@@ -487,7 +487,7 @@ button.lg:hover{transform:translate(-50%,-50%) scale(1.04)}
 .co b{font-size:13px;font-weight:500;color:var(--tx);letter-spacing:-.005em}
 .co p{margin:0;display:grid;gap:3px;justify-items:center}
 .co{margin-top:2px;padding-top:9px;gap:1px;font-size:11.5px;line-height:1.4}.co b{font-size:12px}.co p{display:block}.co .cty::before{content:" · ";color:var(--fa)}
-/* portada con el aro de codigo: el fondo ocupa toda la pantalla y los textos dejan sitio a la animacion */
+/* portada con el pulso de red: el fondo ocupa toda la pantalla y los textos dejan sitio a la animacion */
 .screen:has(.cbg){isolation:isolate}
 .cbg{position:absolute;left:0;top:0;width:100%;height:100%;display:block;z-index:-1;pointer-events:none}
 .okx .globe.code,.wel .globe.code{width:min(100%,360px)}
@@ -673,50 +673,34 @@ function cardPat() { if (CARDPAT) return CARDPAT; const s = 700, c = document.cr
   return (CARDPAT = c.toDataURL('image/png')); }
 
 /* globo vivo: gira, los nodos laten y por los arcos viaja un pulso */
-/* ---------- portada: aro de codigo diminuto que se forma alrededor del logo ---------- */
+/* ---------- portada: pulso de red, ondas que salen del logo y empujan la malla de puntos ---------- */
 const CODEBG = (() => {
-  const GL = '0123456789abcdef', reduce = matchMedia('(prefers-reduced-motion: reduce)').matches, t0 = performance.now();
-  const hs = n => { const s = Math.sin(n * 127.1 + 311.7) * 43758.5453; return s - Math.floor(s); };
-  const ss = (a, b, v) => { const t = Math.min(1, Math.max(0, (v - a) / (b - a))); return t * t * (3 - 2 * t); };
-  let raf = 0, cv = null, x = null, S = null;
-  // ruido suave para el vagar de los caracteres
-  const P = new Uint8Array(512); (() => { const p = [...Array(256).keys()]; let s = 1337; for (let i = 255; i > 0; i--) { s = (s * 16807) % 2147483647; const j = s % (i + 1); [p[i], p[j]] = [p[j], p[i]]; } for (let i = 0; i < 512; i++) P[i] = p[i & 255]; })();
-  const fd = t => t * t * t * (t * (t * 6 - 15) + 10), lp = (t, a, b) => a + t * (b - a), gr = (h, x, y, z) => { const u = h < 8 ? x : y, v = h < 4 ? y : (h === 12 || h === 14 ? x : z); return ((h & 1) ? -u : u) + ((h & 2) ? -v : v); };
-  function nz(x, y, z) { const X = Math.floor(x) & 255, Y = Math.floor(y) & 255, Z = Math.floor(z) & 255; x -= Math.floor(x); y -= Math.floor(y); z -= Math.floor(z);
-    const u = fd(x), v = fd(y), w = fd(z), A = P[X] + Y, AA = P[A] + Z, AB = P[A + 1] + Z, B = P[X + 1] + Y, BA = P[B] + Z, BB = P[B + 1] + Z;
-    return lp(w, lp(v, lp(u, gr(P[AA] & 15, x, y, z), gr(P[BA] & 15, x - 1, y, z)), lp(u, gr(P[AB] & 15, x, y - 1, z), gr(P[BB] & 15, x - 1, y - 1, z))), lp(v, lp(u, gr(P[AA + 1] & 15, x, y, z - 1), gr(P[BA + 1] & 15, x - 1, y, z - 1)), lp(u, gr(P[AB + 1] & 15, x, y - 1, z - 1), gr(P[BB + 1] & 15, x - 1, y - 1, z - 1)))); }
-  function atlas(px, cols) { const cw = Math.ceil(px * .72) + 2, ch = Math.ceil(px * 1.25) + 2, c = document.createElement('canvas'); c.width = cw * GL.length; c.height = ch * cols.length;
-    const g = c.getContext('2d'); g.font = `500 ${px}px 'IBM Plex Mono', ui-monospace, Menlo, monospace`; g.textAlign = 'center'; g.textBaseline = 'middle';
-    cols.forEach((col, j) => { g.fillStyle = col; for (let i = 0; i < GL.length; i++) g.fillText(GL[i], i * cw + cw / 2, j * ch + ch / 2); }); return { c, cw, ch }; }
-  function setup(W, H, sc, lt) {
-    const s = Math.max(9, Math.min(20, Math.sqrt(W * H) / 46)), ink = lt ? '11,14,20' : '255,255,255';
-    const B = document.createElement('canvas'); B.width = Math.max(1, Math.round(W * sc)); B.height = Math.max(1, Math.round(H * sc)); const b = B.getContext('2d');
-    b.fillStyle = `rgba(${ink},${lt ? .1 : .12})`; b.beginPath(); const r = s * .08 * sc;
-    for (let y = s / 2; y < H; y += s) for (let xx = s / 2; xx < W; xx += s) { const px = xx * sc, py = y * sc; if (r < 1.2) b.rect(px - r, py - r, r * 2, r * 2); else { b.moveTo(px + r, py); b.arc(px, py, r, 0, 7); } }
-    b.fill();
-    const n = Math.round(W * H / (s * s * 1.6)), ps = Array.from({ length: n }, (_, i) => ({ hx: hs(i + .1) * W, hy: hs(i + .2) * H, a: hs(i + .6) * Math.PI * 2, rj: (hs(i + .3) - .5) * .28, blue: hs(i + .6 + 7) < .3, d: hs(i + .8) * .15, g: (hs(i + .9) * 16) | 0 }));
-    return { W, H, sc, lt, s, B, ps, at: atlas((W > H ? 8 : 7) * sc, [lt ? '#0b0e14' : '#ffffff', '#1569ff']) };
-  }
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches, t0 = performance.now(), LV = 16;
+  let raf = 0, cv = null, x = null;
+  const bk = [Array.from({ length: LV }, () => []), Array.from({ length: LV }, () => [])];
   function frame() {
     if (!cv || !cv.isConnected) { cv = null; return; }
     const W = cv.clientWidth, H = cv.clientHeight, g = $app.querySelector('.globe.code'); if (!W || !H || !g) { raf = requestAnimationFrame(frame); return; }
-    const lt = document.documentElement.dataset.theme === 'light', sc = Math.min(devicePixelRatio || 1, W > 900 ? 1.5 : 2);
-    if (!S || S.W !== W || S.H !== H || S.lt !== lt || S.sc !== sc) S = setup(W, H, sc, lt);
-    if (cv.width !== S.B.width || cv.height !== S.B.height || !x) { cv.width = S.B.width; cv.height = S.B.height; x = cv.getContext('2d'); }
-    const cr = cv.getBoundingClientRect(), r = g.getBoundingClientRect(), k = cr.width / W || 1, Fx = (r.left + r.width / 2 - cr.left) / k, Fy = (r.top + r.height / 2 - cr.top) / k, Rr = r.width / k * .42;
-    const t = reduce ? 4 : (performance.now() - t0) / 1000, p = t % 9, e = p < 2.6 ? ss(0, 2.6, p) : p < 5 ? 1 : p < 7.4 ? 1 - ss(5, 7.4, p) : 0;
-    x.setTransform(1, 0, 0, 1, 0, 0); x.globalAlpha = 1; x.clearRect(0, 0, cv.width, cv.height); x.drawImage(S.B, 0, 0);
-    const { c, cw, ch } = S.at, s = S.s;
-    for (const q of S.ps) {
-      const wx = q.hx + nz(q.hx * .01, q.hy * .01, t * .2) * s * 3, wy = q.hy + nz(q.hy * .01, q.hx * .01, t * .2 + 9) * s * 3, rr = Rr * (1 + q.rj);
-      const ee = ss(0, 1, e * 1.15 - q.d), px = wx + (Fx + Math.cos(q.a) * rr - wx) * ee, py = wy + (Fy + Math.sin(q.a) * rr - wy) * ee;
-      if (!reduce && Math.random() < .015 + (1 - ee) * .12) q.g = (Math.random() * 16) | 0;
-      x.globalAlpha = .35 + .55 * ee; x.drawImage(c, q.g * cw, (q.blue && ee > .4 ? 1 : 0) * ch, cw, ch, Math.round(px * sc - cw / 2), Math.round(py * sc - ch / 2), cw, ch);
+    const lt = document.documentElement.dataset.theme === 'light', sc = Math.min(devicePixelRatio || 1, W > 900 ? 1.5 : 2), cw = Math.round(W * sc), chh = Math.round(H * sc);
+    if (cv.width !== cw || cv.height !== chh || !x) { cv.width = cw; cv.height = chh; x = cv.getContext('2d'); }
+    const cr = cv.getBoundingClientRect(), r = g.getBoundingClientRect(), k = cr.width / W || 1, Fx = (r.left + r.width / 2 - cr.left) / k, Fy = (r.top + r.height / 2 - cr.top) / k;
+    const t = reduce ? 1.1 : (performance.now() - t0) / 1000, s = Math.max(9, Math.min(20, Math.sqrt(W * H) / 46)), Rm = Math.hypot(Math.max(Fx, W - Fx), Math.max(Fy, H - Fy)), per = 3.2;
+    const split = W >= 1024 && H >= 641, fz = v => { const q = Math.min(1, Math.max(0, v)); return q * q * (3 - 2 * q); };   // los puntos se atenuan bajo los textos para que se lean bien
+    const rings = []; for (let j = 0; j < 3; j++) { const ph = ((t + j * per / 3) % per) / per; rings.push([ph * Rm, s * (1.4 + ph * 2.2), (1 - ph) ** 1.3]); }
+    for (let y = s / 2; y < H; y += s) for (let xx = s / 2; xx < W; xx += s) {
+      const dx = xx - Fx, dy = y - Fy, d = Math.hypot(dx, dy) || 1; let I = 0;
+      for (const [R, w, f] of rings) { const u = (d - R) / w; if (u > -3 && u < 3) { const e = Math.exp(-u * u) * f; if (e > I) I = e; } }
+      const dim = 1 - .6 * (split ? fz((xx - W * .5) / (W * .13)) : fz((y - H * .44) / (H * .13))), push = I * s * .45, al = (.17 + .83 * I) * dim, L = Math.round(Math.min(1, al) * (LV - 1)); if (L <= 0) continue;
+      bk[I > .34 ? 1 : 0][L].push((xx + dx / d * push) * sc, (y + dy / d * push) * sc, s * (.095 + .13 * I) * sc);
     }
-    x.globalAlpha = 1;
+    x.setTransform(1, 0, 0, 1, 0, 0); x.clearRect(0, 0, cw, chh);
+    const ink = lt ? '11,14,20' : '255,255,255', kk = lt ? .8 : 1;
+    for (let c = 0; c < 2; c++) for (let L = 1; L < LV; L++) { const a = bk[c][L]; if (!a.length) continue;
+      x.fillStyle = c ? `rgba(21,105,255,${(L / (LV - 1)).toFixed(3)})` : `rgba(${ink},${(L / (LV - 1) * kk).toFixed(3)})`; x.beginPath();
+      for (let i = 0; i < a.length; i += 3) { const px = a[i], py = a[i + 1], rr = a[i + 2]; if (rr < 1.4) x.rect(px - rr, py - rr, rr * 2, rr * 2); else { x.moveTo(px + rr, py); x.arc(px, py, rr, 0, 6.2832); } }
+      x.fill(); a.length = 0; }
     if (!reduce) raf = requestAnimationFrame(frame);
   }
-  if (document.fonts) document.fonts.ready.then(() => { S = null; });
   return { mount() { cancelAnimationFrame(raf); cv = $app.querySelector('canvas.cbg'); x = null; if (cv) frame(); } };
 })();
 const GLOBE = (() => {
