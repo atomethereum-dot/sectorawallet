@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://raw.githubusercontent.com; font-src 'self' data:; connect-src 'self' https://raw.githubusercontent.com https://ethereum-rpc.publicnode.com https://eth.drpc.org https://bsc-rpc.publicnode.com https://bsc-dataseed.bnbchain.org https://solana-rpc.publicnode.com https://api.mainnet-beta.solana.com https://aggregator-api.kyberswap.com https://lite-api.jup.ag; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://raw.githubusercontent.com https://coin-images.coingecko.com https://assets.coingecko.com; font-src 'self' data:; connect-src 'self' https://raw.githubusercontent.com https://api.coingecko.com https://ethereum-rpc.publicnode.com https://eth.drpc.org https://bsc-rpc.publicnode.com https://bsc-dataseed.bnbchain.org https://solana-rpc.publicnode.com https://api.mainnet-beta.solana.com https://aggregator-api.kyberswap.com https://lite-api.jup.ag; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="no-referrer">
 <title>Sectora Wallet</title>
 <meta name="description" content="Sectora Wallet: a self-custody multichain wallet for Ethereum, BNB Chain, Robinhood Chain and Solana. Your keys stay on your device.">
@@ -868,11 +868,11 @@ const KYBER_ROUTER = '0x6131B5fae19EA4f9D964eAc0408E4408b66337b5';   // MetaAggr
 const NATIVE_EVM = '0xEeeeeEeeeEeEeEeEeEeEEEeeeeEeeeeeeeEEeE';
 const NETS = {
   eth: { id: 'eth', name: 'Ethereum', kind: 'evm', chainId: 1, native: 'ETH', dot: '#627eea', rpc: ['https://ethereum-rpc.publicnode.com', 'https://eth.drpc.org'], kyber: 'ethereum', exp: 'https://etherscan.io/tx/',
-    tokens: [{ s: 'ETH', n: 'Ether', native: true, d: 18 }, { s: 'SECT', n: 'Sectora', a: SECT, d: 18 }, { s: 'USDT', n: 'Tether USD', a: '0xdAC17F958D2ee523a2206206994597C13D831ec7', d: 6 }, { s: 'USDC', n: 'USD Coin', a: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', d: 6 }] },
+    tokens: [{ s: 'ETH', n: 'Ethereum', native: true, d: 18 }, { s: 'SECT', n: 'Sectora', a: SECT, d: 18 }, { s: 'USDT', n: 'Tether USD', a: '0xdAC17F958D2ee523a2206206994597C13D831ec7', d: 6 }, { s: 'USDC', n: 'USD Coin', a: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', d: 6 }] },
   bnb: { id: 'bnb', name: 'BNB Chain', kind: 'evm', chainId: 56, native: 'BNB', dot: '#f0b90b', rpc: ['https://bsc-rpc.publicnode.com', 'https://bsc-dataseed.bnbchain.org'], kyber: 'bsc', exp: 'https://bscscan.com/tx/',
     tokens: [{ s: 'BNB', n: 'BNB', native: true, d: 18 }, { s: 'USDT', n: 'Tether USD', a: '0x55d398326f99059fF775485246999027B3197955', d: 18 }, { s: 'USDC', n: 'USD Coin', a: '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d', d: 18 }] },
   rh: { id: 'rh', name: 'Robinhood Chain', kind: 'evm', chainId: 4663, native: 'ETH', dot: '#e9ecf2', rpc: [], kyber: null, exp: '',
-    tokens: [{ s: 'ETH', n: 'Ether', native: true, d: 18 }] },
+    tokens: [{ s: 'ETH', n: 'Ethereum', native: true, d: 18 }] },
   sol: { id: 'sol', name: 'Solana', kind: 'sol', native: 'SOL', dot: '#9945ff', rpc: ['https://solana-rpc.publicnode.com', 'https://api.mainnet-beta.solana.com'], jup: true, exp: 'https://solscan.io/tx/',
     tokens: [{ s: 'SOL', n: 'Solana', native: true, d: 9, mint: 'So11111111111111111111111111111111111111112' }, { s: 'USDC', n: 'USD Coin', d: 6, mint: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v' }] },
 };
@@ -1463,6 +1463,22 @@ V.addtok = () => { const n = curNet(), list = CT.get(n.id), can = !!TWCHAIN[n.id
   ${list.length ? `<div class="lh" style="margin-top:22px">Your added tokens<span>${n.name}</span></div><div>${list.map(t => `<div class="li"><span class="av" style="background:none">${TOKI(t, 40)}</span><div><b>${esc(t.n)}${t.listed ? VERI() : ''}</b><small>${esc(t.s)} · ${short(t.a || t.mint)}${t.listed ? '' : ' · <em class="unv">Unverified</em>'}</small></div><button class="ctdel" data-ctdel="${tid(t)}" aria-label="Remove ${esc(t.s)}">Remove</button></div>`).join('')}</div>` : ''}
   ${SHEET()}`, can ? `<button class="btn" id="ctAdd" disabled>Add token</button>` : '');
 };
+const CGPF = { eth: 'ethereum', bnb: 'binance-smart-chain', sol: 'solana' };
+async function cgInfo(n, a) { const pf = CGPF[n.id]; if (!pf) return null;
+  try { const ctl = new AbortController(), tm = setTimeout(() => ctl.abort(), 8000);
+    const r = await fetch('https://api.coingecko.com/api/v3/coins/' + pf + '/contract/' + (n.kind === 'sol' ? a : a.toLowerCase()), { signal: ctl.signal, credentials: 'omit', referrerPolicy: 'no-referrer' }); clearTimeout(tm);
+    if (r.status === 429 || r.status >= 500) return { busy: true }; if (!r.ok) return null; const j = await r.json(); if (!j || !j.symbol || !j.image) return null;
+    const dp = j.detail_platforms && j.detail_platforms[pf]; const logo = j.image.large || j.image.small || '';
+    return { symbol: String(j.symbol), name: String(j.name || ''), decimals: dp && dp.decimal_place != null ? +dp.decimal_place : null, logo: /^https:\/\/(coin-images|assets)\.coingecko\.com\//.test(logo) ? logo : '' }; } catch (e) { return { busy: true }; } }
+/* legitimo si esta en el directorio de Trust Wallet o en CoinGecko y el simbolo y los decimales coinciden con el contrato */
+async function verifyTok(n, a, sym, d) {
+  const tw = await twInfo(n, a);
+  if (tw && (!sym || String(tw.symbol || '').toUpperCase() === sym.toUpperCase()) && (tw.decimals == null || +tw.decimals === d))
+    return { listed: true, src: 'Trust Wallet', logo: TWBASE + TWCHAIN[n.id] + '/assets/' + a + '/logo.png', name: tw.name, symbol: tw.symbol };
+  const cg = await cgInfo(n, a);
+  if (cg && !cg.busy && (!sym || cg.symbol.toUpperCase() === sym.toUpperCase()) && (cg.decimals == null || cg.decimals === d))
+    return { listed: true, src: 'CoinGecko', logo: cg.logo, name: cg.name, symbol: cg.symbol.toUpperCase() };
+  return { listed: false, busy: !!(cg && cg.busy) }; }
 async function twInfo(n, a) { const ch = TWCHAIN[n.id]; if (!ch) return null;
   try { const ctl = new AbortController(), tm = setTimeout(() => ctl.abort(), 8000); const r = await fetch(TWBASE + ch + '/assets/' + a + '/info.json', { signal: ctl.signal, credentials: 'omit', referrerPolicy: 'no-referrer' }); clearTimeout(tm);
     if (!r.ok) return null; const j = await r.json(); return j && j.status === 'active' ? j : null; } catch (e) { return null; } }
@@ -1470,8 +1486,8 @@ async function readToken(n, raw) {
   if (n.kind === 'sol') { const mint = raw.trim(); if (!isSolAddr(mint)) throw new UErr('This is not a valid Solana mint address.');
     const r = await rpc(n, 'getAccountInfo', [mint, { encoding: 'jsonParsed' }]); const p = r && r.value && r.value.data && r.value.data.parsed;
     if (!p || p.type !== 'mint') throw new UErr('No token found at this address on Solana.');
-    const tw = await twInfo(n, mint), d = p.info.decimals; const listed = !!tw && (tw.decimals == null || +tw.decimals === d);
-    return { id: 'c:' + mint, mint, d, s: listed ? String(tw.symbol).slice(0, 12) : mint.slice(0, 4).toUpperCase(), n: listed ? String(tw.name).slice(0, 40) : 'Unlisted token', custom: true, listed, logo: listed ? TWBASE + 'solana/assets/' + mint + '/logo.png' : '' }; }
+    const d = p.info.decimals, v = await verifyTok(n, mint, '', d);
+    return { id: 'c:' + mint, mint, d, s: v.listed ? String(v.symbol).slice(0, 12) : mint.slice(0, 4).toUpperCase(), n: v.listed ? String(v.name || v.symbol).slice(0, 40) : 'Unlisted token', custom: true, listed: v.listed, src: v.src || '', busy: !!v.busy, logo: v.listed ? v.logo : '' }; }
   if (!ethers.isAddress(raw.trim())) throw new UErr('This is not a valid contract address.');
   const a = ethers.getAddress(raw.trim()), call = async sel => rpc(n, 'eth_call', [{ to: a, data: sel }, 'latest']);
   const code = await rpc(n, 'eth_getCode', [a, 'latest']); if (!code || code === '0x') throw new UErr(`No contract at this address on ${n.name}.`);
@@ -1480,9 +1496,16 @@ async function readToken(n, raw) {
   if (!(d >= 0 && d <= 36)) throw new UErr('This contract is not a standard token.');
   const sym = (str(await call('0x95d89b41').catch(() => '')) || '').replace(/[^\x20-\x7e]/g, '').trim().slice(0, 12), nm = (str(await call('0x06fdde03').catch(() => '')) || '').replace(/[^\x20-\x7e]/g, '').trim().slice(0, 40);
   if (!sym) throw new UErr('This contract is not a standard token.');
-  const tw = await twInfo(n, a); const listed = !!tw && String(tw.symbol || '').toUpperCase() === sym.toUpperCase() && (tw.decimals == null || +tw.decimals === d);
-  return { id: 'c:' + a.toLowerCase(), a, d, s: sym, n: nm || sym, custom: true, listed, logo: listed ? TWBASE + TWCHAIN[n.id] + '/assets/' + a + '/logo.png' : '' }; }
+  const v = await verifyTok(n, a, sym, d);
+  return { id: 'c:' + a.toLowerCase(), a, d, s: sym, n: nm || sym, custom: true, listed: v.listed, src: v.src || '', busy: !!v.busy, logo: v.listed ? v.logo : '' }; }
+const CTCHK = {};
+async function recheckCT() { const n = curNet(); if (CTCHK[n.id] || !TWCHAIN[n.id]) return; CTCHK[n.id] = 1;
+  const l = CT.get(n.id); let ch = false;
+  for (const t of l) { if (t.listed) continue; try { const v = await verifyTok(n, t.a || t.mint, n.kind === 'sol' ? '' : t.s, t.d);
+      if (v.listed) { t.listed = true; t.src = v.src; t.logo = v.logo; t.busy = false; if (n.kind === 'sol') { t.s = String(v.symbol).slice(0, 12); t.n = String(v.name || v.symbol).slice(0, 40); } ch = true; } } catch (e) {} }
+  if (ch) { CT.set(n.id, l); if (S.view === 'home' || S.view === 'addtok') render(); } }
 function bindCT() {
+  if (S.view === 'home' || S.view === 'addtok') recheckCT();
   if (S.view !== 'addtok') return; const n = curNet(), inp = $app.querySelector('#ctAddr'), res = $app.querySelector('#ctRes'), btn = $app.querySelector('#ctAdd');
   $app.querySelectorAll('[data-ctdel]').forEach(b => b.addEventListener('click', () => { CT.set(n.id, CT.get(n.id).filter(t => tid(t) !== b.dataset.ctdel)); S.bal = {}; S.balSt = {}; render(); toast('Token removed'); }));
   if (!inp) return; let found = null, seq = 0, tmr = 0;
@@ -1493,8 +1516,8 @@ function bindCT() {
     try { const t = await readToken(n, v); if (my !== seq) return; found = t; btn.disabled = false;
       const pg = tokPage(n, t.a || t.mint);
       paint(`<div class="card ctres" style="margin-top:14px"><div class="li" style="border:0;padding:0"><span class="av" style="background:none">${TOKI(t, 44)}</span><div><b>${esc(t.n)}${t.listed ? VERI() : ''}</b><small>${esc(t.s)} · ${t.d} decimals · ${short(t.a || t.mint)}</small></div></div>
-      ${t.listed ? `<div class="note" style="margin-top:12px">${ic(P.chk, 16, '#5c9bff', 2.6)}<span>Listed in the Trust Wallet token directory. Name, symbol and logo match the contract.</span></div>`
-      : `<div class="note" style="margin-top:12px">${ic(P.info, 16, '#f0b54a')}<span><b>Unverified token.</b> Anyone can create a token with any name. Check the contract on the explorer before you use it.${pg ? ` <a href="${pg}" target="_blank" rel="noopener noreferrer">Open in explorer</a>` : ''}</span></div>`}</div>`); }
+      ${t.listed ? `<div class="note" style="margin-top:12px">${ic(P.chk, 16, '#5c9bff', 2.6)}<span>Listed on ${t.src === 'CoinGecko' ? 'CoinGecko' : 'the Trust Wallet token directory'}. Symbol and decimals match the contract.</span></div>`
+      : `<div class="note" style="margin-top:12px">${ic(P.info, 16, '#f0b54a')}<span><b>Unverified token.</b> ${t.busy ? 'The token directories could not be reached right now; the wallet will check again later. ' : ''}Anyone can create a token with any name. Check the contract on the explorer before you use it.${pg ? ` <a href="${pg}" target="_blank" rel="noopener noreferrer">Open in explorer</a>` : ''}</span></div>`}</div>`); }
     catch (e) { if (my !== seq) return; paint(`<p class="err" style="margin-top:12px">${esc(e instanceof UErr ? e.message : 'Could not read this token. Check the address and the network.')}</p>`); } };
   inp.addEventListener('input', () => { clearTimeout(tmr); tmr = setTimeout(look, 450); });
   inp.addEventListener('paste', () => { clearTimeout(tmr); tmr = setTimeout(look, 50); });
