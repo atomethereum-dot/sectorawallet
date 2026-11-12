@@ -858,6 +858,38 @@ html.iosapp .stage,html.iosapp .device,html.iosapp .app{height:var(--app-h)}
 .hact button{display:inline-flex;align-items:center;justify-content:center;padding:7px 12px;border-radius:10px;background:var(--tile);color:var(--b2);font-size:13px;font-weight:500}
 .hact button[data-bump="cancel"]{color:var(--bad)}
 .hact.big{margin:12px 0 0}.hact.big button{flex:1;padding:12px;font-size:14.5px}
+/* escanear QR */
+.qrb{flex:none;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;color:var(--b2);background:var(--tile)}
+.in .qrb{width:42px;height:42px}
+.scanov{position:fixed;inset:0;z-index:200;background:#000;color:#fff;font-family:inherit;display:flex;flex-direction:column;justify-content:space-between}
+.scanov video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.scanov.nocam video{display:none}
+.scanov .sfr{position:absolute;left:50%;top:46%;width:min(68vw,280px);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:26px;box-shadow:0 0 0 100vmax rgba(0,0,0,.55);pointer-events:none}
+.scanov .sfr i{position:absolute;inset:0;border-radius:26px;border:2.5px solid rgba(255,255,255,.92)}
+.scanov.nocam .sfr{opacity:.35}
+.scanov .sctop{position:relative;display:grid;grid-template-columns:44px 1fr 44px;align-items:center;padding:calc(env(safe-area-inset-top) + 12px) 14px 0}
+.scanov .sctop b{text-align:center;font-weight:600;font-size:17px}
+.scanov .sx{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.14)}
+.scanov .sbt{position:relative;padding:0 22px calc(env(safe-area-inset-bottom) + 26px);text-align:center}
+.scanov .smsg{margin:0 auto 16px;max-width:320px;font-size:15px;line-height:1.45;color:rgba(255,255,255,.9)}
+.scanov .smsg.warn{color:#ffd28a}
+.scanov .sfile{display:inline-flex;align-items:center;gap:8px;padding:13px 20px;border-radius:14px;background:rgba(255,255,255,.14);font-weight:500;font-size:15px;cursor:pointer}
+/* permisos de tokens */
+.plead{margin:6px 0 0;color:var(--mu);font-size:14.5px;line-height:1.5}
+.plist{margin-top:10px}
+.prow{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--ln)}
+.prow:last-child{border-bottom:0}
+.prow .ptk{flex:none;width:38px;height:38px;display:grid;place-items:center}
+.prow .pt{flex:1;min-width:0}
+.prow .pt b{display:block;font-weight:500;font-size:16px}
+.prow .pt small{display:block;color:var(--mu);font-size:13px;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.prow .pt small a{color:var(--b2);text-decoration:none}
+.prow .pamt{color:var(--tx)!important}.prow .pamt.unl{color:var(--warn)!important}
+.prow .pscam{color:var(--bad)!important;font-weight:500}
+.prow .prm{flex:none;padding:9px 13px;border-radius:11px;background:var(--tile);color:var(--bad);font-size:14px;font-weight:500;max-width:46%}
+.prow .prm.arm{background:rgba(255,92,92,.14)}
+.prow .ppend{flex:none;color:var(--warn);font-size:13px;font-weight:500}
+.pnone{text-align:center;margin-top:46px;color:var(--mu)}.pnone b{display:block;margin-top:12px;color:var(--tx);font-weight:500;font-size:16px}.pnone p{margin:6px 0 0;font-size:14px}
 /* barra inferior en movil: cuatro secciones con su nombre */
 @media (max-width:1023px),(max-height:640px){
   .tabs{left:0;right:0;bottom:0;width:auto;margin:0;height:auto;border-radius:0;border:0;border-top:1px solid var(--ln);background:var(--bg);padding:6px 6px calc(8px + env(safe-area-inset-bottom,0px));justify-content:space-around;box-shadow:none}
@@ -943,7 +975,8 @@ const P = {
   home: '<path d="M3 11l9-7 9 7v9h-6v-6H9v6H3z"/>', act: '<path d="M4 6h16M4 12h10M4 18h7"/>', lock: '<rect x="5" y="11" width="14" height="10" rx="2.5"/><path d="M8 11V7a4 4 0 018 0v4"/>',
   gear: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/>',
   eye: '<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
-  user: '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/>',
+  qr: '<path d="M4 8V5.5A1.5 1.5 0 015.5 4H8M16 4h2.5A1.5 1.5 0 0120 5.5V8M20 16v2.5a1.5 1.5 0 01-1.5 1.5H16M8 20H5.5A1.5 1.5 0 014 18.5V16M7 12h10"/>',
+user: '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/>',
 eyeoff: '<path d="M3 3l18 18M10.6 5.1A10.4 10.4 0 0112 5c6.4 0 10 7 10 7a17 17 0 01-3.2 4.1M6.6 6.6A17.5 17.5 0 002 12s3.6 7 10 7a9.7 9.7 0 005.4-1.6"/><path d="M9.9 9.9a3 3 0 004.2 4.2"/>',
   copy: '<rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15V5a1 1 0 011-1h10"/>', warn: '<path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18v.01"/>',
   key: '<circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3M15 8l2 2"/>', clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
@@ -1047,7 +1080,7 @@ function qrSvg(text) {
   if (!window.SWQR) return '';
   const q = window.SWQR.create(text, { errorCorrectionLevel: 'H' }), N = q.modules.size, M = q.modules.data;
   const fin = (x, y) => x < 7 && y < 7 || x >= N - 7 && y < 7 || x < 7 && y >= N - 7, c0 = Math.floor(N / 2) - 3, c1 = c0 + 7; let d = '';
-  for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) { if (!M[y * N + x] || fin(x, y) || (x >= c0 && x < c1 && y >= c0 && y < c1)) continue; d += `<circle cx="${x + .5}" cy="${y + .5}" r=".46"/>`; }
+  for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) { if (!M[y * N + x] || fin(x, y) || (x >= c0 && x < c1 && y >= c0 && y < c1)) continue; d += `<circle cx="${x + .5}" cy="${y + .5}" r=".5"/>`; }   // puntos que se tocan: mas facil de leer para cualquier escaner
   const F = (x, y) => `<rect x="${x + .5}" y="${y + .5}" width="6" height="6" rx="1.8" fill="none" stroke="#05070d" stroke-width="1"/><rect x="${x + 2}" y="${y + 2}" width="3" height="3" rx=".8" fill="#1569ff"/>`;
   return `<svg viewBox="0 0 ${N} ${N}" role="img" aria-label="QR code of your address"><g fill="#05070d">${d}</g>${F(0, 0)}${F(N - 7, 0)}${F(0, N - 7)}
     <g transform="translate(${c0 + .6} ${c0 + .6}) scale(.058)"><rect width="100" height="100" rx="9" fill="#1569ff"/><circle cx="50" cy="50" r="30" fill="none" stroke="#fff" stroke-width="11"/></g></svg>`;
@@ -1113,7 +1146,7 @@ function runIntro() {
   setTimeout(fly, 1850);
   o.addEventListener('click', () => { A.forEach(x => x.finish()); fly(); });
 }
-function go(view, p = {}) { S.sheet = null; Object.assign(S, p); S.view = view; render(); }
+function go(view, p = {}) { if (typeof closeScan === 'function') closeScan(); S.sheet = null; Object.assign(S, p); S.view = view; render(); }
 
 /* ---------- piezas ---------- */
 const NAV = (title = '', step = 0, back = '') => `<div class="nav">${back ? `<button class="cb" data-go="${back}" aria-label="Back">${ic(P.back, 20, '#f6f7fb', 2.2)}</button>` : '<span style="width:40px"></span>'}${step
@@ -1307,8 +1340,8 @@ async function loadHist(force) {
 function histItems(n, sym) {
   const h = HIST[hKey(n)], me0 = (addrOf(n) || '').toLowerCase(), own = n.id === 'bnb' ? new Set(txs().filter(t => (t.netId || 'eth') === n.id && t.hash && (t.from ? t.from.toLowerCase() === me0 : ACCI() === 0)).map(t => t.hash.toLowerCase())) : null;
   const on = ((h && h.items) || []).filter(e => !own || !own.has(e.hash.toLowerCase())), seen = new Set(on.map(e => e.hash.toLowerCase()));
-  const me = (addrOf(n) || '').toLowerCase(), loc = txs().filter(t => (t.netId || 'eth') === n.id && t.hash && !seen.has(t.hash.toLowerCase()) && (t.from ? t.from.toLowerCase() === me : ACCI() === 0)).map(t => ({ hash: t.hash, time: t.time, ok: t.st !== 'fail', local: t, cancel: t.kind === 'cancel',
-    legs: t.kind === 'cancel' ? [] : t.kind === 'swap' ? [{ s: t.token, amt: t.amount, dir: 'out', peer: '' }, { s: t.outToken, amt: '', dir: 'in', peer: '' }] : [{ s: t.token, amt: t.amount, dir: 'out', peer: (t.to || '').toLowerCase() }] }));
+  const me = (addrOf(n) || '').toLowerCase(), loc = txs().filter(t => (t.netId || 'eth') === n.id && t.hash && !seen.has(t.hash.toLowerCase()) && (t.from ? t.from.toLowerCase() === me : ACCI() === 0)).map(t => ({ hash: t.hash, time: t.time, ok: t.st !== 'fail', local: t, cancel: t.kind === 'cancel', rev: t.kind === 'revoke',
+    legs: t.kind === 'cancel' || t.kind === 'revoke' ? [] : t.kind === 'swap' ? [{ s: t.token, amt: t.amount, dir: 'out', peer: '' }, { s: t.outToken, amt: '', dir: 'in', peer: '' }] : [{ s: t.token, amt: t.amount, dir: 'out', peer: (t.to || '').toLowerCase() }] }));
   const dust = e => !e.local && e.legs.length > 0 && e.legs.every(l => { if (l.dir !== 'in') return false; const tk = toks(n).find(t => t.s === l.s), p = tk && pxOf(n, tk), a = Number(l.amt);   // recibos de menos de $0.01: polvo y envenenamiento de direcciones
     return p ? a * p.usd < 0.01 : a < 1e-9; });
   return [...loc, ...on].filter(e => !dust(e) && (!sym || e.legs.some(l => l.s === sym))).sort((a, b) => b.time - a.time);
@@ -1317,14 +1350,14 @@ const HICON = k => ({ in: P.recv, out: P.send, swap: P.swap, self: P.swap, fail:
 function hRow(n, e) {
   const o = e.legs.filter(l => l.dir === 'out'), i = e.legs.filter(l => l.dir === 'in'), kind = !e.ok && !e.legs.length ? 'fail' : o.length && i.length ? 'swap' : i.length ? 'in' : o.length ? 'out' : 'self';
   const main = kind === 'swap' ? i[0] : (i[0] || o[0] || e.legs[0]), peer = main && main.peer, tm = new Date(e.time).toLocaleTimeString(LOC(), { hour: 'numeric', minute: '2-digit' });
-  const title = e.cancel ? 'Transfer cancelled' : kind === 'fail' ? 'Failed transaction' : kind === 'swap' ? `${esc(o[0].s)} → ${esc(i[0].s)}` : `${kind === 'in' ? 'Received' : kind === 'out' ? 'Sent' : 'Moved'} ${esc(main.s)}`;
+  const title = e.rev ? `Permission removed${e.local && e.local.token ? ' · ' + esc(e.local.token) : ''}` : e.cancel ? 'Transfer cancelled' : kind === 'fail' ? 'Failed transaction' : kind === 'swap' ? `${esc(o[0].s)} → ${esc(i[0].s)}` : `${kind === 'in' ? 'Received' : kind === 'out' ? 'Sent' : 'Moved'} ${esc(main.s)}`;
   const st = e.local ? stOf(e.local) : !e.ok ? TXST.fail : null;
   const sub = `${st ? `<em style="color:${st[1]}">${st[0]}</em> · ` : ''}${kind === 'swap' ? 'Swap · ' + tm : !peer ? tm : `${kind === 'in' ? 'From' : 'To'} ${short(peer)} · ${tm}`}`;
   const tk = main && toks(n).find(t => t.s === main.s), p = tk && pxOf(n, tk), amt = main && main.amt ? Number(main.amt) : null;
-  const right = kind === 'fail' || e.cancel ? '' : `<b class="${kind === 'in' || kind === 'swap' ? 'up' : ''}">${amt === null ? '' : (kind === 'in' || kind === 'swap' ? '+' : '−') + fmtAmt(main.amt)} ${esc(main.s)}</b><small>${kind === 'swap' && o[0].amt ? '−' + fmtAmt(o[0].amt) + ' ' + esc(o[0].s) : p && amt !== null ? fmtUsd(amt * p.usd) : ''}</small>`;
+  const right = kind === 'fail' || e.cancel || e.rev ? '' : `<b class="${kind === 'in' || kind === 'swap' ? 'up' : ''}">${amt === null ? '' : (kind === 'in' || kind === 'swap' ? '+' : '−') + fmtAmt(main.amt)} ${esc(main.s)}</b><small>${kind === 'swap' && o[0].amt ? '−' + fmtAmt(o[0].amt) + ' ' + esc(o[0].s) : p && amt !== null ? fmtUsd(amt * p.usd) : ''}</small>`;
   const href = n.exp ? n.exp + e.hash : '';
   const bump = e.local && e.local.st === 'pend' && n.kind === 'evm' && e.local.nonce != null && e.local.maxFee && Date.now() - e.local.time < 6 * 3600e3 ? `<div class="hact"><button data-bump="speed" data-h="${e.hash}">Speed up</button>${e.cancel ? '' : `<button data-bump="cancel" data-h="${e.hash}">Cancel</button>`}</div>` : '';
-  return `<${href ? `a href="${href}" target="_blank" rel="noopener noreferrer"` : 'div'} class="hrow"><span class="hic k-${e.cancel ? 'fail' : kind}">${ic(HICON(e.cancel ? 'cancel' : kind), 18, 'currentColor', 1.9)}</span><div class="ht"><b>${title}</b><small>${sub}</small></div><div class="hr">${right}</div></${href ? 'a' : 'div'}>` + bump;
+  return `<${href ? `a href="${href}" target="_blank" rel="noopener noreferrer"` : 'div'} class="hrow"><span class="hic k-${e.cancel ? 'fail' : kind}">${ic(e.rev ? P.shield : HICON(e.cancel ? 'cancel' : kind), 18, 'currentColor', 1.9)}</span><div class="ht"><b>${title}</b><small>${sub}</small></div><div class="hr">${right}</div></${href ? 'a' : 'div'}>` + bump;
 }
 function HLIST(sym) {
   const n = curNet(), h = HIST[hKey(n)], L = histItems(n, sym), eb = expBase(n), me = addrOf(n);
@@ -1429,6 +1462,7 @@ V.security = () => { const sc = sec(); return SCREEN(`${NAV('Security', 0, 'home
     <div><b class="big">${sc.score === sc.total ? 'Fully protected' : 'Almost there'}</b><small>Your wallet, ${esc(S.name)}, is secured on this device only.</small></div></div>
   ${SECLIST()}
   <div class="lbl gl2">Controls</div><div class="grp card">
+    <button class="row" data-go="perms"><span class="si">${ic(P.shield, 18, '#5c9bff')}</span><div><b>Token permissions</b><small>See which apps can move your tokens</small></div><span class="end">${ic(P.chev, 15)}</span></button>
     <div class="row"><span class="si">${ic(P.clock, 18, '#5c9bff')}</span><div><b>Auto-lock</b><small>After inactivity</small></div><span class="end pill3">${[1, 5, 15].map(m => `<button class="${S.lockMin === m ? 'on' : ''}" data-lockmin="${m}">${m}m</button>`).join('')}</span></div>
     <div class="row"><span class="si">${ic(P.face, 18, '#5c9bff')}</span><div><b>${BIOCAP} unlock</b><small>${BIO.get() ? 'On · this device' : 'Off · use your password'}</small></div><span class="end"><button class="bioT ${BIO.get() ? 'on' : ''}" id="bioT">${BIO.get() ? (S.bioArm ? 'Tap to turn off' : 'On') : 'Turn on'}</button></span></div>
     <button class="row" data-go="reveal"><span class="si">${ic(P.key, 18, '#f0b54a')}</span><div><b>Recovery phrase</b><small>Requires your password</small></div><span class="end">${ic(P.chev, 15)}</span></button>
@@ -1738,11 +1772,148 @@ V.contacts = () => { const L = CONTACTS.get(); return SCREEN(`${NAV('Contacts', 
   `<button class="btn" data-cnew="1">${ic('<path d="M12 5v14M5 12h14"/>', 18, '#fff', 2.2)}Add contact</button>`); };
 V.contact = () => { const e = S.cEdit || { i: -1, n: '', a: '' }; return SCREEN(`${NAV(e.i >= 0 ? 'Edit contact' : 'New contact', 0, 'contacts')}
   <div class="fld" style="margin-top:12px"><label class="lbl" for="cname">Name</label><div class="in"><input id="cname" maxlength="32" autocomplete="off" placeholder="e.g. Ana" value="${esc(e.n || '')}"></div></div>
-  <div class="fld" style="margin-top:14px"><label class="lbl" for="caddr">Address</label><div class="in"><input id="caddr" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="0x… or Solana address" value="${esc(e.a || '')}"></div></div>
+  <div class="fld" style="margin-top:14px"><label class="lbl" for="caddr">Address</label><div class="in"><input id="caddr" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="0x… or Solana address" value="${esc(e.a || '')}"><button class="qrb" data-scan="caddr" aria-label="Scan QR code">${ic(P.qr, 21, 'currentColor', 1.8)}</button></div></div>
   <div class="err" id="cerr"></div>
   <div class="note" style="margin-top:6px">${ic(P.info, 16, '#5c9bff')}<span>0x… addresses work on Ethereum, BNB Chain and Robinhood Chain. Solana addresses work on Solana.</span></div>
   ${e.i >= 0 ? `<button class="link" id="cdel" style="color:var(--bad);margin-top:18px">${S.cdelArm ? 'Tap again to delete' : 'Delete contact'}</button>` : ''}`,
   `<button class="btn" id="csave">Save contact</button>`); };
+V.perms = () => { const n = curNet(), eb = expBase(n); return SCREEN(`${NAV('Token permissions', 0, 'security')}
+  <p class="plead">Apps you approved can move these tokens from your wallet. Remove the ones you no longer use.</p>
+  <div class="hsub" style="margin-top:14px">${NETPILL()}<span class="sync" id="psync"></span></div>
+  ${n.kind === 'evm' && n.rpc.length ? `<div id="plist" class="plist"></div>
+  <div class="note" style="margin-top:16px">${ic(P.info, 17, '#5c9bff')}<span id="pnote">${n.id === 'bnb' ? 'Checked the tokens in your list: well-known exchanges and any app approved in the last 14 days. For older approvals or other tokens, use the approval checker on the explorer.' : 'Checked the approvals sent from this address and well-known exchanges.'}</span></div>
+  ${eb ? `<a class="tfull" href="${eb}tokenapprovalchecker" target="_blank" rel="noopener noreferrer">${ic(P.ext, 16, 'currentColor', 1.8)}Approval checker on ${new URL(eb).hostname}</a>` : ''}`
+  : `<div class="cempty">${ic(P.shield, 34, '#545c6e', 1.6)}<p>${n.kind === 'sol' ? 'Solana tokens don\'t use app permissions like this. Nothing to review here.' : `${n.name} opens soon.`}</p></div>`}
+  ${SHEET()}`); };
+/* ---------- permisos de tokens (aprobaciones ERC-20 / BEP-20) ---------- */
+const MC3 = '0xcA11bde05977b3631167028862bE2a173976CA11';   // Multicall3, misma direccion en Ethereum y BNB Chain
+const SPN = { eth: { '0x000000000022d473030f116ddee9f6b43ac78ba3': 'Uniswap Permit2', '0x7a250d5630b4cf539739df2c5dacb4c659f2488d': 'Uniswap V2', '0xe592427a0aece92de3edee1f18e0157c05861564': 'Uniswap V3', '0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45': 'Uniswap V3', '0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad': 'Uniswap', '0x66a9893cc07d91d95644aedd05d03f95e1dba8af': 'Uniswap', '0x1111111254eeb25477b68fb85ed929f73a960582': '1inch', '0x111111125421ca6dc452d289314280a0f8842a65': '1inch', '0x6131b5fae19ea4f9d964eac0408e4408b66337b5': 'KyberSwap' },
+  bnb: { '0x000000000022d473030f116ddee9f6b43ac78ba3': 'Permit2', '0x10ed43c718714eb63d5aa57b78b54704e256024e': 'PancakeSwap V2', '0x13f4ea83d0bd40e75c8222255bc855a974568dd4': 'PancakeSwap V3', '0x1111111254eeb25477b68fb85ed929f73a960582': '1inch', '0x111111125421ca6dc452d289314280a0f8842a65': '1inch', '0x6131b5fae19ea4f9d964eac0408e4408b66337b5': 'KyberSwap' } };
+const IFC = () => IFC.v || (IFC.v = new ethers.Interface(['function aggregate3((address target,bool allowFailure,bytes callData)[] calls) payable returns ((bool success,bytes returnData)[])', 'function allowance(address,address) view returns (uint256)', 'function symbol() view returns (string)', 'function decimals() view returns (uint8)', 'function approve(address,uint256)']));
+async function mcall(n, calls) { const out = [];
+  for (let i = 0; i < calls.length; i += 120) { const part = calls.slice(i, i + 120), data = IFC().encodeFunctionData('aggregate3', [part.map(c => [c[0], true, c[1]])]);
+    const r = IFC().decodeFunctionResult('aggregate3', await rpc(n, 'eth_call', [{ to: MC3, data }, 'latest']))[0]; for (const x of r) out.push(x[0] ? x[1] : null); }
+  return out; }
+async function bscApprovals(n, me, add, onPct) {   // eventos Approval de esta direccion en los ultimos 14 dias (el nodo publico no guarda mas)
+  const lo = me.toLowerCase(), key = 'bapp.' + lo, AP = '0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925', topic = '0x' + lo.slice(2).padStart(64, '0');
+  const tk = toks(n).filter(t => !t.native && t.a), sig = tk.map(t => t.a.toLowerCase()).sort().join(','); if (!tk.length) return;   // el nodo publico exige indicar los contratos
+  let st = null; try { st = JSON.parse(store.get(key) || 'null'); } catch (e) {} if (!st || !Array.isArray(st.cov) || !Array.isArray(st.p)) st = { cov: [], p: [] }; if (st.sig !== sig) { st.sig = sig; st.cov = []; }
+  const hb = await rpc(n, 'eth_getBlockByNumber', ['latest', false]), ob = await rpc(n, 'eth_getBlockByNumber', [ethers.toQuantity(Number(BigInt(hb.number)) - 100000), false]);
+  const head = Number(BigInt(hb.number)), spb = Math.max(0.1, (Number(BigInt(hb.timestamp)) - Number(BigInt(ob.timestamp))) / 100000), floor = head - Math.round(BSC_DAYS * 86400 / spb);
+  st.cov = st.cov.filter(([, z]) => z > floor); const wins = []; let c = head;
+  while (c > floor && wins.length < 200) { const cv = st.cov.find(([a, z]) => c >= a && c <= z); if (cv) { c = cv[0] - 1; continue; }
+    let a = Math.max(floor + 1, c - BSC_WIN + 1); for (const [, z] of st.cov) if (z < c && z >= a) a = z + 1; wins.push([a, c]); c = a - 1; }
+  const save = () => { st.cov.sort((x, y) => x[0] - y[0]); const m = []; for (const r of st.cov) { const p = m[m.length - 1]; if (p && r[0] <= p[1] + 1) p[1] = Math.max(p[1], r[1]); else m.push([r[0], r[1]]); } st.cov = m; st.p = st.p.slice(-300); try { store.set(key, JSON.stringify(st)); } catch (e) {} };
+  let i = 0, done = 0, stop = false;
+  const work = async () => { while (!stop && i < wins.length) { const [a, z] = wins[i++];
+      try { const L = await logsRpc(n, { fromBlock: ethers.toQuantity(a), toBlock: ethers.toQuantity(z), address: tk.map(t => t.a), topics: [AP, topic] });
+        for (const l of L) if (!l.removed && l.topics && l.topics.length === 3) { const tk = l.address.toLowerCase(), sp = '0x' + l.topics[2].slice(26); if (!st.p.some(x => x[0] === tk && x[1] === sp)) st.p.push([tk, sp]); }
+        st.cov.push([a, z]); save(); done++; if (onPct) onPct(Math.round(done / wins.length * 100));
+      } catch (e) { if (/archive/i.test(String(e && e.message))) stop = true; } } };
+  await Promise.all([work(), work(), work()]);
+  for (const [t, sp] of st.p) add(t, sp); }
+async function permFind(n, me, onPct) {
+  const pairs = new Map(), add = (tok, sp) => { try { const k = tok.toLowerCase() + ':' + sp.toLowerCase(); if (!pairs.has(k)) pairs.set(k, { tok: ethers.getAddress(tok.toLowerCase()), sp: ethers.getAddress(sp.toLowerCase()) }); } catch (e) {} };
+  for (const t of toks(n)) if (t.a) for (const sp of Object.keys(SPN[n.id] || {})) add(t.a, sp);
+  let full = true, part = false;
+  try { if (n.id === 'eth') { const b0 = 'https://eth.blockscout.com/api/v2/addresses/' + me + '/transactions?filter=from'; let url = b0, pages = 0;
+    while (url && pages < 8) { const j = await getJ(url); pages++;
+      for (const x of j.items || []) { const ri = String(x.raw_input || '').toLowerCase(), to = x.to && x.to.hash;
+        if (to && x.status === 'ok' && (ri.startsWith('0x095ea7b3') || ri.startsWith('0x39509351')) && ri.length >= 138) add(to, '0x' + ri.slice(34, 74)); }
+      const np = j.next_page_params; url = np ? b0 + '&' + new URLSearchParams(Object.entries(np).filter(([k]) => k !== 'filter').map(([k, v]) => [k, String(v)])) : null; }
+    full = !url; }
+  else if (n.id === 'bnb') await bscApprovals(n, me, add, onPct); } catch (e) { part = true; }   // sin historial: se revisan igual los exchanges conocidos
+  return { pairs: [...pairs.values()], full, part }; }
+async function loadPerms(force) {
+  const n = curNet(), me = addrOf(n), key = n.id + ':' + (me || '').toLowerCase(); S.perm = S.perm || {};
+  if (n.kind !== 'evm' || !n.rpc.length || !me) return;
+  const c = S.perm[key]; if (!force && c && (c.st === 'loading' || Date.now() - c.at < 30000)) return paintPerms();
+  S.perm[key] = { st: 'loading', at: Date.now(), items: c ? c.items : null, full: c ? c.full : true }; paintPerms();
+  try { const { pairs, full, part } = await permFind(n, me, pc => { const x = S.perm[key]; if (x && x.st === 'loading') { x.pc = pc; paintPerms(); } });
+    const r = await mcall(n, pairs.map(p => [p.tok, IFC().encodeFunctionData('allowance', [me, p.sp])]));
+    const live = pairs.map((p, i) => ({ ...p, v: r[i] && r[i].length >= 66 ? BigInt(r[i].slice(0, 66)) : 0n })).filter(p => p.v > 0n);
+    const unk = [...new Set(live.map(p => p.tok.toLowerCase()))].filter(a => !toks(n).some(t => t.a && t.a.toLowerCase() === a));
+    const info = unk.length ? await mcall(n, unk.flatMap(a => [[a, IFC().encodeFunctionData('symbol')], [a, IFC().encodeFunctionData('decimals')]])) : [];
+    const meta = new Map(unk.map((a, i) => { let sy = '', d = 18;
+      try { sy = IFC().decodeFunctionResult('symbol', info[2 * i])[0]; } catch (e) { try { sy = ethers.decodeBytes32String(info[2 * i]); } catch (e2) {} }
+      try { d = Number(IFC().decodeFunctionResult('decimals', info[2 * i + 1])[0]); } catch (e) {}
+      sy = String(sy || '').replace(/[^\w.$-]/g, '').slice(0, 10) || 'TOKEN'; return [a, { s: sy, n: sy, a: ethers.getAddress(a), d, custom: true }]; }));
+    const names = {}; if (n.id === 'eth') await Promise.all([...new Set(live.map(p => p.sp))].filter(sp => !SPN.eth[sp.toLowerCase()]).slice(0, 12).map(sp => getJ('https://eth.blockscout.com/api/v2/addresses/' + sp).then(j => { names[sp] = { nm: j.name || '', scam: !!j.is_scam }; }).catch(() => {})));
+    S.perm[key] = { st: 'ok', at: Date.now(), full, part, items: live.map(p => ({ ...p, t: toks(n).find(t => t.a && t.a.toLowerCase() === p.tok.toLowerCase()) || meta.get(p.tok.toLowerCase()), nm: (SPN[n.id] || {})[p.sp.toLowerCase()] || (names[p.sp] && names[p.sp].nm) || '', scam: !!(names[p.sp] && names[p.sp].scam) })) };
+  } catch (e) { console.warn('[wallet] perms', e); S.perm[key] = { st: 'off', at: Date.now(), items: c ? c.items : null }; }
+  paintPerms(); }
+const permPend = () => { try { return JSON.parse(store.get('revpend') || '{}'); } catch (e) { return {}; } };
+function paintPerms() { const el = $app && $app.querySelector('#plist'); if (!el || S.view !== 'perms') return; const n = curNet(), key = n.id + ':' + (addrOf(n) || '').toLowerCase(), c = (S.perm || {})[key], eb = expBase(n), pend = permPend();
+  const sy = $app.querySelector('#psync'); if (sy) sy.innerHTML = !c ? '' : c.st === 'loading' ? `<span class="dot off"></span>${c.pc != null && c.pc < 100 ? `Checking… ${c.pc}%` : 'Checking…'}` : c.st === 'ok' ? '<span class="dot"></span>Up to date' : '';
+  const pn = $app.querySelector('#pnote'); if (pn && c && c.st === 'ok') { if (c.part) pn.textContent = 'Your past approvals could not be read right now, so only well-known exchanges were checked. Try again later.'; else if (n.id === 'eth' && !c.full) pn.textContent = 'Checked your latest 400 transactions and well-known exchanges.'; }
+  const L = (c && c.items) || [];
+  if (!L.length) { el.innerHTML = !c || c.st === 'loading' ? '<p class="hnone">Checking permissions…</p>' : c.st === 'off' ? "<p class=\"hnone\">Couldn't check permissions right now. Try again in a minute.</p>" : `<div class="pnone">${ic(P.shield, 30, '#5c9bff', 1.7)}<b>No active permissions</b><p>No app can move your tokens on ${n.name}.</p></div>`; return; }
+  el.innerHTML = L.map((p, i) => { const t = p.t || { s: 'TOKEN', d: 18, custom: true }, unl = p.v >= 2n ** 128n, pk = n.id + ':' + p.tok.toLowerCase() + ':' + p.sp.toLowerCase(), pd = pend[pk] && Date.now() - pend[pk] < 30 * 60e3;
+    return `<div class="prow"><span class="ptk">${TOKI(t, 38)}</span><div class="pt"><b class="notr">${esc(t.s)}</b><small>${p.nm ? `<span class="notr">${esc(p.nm)}</span>` : '<span>Unknown app</span>'}<span> · </span>${eb ? `<a class="mono" href="${eb}address/${p.sp}" target="_blank" rel="noopener noreferrer">${short(p.sp)}</a>` : `<span class="mono">${short(p.sp)}</span>`}</small>${p.scam ? '<small class="pscam">Flagged as a scam. Remove it.</small>' : ''}<small class="pamt ${unl ? 'unl' : ''}">${unl ? 'Unlimited' : `Up to <span class="notr">${fmtAmt(ethers.formatUnits(p.v, t.d))} ${esc(t.s)}</span>`}</small></div>
+      ${pd ? '<span class="ppend">Removal pending</span>' : `<button class="prm" data-revoke="${i}">Remove</button>`}</div>`; }).join('');
+  el.querySelectorAll('[data-revoke]').forEach(b => b.addEventListener('click', async () => { const p = L[+b.dataset.revoke]; if (!p || b.disabled) return;
+    if (b.dataset.arm !== '1') { b.dataset.arm = '1'; b.textContent = 'Tap again to remove'; b.classList.add('arm'); return; }
+    b.disabled = true; b.textContent = 'Removing…';
+    try { await revokePerm(n, p); const pp = permPend(); pp[n.id + ':' + p.tok.toLowerCase() + ':' + p.sp.toLowerCase()] = Date.now(); store.set('revpend', JSON.stringify(pp)); toast('Removal sent. It takes effect when the network confirms it.'); paintPerms(); setTimeout(() => { if (S.view === 'perms') loadPerms(true); }, 20000); }
+    catch (e) { b.disabled = false; b.dataset.arm = ''; b.classList.remove('arm'); b.textContent = 'Remove'; toast(errMsg(e, "Couldn't remove the permission. Try again."), 1); } })); }
+async function revokePerm(n, p) { if (!S.wallet) throw new UErr('Unlock the wallet first.');
+  const tx = { to: p.tok, value: 0n, data: IFC().encodeFunctionData('approve', [p.sp, 0n]) }, base = await evmTxBase(n, 'normal'), gasLimit = await estGas(n, tx, 70000n);
+  await needNative(n, 0n, gasLimit, base); const { baseFee, ...fee } = base, raw = await S.wallet.signTransaction({ ...tx, gasLimit, ...fee }), hash = ethers.keccak256(raw);
+  await sendRaw(n, raw); keepTx({ hash, to: p.sp, amount: '0', token: p.t ? p.t.s : '', net: n.name, netId: n.id, kind: 'revoke', time: Date.now(), st: 'pend' }); return hash; }
+
+/* ---------- escanear un codigo QR con la camara (o desde una imagen) ---------- */
+let SCAN = null;
+const loadJsQR = () => window.jsQR ? Promise.resolve() : new Promise((res, rej) => { const sc = document.createElement('script'); sc.src = 'jsqr.js'; sc.onload = () => res(); sc.onerror = () => rej(new Error('jsqr')); document.head.appendChild(sc); });
+function closeScan() { if (!SCAN) return; const x = SCAN; SCAN = null; clearTimeout(x.tm); try { x.stream && x.stream.getTracks().forEach(t => t.stop()); } catch (e) {} x.o.remove(); document.removeEventListener('keydown', x.key); }
+async function openScan(onText) {
+  closeScan(); const o = document.createElement('div'); o.className = 'scanov'; o.setAttribute('role', 'dialog'); o.setAttribute('aria-label', 'Scan QR code');
+  o.innerHTML = `<video playsinline muted autoplay></video><div class="sfr" aria-hidden="true"><i></i></div>
+    <div class="sctop"><button class="sx" aria-label="Close">${ic('<path d="M6 6l12 12M18 6L6 18"/>', 22, '#fff', 2.2)}</button><b>Scan QR code</b><span></span></div>
+    <div class="sbt"><p class="smsg">Point the camera at the QR code of the address.</p><label class="sfile">${ic('<rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-8 9"/>', 18, 'currentColor', 1.8)}<span>Choose image</span><input type="file" accept="image/*" hidden></label></div>`;
+  document.body.appendChild(o); if (TR) trNode(o);
+  const me = SCAN = { o, stream: null, tm: 0, key: e => { if (e.key === 'Escape') closeScan(); } }; document.addEventListener('keydown', me.key);
+  const v = o.querySelector('video'), msg = o.querySelector('.smsg'), say = t => { msg.textContent = t; msg.classList.add('warn'); if (TR) trNode(msg); };
+  o.querySelector('.sx').addEventListener('click', closeScan);
+  let det = null; try { if ('BarcodeDetector' in window && (await BarcodeDetector.getSupportedFormats()).includes('qr_code')) det = new BarcodeDetector({ formats: ['qr_code'] }); } catch (e) {}
+  const cv = document.createElement('canvas'), cx = cv.getContext('2d', { willReadFrequently: true });
+  let pass = 0; const cv2 = document.createElement('canvas'), cx2 = cv2.getContext('2d', { willReadFrequently: true });
+  const jq = (c, x) => { const d = x.getImageData(0, 0, c.width, c.height), r = window.jsQR(d.data, d.width, d.height, { inversionAttempts: 'attemptBoth' }); return r ? r.data : null; };
+  const decode = async (src, all) => { if (det) { const r = await det.detect(src); if (r && r[0]) return r[0].rawValue; }
+    await loadJsQR(); const w = src.videoWidth || src.naturalWidth || src.width, h = src.videoHeight || src.naturalHeight || src.height; if (!w || !h) return null;
+    const k = Math.min(1, 720 / Math.max(w, h)); cv.width = cv2.width = Math.round(w * k); cv.height = cv2.height = Math.round(h * k); cx.drawImage(src, 0, 0, cv.width, cv.height);
+    pass++; if (all || pass % 2) { const t = jq(cv, cx); if (t || !all) return t; }
+    cx2.filter = `blur(${Math.max(1, cv.width / 260).toFixed(1)}px)`; cx2.drawImage(cv, 0, 0); return jq(cv2, cx2); };   // segunda lectura suavizada: une los QR hechos de puntos
+  const done = t => { if (SCAN !== me) return; try { navigator.vibrate && navigator.vibrate(30); } catch (e) {} closeScan(); onText(String(t)); };
+  o.querySelector('input[type=file]').addEventListener('change', async e => { const f = e.target.files && e.target.files[0]; if (!f) return; const u = URL.createObjectURL(f), im = new Image();
+    im.onload = async () => { let t = null; try { t = await decode(im, true); } catch (er) {} URL.revokeObjectURL(u); if (t) done(t); else say('No QR code found in that image. Try another one.'); };
+    im.onerror = () => { URL.revokeObjectURL(u); say('That image could not be opened.'); }; im.src = u; });
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { o.classList.add('nocam'); return say('This browser cannot use the camera here. Choose an image of the QR code instead.'); }
+  try { me.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } }, audio: false });
+    if (SCAN !== me) { me.stream.getTracks().forEach(t => t.stop()); return; } v.srcObject = me.stream; await v.play().catch(() => {}); }
+  catch (e) { o.classList.add('nocam'); return say(/NotAllowed|Security|Permission/i.test(e && e.name) ? 'Camera access is blocked. Allow it in your browser settings, or choose an image of the QR code.' : 'No camera found. Choose an image of the QR code instead.'); }
+  const tick = async () => { if (SCAN !== me) return; if (v.readyState >= 2) { try { const t = await decode(v); if (t) return done(t); } catch (e) {} } me.tm = setTimeout(tick, det ? 120 : 200); };
+  tick(); }
+const bigAmt = x => { x = String(x || '').trim(); if (/^\d+$/.test(x)) return BigInt(x); const m = /^(\d+)(?:\.(\d+))?e\+?(\d+)$/i.exec(x); if (!m) return null; const fr = m[2] || '', e = +m[3]; if (fr.length > e) return null; return BigInt(m[1] + fr + '0'.repeat(e - fr.length)); };
+function qrParse(txt) {   // direccion sola, EIP-681 (ethereum:0x…@56/transfer?address=…&uint256=…) o solana:…?amount=…&spl-token=…
+  let x = String(txt || '').trim(); const m = /^([a-z][a-z0-9+.-]*):(\/\/)?/i.exec(x), sch = m ? m[1].toLowerCase() : '';
+  if (m) x = x.slice(m[0].length); const [path, qs] = x.split('?'), Q = new URLSearchParams(qs || ''), r = { sch, a: '', chain: null, token: null, raw: null, amt: null };
+  if (sch && sch !== 'ethereum' && sch !== 'solana') return r;
+  if (sch === 'solana' || (!sch && !/^0x/i.test(path))) { r.a = path; r.amt = Q.get('amount'); r.token = Q.get('spl-token'); return r; }
+  const [head, fn] = path.replace(/^pay-/i, '').split('/'), [a, ch] = head.split('@'); r.chain = ch && /^\d+$/.test(ch) ? Number(ch) : null;
+  if (fn === 'transfer') { r.token = a; r.a = Q.get('address') || ''; r.raw = Q.get('uint256'); } else { r.a = a; r.raw = Q.get('value'); }
+  return r; }
+function scanTo() { openScan(txt => { const n = curNet(), r = qrParse(txt), isE = a => { try { return ethers.isAddress(a); } catch (e) { return false; } };
+  if (!r.a || !(isE(r.a) || isSolAddr(r.a))) return toast("This QR code doesn't contain a wallet address.", 1);
+  if (n.kind === 'evm' && !isE(r.a)) return toast('This is a Solana address. Switch to Solana to send there.', 1);
+  if (n.kind === 'sol' && !isSolAddr(r.a)) return toast('This is a 0x address. Switch to Ethereum or BNB Chain to send there.', 1);
+  if (n.kind === 'evm' && r.chain && r.chain !== n.chainId) { const nn = Object.values(NETS).find(z => z.chainId === r.chain); return toast(nn ? `This QR code is for ${nn.name}. Switch to ${nn.name} to send.` : 'This QR code is for a different network.', 1); }
+  S.to = n.kind === 'evm' ? ethers.getAddress(r.a.toLowerCase() === r.a || r.a.toUpperCase().slice(2) === r.a.slice(2) ? r.a.toLowerCase() : r.a) : r.a; let note = 'Address scanned';
+  let t = tokOf(n, S.tok);
+  if (r.token) { const ft = toks(n).find(z => n.kind === 'sol' ? z.mint === r.token : z.a && z.a.toLowerCase() === String(r.token).toLowerCase()); if (ft) { S.tok = tid(ft); t = ft; } else { note = "Address scanned. The token in this code isn't in your list, so only the address was filled in."; r.raw = null; r.amt = null; } }
+  else if (n.kind === 'evm' && r.raw != null) { const nat = toks(n).find(z => z.native); if (nat) { S.tok = tid(nat); t = nat; } }
+  let a = null; try { if (n.kind === 'sol' && r.amt && /^\d*\.?\d+$/.test(r.amt)) a = r.amt; else if (r.raw != null) { const v = bigAmt(r.raw); if (v && v > 0n) a = ethers.formatUnits(v, t.d); } } catch (e) {}
+  if (a) { a = a.includes('.') ? a.replace(/\.?0+$/, '') : a; if (+a > 0 && a.replace('.', '').length <= 12) S.amt = a; }
+  render(); toast(note); }); }
 V.receive = () => { const n = curNet(), a = addrOf(n); return SCREEN(`${NAV('Receive', 0, 'home')}
   <div class="nbar" style="justify-content:center">${NETPILL()}</div>
   <div class="qcard"><div class="r1"><span class="wm">${LOGOW()}SECTORA</span><span class="net">${NDOT(n)}${n.name}</span></div>
@@ -1756,7 +1927,7 @@ V.receive = () => { const n = curNet(), a = addrOf(n); return SCREEN(`${NAV('Rec
 V.send = () => { const n = curNet(), t = tokOf(n, S.tok), a = S.amt || '', cs = CONTACTS.get().filter(c => c.k === (n.kind === 'sol' ? 'sol' : 'evm')).slice(0, 12), rec = [...new Set(txs().filter(x => (x.netId || 'eth') === n.id && x.to).map(x => x.to))].filter(r => !contactOf(r)).slice(0, 3);
   const solSpl = n.kind === 'sol' && !t.native; return SCREEN(`${NAV('Send', 0, 'home')}
   <div class="nbar" style="justify-content:center;margin-top:2px">${NETPILL()}</div>
-  <div class="to card" style="margin-top:12px"><span id="idn">${IDN(38, S.to)}</span><div class="tx"><small>To · ${n.name}<em class="cnm notr" id="cnm"></em></small><input id="to" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="${n.kind === 'sol' ? 'Solana address' : 'Address 0x…'}" value="${esc(S.to || '')}" aria-label="Recipient address"></div><span class="ok" id="valid" hidden style="color:var(--b2)">${ic(P.chk, 14, '#5c9bff', 2.6)}Valid</span></div>
+  <div class="to card" style="margin-top:12px"><span id="idn">${IDN(38, S.to)}</span><div class="tx"><small>To · ${n.name}<em class="cnm notr" id="cnm"></em></small><input id="to" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="${n.kind === 'sol' ? 'Solana address' : 'Address 0x…'}" value="${esc(S.to || '')}" aria-label="Recipient address"></div><span class="ok" id="valid" hidden style="color:var(--b2)">${ic(P.chk, 14, '#5c9bff', 2.6)}Valid</span><button class="qrb" data-scan="to" aria-label="Scan QR code">${ic(P.qr, 21, 'currentColor', 1.8)}</button></div>
   ${cs.length ? `<div class="recent"><span class="lbl">Contacts</span>${cs.map(c => `<button class="rc notr" data-rec="${esc(c.a)}">${c.k === 'evm' ? IDN(20, c.a) : ''}${esc(c.n)}</button>`).join('')}</div>` : ''}
   ${rec.length ? `<div class="recent"><span class="lbl">Recent</span>${rec.map(r => `<button class="rc" data-rec="${r}">${IDN(20, r)}${short(r)}</button>`).join('')}</div>` : ''}
   <div class="err" id="toerr" style="padding-left:6px"></div>
@@ -2030,6 +2201,9 @@ function bindMulti() {
     feeQuote(n, t, S.amt, S.to).then(r => { S.feeQ = r; if (S.view === 'review') paint(r); }).catch(() => paint(null)); if (!p) loadPrices();
     qa('[data-speed]').forEach(b => b.addEventListener('click', () => { S.speed = b.dataset.speed; qa('[data-speed]').forEach(x => x.classList.toggle('on', x === b)); const a = $app.querySelector('#feeAll'); if (a && S.feeQ) a.textContent = `≈ ${fmtAmt(S.feeQ[S.speed])} ${n.native}`; })); }
   qa('[data-bump]').forEach(b => b.addEventListener('click', () => onBump(b)));
+  qa('[data-scan]').forEach(b => b.addEventListener('click', e => { e.preventDefault(); if (b.dataset.scan === 'to') return scanTo();
+    openScan(txt => { const r = qrParse(txt), i = $app.querySelector('#caddr'), er = $app.querySelector('#cerr'); if (!i) return; if (!r.a || !kindOf(r.a)) { if (er) er.textContent = "This QR code doesn't contain a wallet address."; return; } i.value = r.a; if (er) er.textContent = ''; toast('Address scanned'); }); }));
+  if (S.view === 'perms') { paintPerms(); loadPerms(); }
   qa('[data-cnew]').forEach(b => b.addEventListener('click', () => { S.cEdit = { i: -1, n: '', a: '' }; S.cdelArm = false; S.dir = 'fwd'; go('contact'); }));
   qa('[data-cedit]').forEach(b => b.addEventListener('click', () => { const i = +b.dataset.cedit, c = CONTACTS.get()[i]; if (!c) return; S.cEdit = { ...c, i }; S.cdelArm = false; S.dir = 'fwd'; go('contact'); }));
   qa('[data-csave]').forEach(b => b.addEventListener('click', () => { S.cEdit = { i: -1, n: '', a: b.dataset.csave }; S.cdelArm = false; S.dir = 'fwd'; go('contact'); }));
