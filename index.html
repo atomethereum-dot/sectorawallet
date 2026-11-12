@@ -1229,7 +1229,44 @@ V.home = () => { const sc = sec(); return SCREEN(`<div class="top"><div class="m
    BNB Chain y Robinhood Chain: lo firmado en esta wallet y enlace al explorador. Solo tokens de la lista de la wallet y nunca transferencias de 0 (spam y envenenamiento de direcciones) ---------- */
 const HIST = {};
 const hKey = n => n.id + ':' + (addrOf(n) || '').toLowerCase();
-const HFULL = n => n.id === 'eth' || n.kind === 'sol';
+const HFULL = n => n.id === 'eth' || n.kind === 'sol' || n.id === 'bnb';
+/* ---------- BNB Chain: tokens recibidos leidos de la propia red (eventos Transfer hacia esta direccion) ----------
+   El nodo publico guarda ~15 dias y acepta 50.000 bloques por consulta. Se leen los ultimos 14 dias la primera vez
+   y despues solo los bloques nuevos; lo leido se guarda en este dispositivo. Los BNB recibidos no generan eventos. */
+const BSC_WIN = 50000, BSC_DAYS = 14, TRF = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef';
+async function logsRpc(n, p) { const ac = new AbortController(), tm = setTimeout(() => ac.abort(), 25000);
+  try { const r = await fetch(n.rpc[0], { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'eth_getLogs', params: [p] }), signal: ac.signal });
+    const j = await r.json(); if (j.error) throw new Error(j.error.message || 'rpc'); return j.result || []; } finally { clearTimeout(tm); } }
+async function histBsc(n, me, onPart) {
+  const lo = me.toLowerCase(), key = 'bscan.' + lo, tk = toks(n).filter(t => !t.native && t.a), sig = tk.map(t => t.a.toLowerCase()).sort().join(',');
+  let st = null; try { st = JSON.parse(store.get(key) || 'null'); } catch (e) {}
+  if (!st || !Array.isArray(st.cov) || !Array.isArray(st.logs)) st = { sig, cov: [], logs: [] }; if (st.sig !== sig) { st.sig = sig; st.cov = []; }   // lista de tokens cambiada: se vuelve a leer
+  const tiny = (t, v) => { const p = pxOf(n, t); return v === '0' || (p ? Number(ethers.formatUnits(v, t.d)) * p.usd < 0.01 : false); };   // polvo / envenenamiento de direcciones
+  const build = () => { const by = new Map();
+    for (const l of st.logs) { const t = tk.find(x => x.a.toLowerCase() === l.a); if (!t || tiny(t, l.v)) continue; const e = by.get(l.h) || { hash: l.h, time: l.t * 1000, ok: true, legs: [] };
+      e.legs.push({ s: t.s, d: t.d, v: BigInt(l.v), dir: 'in', peer: l.f }); by.set(l.h, e); }
+    return [...by.values()]; };
+  if (!tk.length) return [];
+  for (let k = 0; k < 10 && tk.some(t => !pxOf(n, t)); k++) await new Promise(r => setTimeout(r, 400));   // precios para descartar el polvo antes de guardar
+  const hb = await rpc(n, 'eth_getBlockByNumber', ['latest', false]), ob = await rpc(n, 'eth_getBlockByNumber', [ethers.toQuantity(Number(BigInt(hb.number)) - 100000), false]);
+  const head = Number(BigInt(hb.number)), tH = Number(BigInt(hb.timestamp)), spb = Math.max(0.1, (tH - Number(BigInt(ob.timestamp))) / 100000), floor = head - Math.round(BSC_DAYS * 86400 / spb);
+  st.cov = st.cov.filter(([a, z]) => z > floor); st.logs = st.logs.filter(l => l.b > floor - Math.round(180 * 86400 / spb)).slice(-300);
+  const wins = []; let c = head;
+  while (c > floor && wins.length < 200) { const cv = st.cov.find(([a, z]) => c >= a && c <= z); if (cv) { c = cv[0] - 1; continue; }
+    let a = Math.max(floor + 1, c - BSC_WIN + 1); for (const [, z] of st.cov) if (z < c && z >= a) a = z + 1; wins.push([a, c]); c = a - 1; }
+  const save = () => { st.cov.sort((x, y) => x[0] - y[0]); const m = []; for (const r of st.cov) { const p = m[m.length - 1]; if (p && r[0] <= p[1] + 1) p[1] = Math.max(p[1], r[1]); else m.push([r[0], r[1]]); } st.cov = m; try { store.set(key, JSON.stringify(st)); } catch (e) {} };
+  const topic = '0x' + lo.slice(2).padStart(64, '0'); let i = 0, stop = false, done = 0, fails = 0;
+  const work = async () => { while (!stop && i < wins.length) { const [a, z] = wins[i++];
+      try { const L = await logsRpc(n, { fromBlock: ethers.toQuantity(a), toBlock: ethers.toQuantity(z), address: tk.map(t => t.a), topics: [TRF, null, topic] });
+        for (const l of L) if (!l.removed && l.topics && l.topics.length === 3 && !st.logs.some(x => x.h === l.transactionHash && x.i === l.logIndex)) { const b = Number(BigInt(l.blockNumber)), t0 = tk.find(x => x.a.toLowerCase() === l.address.toLowerCase());
+          if (!t0 || tiny(t0, BigInt(l.data === '0x' ? 0 : l.data).toString())) continue;
+          st.logs.push({ h: l.transactionHash, i: l.logIndex, b, t: l.blockTimestamp ? Number(BigInt(l.blockTimestamp)) : Math.round(tH - (head - b) * spb), a: l.address.toLowerCase(), v: BigInt(l.data === '0x' ? 0 : l.data).toString(), f: '0x' + l.topics[1].slice(26) }); }
+        st.cov.push([a, z]); save(); done++; if (onPart) onPart(build(), Math.round(done / wins.length * 100));
+      } catch (e) { fails++; if (/archive/i.test(String(e && e.message))) stop = true; } } };
+  await Promise.all([work(), work(), work()]);
+  if (fails && !done && wins.length && !st.logs.length) throw new Error('bsc-logs');
+  return build();
+}
 async function histEvm(n, me) {
   const base = 'https://eth.blockscout.com/api/v2/addresses/' + me, lo = me.toLowerCase(), nat = n.tokens[0];
   const [tx, tt, it] = await Promise.all([getJ(base + '/transactions'), getJ(base + '/token-transfers?type=ERC-20'), getJ(base + '/internal-transactions').catch(() => ({ items: [] }))]);
@@ -1260,14 +1297,16 @@ async function loadHist(force) {
   const n = curNet(), me = addrOf(n), key = hKey(n); if (!me || !HFULL(n)) return paintHist();
   const h = HIST[key]; if (!force && h && (h.st === 'loading' || Date.now() - h.at < 60000)) return paintHist();
   HIST[key] = { items: h ? h.items : (() => { try { return JSON.parse(store.get('hist.' + key) || 'null'); } catch (e) { return null; } })(), st: 'loading', at: Date.now() }; paintHist();
-  try { const raw = n.kind === 'sol' ? await histSol(n, me) : await histEvm(n, me);
-    const items = raw.filter(e => e.legs.length || !e.ok).map(e => ({ hash: e.hash, time: e.time, ok: e.ok, legs: e.legs.map(l => ({ s: l.s, amt: ethers.formatUnits(l.v, l.d), dir: l.dir, peer: l.peer || '' })) })).sort((a, b) => b.time - a.time).slice(0, 50);
+  const hMap = raw => raw.filter(e => e.legs.length || !e.ok).map(e => ({ hash: e.hash, time: e.time, ok: e.ok, legs: e.legs.map(l => ({ s: l.s, amt: ethers.formatUnits(l.v, l.d), dir: l.dir, peer: l.peer || '' })) })).sort((a, b) => b.time - a.time).slice(0, 50);
+  try { const raw = n.kind === 'sol' ? await histSol(n, me) : n.id === 'bnb' ? await histBsc(n, me, (r, pc) => { const h2 = HIST[key]; if (h2 && h2.st === 'loading') { h2.items = hMap(r); h2.pc = pc; paintHist(); } }) : await histEvm(n, me);
+    const items = hMap(raw);
     HIST[key] = { items, st: 'ok', at: Date.now() }; try { store.set('hist.' + key, JSON.stringify(items)); } catch (e) {}
   } catch (e) { HIST[key] = { items: HIST[key].items, st: 'off', at: Date.now() }; }
   paintHist();
 }
 function histItems(n, sym) {
-  const h = HIST[hKey(n)], on = (h && h.items) || [], seen = new Set(on.map(e => e.hash.toLowerCase()));
+  const h = HIST[hKey(n)], me0 = (addrOf(n) || '').toLowerCase(), own = n.id === 'bnb' ? new Set(txs().filter(t => (t.netId || 'eth') === n.id && t.hash && (t.from ? t.from.toLowerCase() === me0 : ACCI() === 0)).map(t => t.hash.toLowerCase())) : null;
+  const on = ((h && h.items) || []).filter(e => !own || !own.has(e.hash.toLowerCase())), seen = new Set(on.map(e => e.hash.toLowerCase()));
   const me = (addrOf(n) || '').toLowerCase(), loc = txs().filter(t => (t.netId || 'eth') === n.id && t.hash && !seen.has(t.hash.toLowerCase()) && (t.from ? t.from.toLowerCase() === me : ACCI() === 0)).map(t => ({ hash: t.hash, time: t.time, ok: t.st !== 'fail', local: t, cancel: t.kind === 'cancel',
     legs: t.kind === 'cancel' ? [] : t.kind === 'swap' ? [{ s: t.token, amt: t.amount, dir: 'out', peer: '' }, { s: t.outToken, amt: '', dir: 'in', peer: '' }] : [{ s: t.token, amt: t.amount, dir: 'out', peer: (t.to || '').toLowerCase() }] }));
   const dust = e => !e.local && e.legs.length > 0 && e.legs.every(l => { if (l.dir !== 'in') return false; const tk = toks(n).find(t => t.s === l.s), p = tk && pxOf(n, tk), a = Number(l.amt);   // recibos de menos de $0.01: polvo y envenenamiento de direcciones
@@ -1295,10 +1334,11 @@ function HLIST(sym) {
   return out;
 }
 function paintHist() { const el = $app && $app.querySelector('#hlist'); if (el) { el.innerHTML = HLIST(el.dataset.tok || ''); el.querySelectorAll('[data-bump]').forEach(b => b.addEventListener('click', () => onBump(b))); }
-  const s = $app && $app.querySelector('#hsync'), h = HIST[hKey(curNet())]; if (s) s.innerHTML = h && h.st === 'loading' ? '<span class="dot off"></span>Updating…' : h && h.st === 'ok' ? '<span class="dot"></span>Up to date' : ''; }
+  const s = $app && $app.querySelector('#hsync'), h = HIST[hKey(curNet())]; if (s) s.innerHTML = h && h.st === 'loading' ? `<span class="dot off"></span>${h.pc != null && h.pc < 100 ? `Updating… ${h.pc}%` : 'Updating…'}` : h && h.st === 'ok' ? '<span class="dot"></span>Up to date' : ''; }
 V.activity = () => { const n = curNet(), eb = expBase(n), me = addrOf(n); return SCREEN(`<h1 class="h1" style="margin-top:14px">Activity</h1>
   <div class="hsub" style="margin-top:14px">${NETPILL()}<span class="sync" id="hsync"></span></div>
   <div id="hlist" class="hlist">${HLIST()}</div>
+  ${n.id === 'bnb' ? `<div class="note" style="margin-top:16px">${ic(P.info, 17, '#5c9bff')}<span>BNB Chain: you see what you send and swap, and the tokens you receive (last 14 days). BNB you receive and older transfers are in the full history on the explorer.</span></div>` : ''}
   ${!HFULL(n) ? `<div class="note" style="margin-top:16px">${ic(P.info, 17, '#5c9bff')}<span>${n.name}: this list shows what you send and swap from this wallet. ${eb ? 'Transfers you receive show in the full history on the explorer.' : 'Received transfers will show here when this network opens.'}</span></div>` : ''}
   ${eb ? `<a class="tfull" href="${eb}${n.kind === 'sol' ? 'account' : 'address'}/${me}" target="_blank" rel="noopener noreferrer">${ic(P.ext, 16, 'currentColor', 1.8)}Full history on ${new URL(eb).hostname}</a>` : ''}
   ${TABS('activity')}${SHEET()}`, '', 'has-tabs'); };
