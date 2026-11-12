@@ -128,7 +128,16 @@ html[data-theme="light"] .bchip{background:rgba(21,105,255,.08);color:#1569ff}
 .rename:focus{border-color:var(--b)}
 /* multired y swap */
 .tki{border-radius:50%;display:grid;place-items:center;background:var(--s3);color:#fff;font-weight:500;letter-spacing:.02em;flex:none}
-.ndot{display:inline-block;width:8px;height:8px;border-radius:50%;flex:none}
+.ndot{display:inline-block;width:8px;height:8px;border-radius:50%;flex:none;background:#f5b301}
+.ndot.live{background:#36d98a;animation:npulse 1.9s ease-out infinite}
+.ndot.off{background:#f5b301}
+@keyframes npulse{0%{box-shadow:0 0 0 0 rgba(54,217,138,.6)}70%{box-shadow:0 0 0 7px rgba(54,217,138,0)}100%{box-shadow:0 0 0 0 rgba(54,217,138,0)}}
+.ncon{flex:none;font:500 9.5px/1 var(--mono);font-style:normal;letter-spacing:.12em;text-transform:uppercase;padding:5px 8px 4px;border-radius:999px;border:1px solid rgba(245,179,1,.45);color:#f5c542;transition:color .3s,border-color .3s,background .3s}
+.ncon.on{border-color:rgba(54,217,138,.45);color:#36d98a;background:rgba(54,217,138,.08)}
+html[data-theme="light"] .ndot.live{background:#12b76a}
+html[data-theme="light"] .ncon{color:#a06c00;border-color:rgba(176,124,0,.4)}
+html[data-theme="light"] .ncon.on{color:#0f9d63;border-color:rgba(15,157,99,.4);background:rgba(15,157,99,.07)}
+@media (prefers-reduced-motion: reduce){.ndot.live{animation:none;box-shadow:0 0 0 3px rgba(54,217,138,.25)}}
 .nbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px}
 .npill{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 12px 0 13px;border-radius:18px;background:var(--s1);border:1px solid var(--ln);font-size:13.5px;font-weight:500}
 .sbg{position:absolute;inset:0;background:rgba(0,0,0,.62);z-index:20}
@@ -522,7 +531,8 @@ a[x-apple-data-detectors]{color:inherit!important;text-decoration:none!important
 .es-tag{display:inline-flex;align-items:center;gap:6px;padding:4px 8px 3px;border:1px solid rgba(92,155,255,.42);border-radius:2px;font:500 9.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--b2)}
 .es-tag::before{content:"";width:5px;height:5px;border-radius:50%;background:#5c9bff;box-shadow:0 0 6px 1px rgba(92,155,255,.8);animation:espulse 2.2s ease-in-out infinite}
 @keyframes espulse{50%{opacity:.3}}
-.es-row{display:flex;align-items:center;gap:12px;margin-top:13px}
+.es-row{display:flex;align-items:flex-start;gap:12px;margin-top:13px}
+.es-row svg{margin-top:1px}
 .es-row b{display:block;font-weight:500;font-size:16px;letter-spacing:-.01em}
 .es-row small{display:block;color:var(--mu);font-size:12.5px;line-height:1.45;margin-top:2px}
 .es-ml{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:6px}
@@ -1048,7 +1058,7 @@ const TLOGO = { ETH: 'tokens/eth.png', BNB: 'tokens/bnb.png', SOL: 'tokens/sol.p
 const VERI = (s = 16) => `<span class="vbadge" title="Verified token" aria-label="Verified token"><svg width="${s}" height="${s}" viewBox="0 0 24 24" aria-hidden="true" shape-rendering="geometricPrecision"><path fill="#1569ff" stroke="#1569ff" stroke-width="1.1" stroke-linejoin="round" d="M9.033 2.870 Q12.000 -0.900 14.967 2.870 Q19.582 1.564 19.767 6.357 Q24.269 8.014 21.600 12.000 Q24.269 15.986 19.767 17.643 Q19.582 22.436 14.967 21.130 Q12.000 24.900 9.033 21.130 Q4.418 22.436 4.233 17.643 Q-0.269 15.986 2.400 12.000 Q-0.269 8.014 4.233 6.357 Q4.418 1.564 9.033 2.870Z"/><path d="M7.75 12.35l2.85 2.85 5.65-5.9" fill="none" stroke="#fff" stroke-width="2.35" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
 const TOKI = (t, s = 40) => t.custom ? (t.logo ? `<img class="tkl" src="${t.logo}" width="${s}" height="${s}" alt="" decoding="async" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'tki',textContent:'${esc(t.s).slice(0, 4)}',style:'width:${s}px;height:${s}px;font-size:${Math.round(s * .3)}px'}))">` : `<span class="tki" style="width:${s}px;height:${s}px;font-size:${Math.round(s * .3)}px">${esc(t.s).slice(0, 4)}</span>`) : t.s === 'SECT' ? LOGO(s) : TLOGO[t.s] ? `<img class="tkl" src="${TLOGO[t.s]}" width="${s}" height="${s}" alt="${t.n}" decoding="async">` : (t.s === 'ETH' ? `<span class="tki" style="width:${s}px;height:${s}px">${ETH(Math.round(s * .48))}</span>`
   : `<span class="tki" style="width:${s}px;height:${s}px;font-size:${Math.round(s * .3)}px">${t.s.slice(0, 4)}</span>`);
-const NDOT = n => `<i class="ndot" style="background:${n.dot}"></i>`;
+const NDOT = n => n.id === S.net ? '<i class="ndot live" title="Connected"></i>' : '<i class="ndot off" title="Not connected"></i>';   // verde con pulso: red conectada; amarillo: sin conectar
 
 /* direcciones de Solana: misma frase, ruta m/44'/501'/0'/0' (estandar de Phantom) */
 function solFrom(w) { try { if (!w || !w.mnemonic || !window.SWSOL) return null; const k = SWSOL.keyFromSeed(ethers.getBytes(w.mnemonic.computeSeed())); return { sk: k.sk, addr: ethers.encodeBase58(k.pk) }; } catch (e) { return null; } }
@@ -1101,7 +1111,7 @@ const SHEET = () => {
   if (!S.sheet) return '';
   if (S.sheet === 'avatar') { const k = AVK(); return `<div class="sbg" data-close="1"></div><div class="bsheet" role="dialog" aria-label="Profile picture"><div class="grab"></div><h3>Profile picture</h3><div class="avgrid"><button class="avopt sq ${k.startsWith('img:') ? '' : 'on'}" data-av="logo" aria-label="Sectora logo" title="Sectora">${LOGO(52)}</button>${k.startsWith('img:') ? `<span class="avopt on">${AVATAR(52)}</span>` : ''}</div><label class="btn avup"><input type="file" id="avFile" accept="image/*" hidden>${ic('<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>', 18, '#fff', 2)}${k.startsWith('img:') ? 'Change photo' : 'Upload a photo'}</label>${k.startsWith('img:') ? `<button class="btn dark" data-av="logo" style="margin-top:8px">Remove photo</button>` : ''}<p class="avnote">${ic(P.lock, 14, '#8b93a6', 2)}Saved only on this device. It is never uploaded.</p></div>`; }
   if (S.sheet === 'net') return `<div class="sbg" data-close="1"></div><div class="bsheet" role="dialog" aria-label="Choose network"><div class="grab"></div><h3>Network</h3>
-    ${NET_ORDER.map(k => { const n = NETS[k]; return `<button class="nrow ${S.net === k ? 'on' : ''}" data-net="${k}">${NDOT(n)}<span><b>${n.name}</b><small>${n.kind === 'sol' ? short(S.sol) : short(S.addr)} · fees in ${n.native}</small></span>${S.net === k ? ic(P.chk, 18, '#5c9bff', 2.6) : ''}</button>`; }).join('')}
+    ${NET_ORDER.map(k => { const n = NETS[k]; return `<button class="nrow ${S.net === k ? 'on' : ''}" data-net="${k}">${NDOT(n)}<span><b>${n.name}</b><small>${n.kind === 'sol' ? short(S.sol) : short(S.addr)} · fees in ${n.native}</small></span><em class="ncon ${S.net === k ? 'on' : ''}">${S.net === k ? 'Connected' : 'Connect'}</em></button>`; }).join('')}
     <div class="evmsoon" role="note" aria-label="SectoraEVM, launching soon"><div class="es-top"><span class="es-q">Sectora L3 · Mainnet</span><span class="es-tag">Launching soon</span></div>
       <div class="es-row">${LOGO(38)}<span><b>SectoraEVM</b><small>Sectora's own blockchain for real-world assets. It appears here at launch.</small></span></div>
       <ul class="es-ml"><li>Public mainnet of the Sectora L3 RWA blockchain</li><li>Hash Nodes move from testnet to mainnet</li><li>Same address as your Ethereum account</li></ul></div>
@@ -1374,7 +1384,10 @@ function bindMulti() {
   const q = s => $app.querySelector(s), qa = s => $app.querySelectorAll(s);
   qa('[data-sheet]').forEach(b => b.addEventListener('click', () => { S.sheet = b.dataset.sheet; render(); }));
   qa('[data-close]').forEach(b => b.addEventListener('click', () => { S.sheet = null; render(); }));
-  qa('[data-net]').forEach(b => b.addEventListener('click', () => { S.net = b.dataset.net; store.set('net', S.net); S.sheet = null; S.tok = null; S.sf = null; S.st = null; S.to = ''; S.amt = ''; S.samt = ''; S.quote = null; render(); }));
+  qa('[data-net]').forEach(b => b.addEventListener('click', () => { const k = b.dataset.net; if (S.netBusy) return; if (k === S.net) { S.sheet = null; return render(); }
+    // se ve el cambio: la red elegida pasa a verde con pulso y "Connected"; luego se cierra la hoja
+    S.netBusy = true; qa('.nrow[data-net]').forEach(r => { const on = r === b; r.classList.toggle('on', on); const d = r.querySelector('.ndot'); if (d) d.className = 'ndot ' + (on ? 'live' : 'off'); const c = r.querySelector('.ncon'); if (c) { c.classList.toggle('on', on); c.textContent = on ? 'Connected' : 'Connect'; } });
+    setTimeout(() => { S.netBusy = false; S.net = k; store.set('net', S.net); S.sheet = null; S.tok = null; S.sf = null; S.st = null; S.to = ''; S.amt = ''; S.samt = ''; S.quote = null; render(); toast('Connected to ' + NETS[k].name); }, 700); }));
   qa('[data-pick]').forEach(b => b.addEventListener('click', () => { const [w, s] = b.dataset.pick.split(':'); if (w === 'send') S.tok = s; else if (w === 'from') { if (s === tid(swapPair().to)) S.st = tid(swapPair().from); S.sf = s; } else { if (s === tid(swapPair().from)) S.sf = tid(swapPair().to); S.st = s; } S.sheet = null; render(); if (S.view === 'swap' && S.samt) requestQuote(); }));
   // enviar: validacion por tipo de red
   const to = q('#to');
