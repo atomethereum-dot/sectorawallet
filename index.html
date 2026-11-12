@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://ethereum-rpc.publicnode.com https://eth.drpc.org https://bsc-rpc.publicnode.com https://bsc-dataseed.bnbchain.org https://solana-rpc.publicnode.com https://api.mainnet-beta.solana.com https://aggregator-api.kyberswap.com https://lite-api.jup.ag; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://raw.githubusercontent.com; font-src 'self' data:; connect-src 'self' https://raw.githubusercontent.com https://ethereum-rpc.publicnode.com https://eth.drpc.org https://bsc-rpc.publicnode.com https://bsc-dataseed.bnbchain.org https://solana-rpc.publicnode.com https://api.mainnet-beta.solana.com https://aggregator-api.kyberswap.com https://lite-api.jup.ag; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="no-referrer">
 <title>Sectora Wallet</title>
 <meta name="description" content="Sectora Wallet: a self-custody multichain wallet for Ethereum, BNB Chain, Robinhood Chain and Solana. Your keys stay on your device.">
@@ -456,6 +456,14 @@ button.lg:hover{transform:translate(-50%,-50%) scale(1.04)}
 .tkl{display:block;flex:none;border-radius:50%;object-fit:cover;background:#15181e}
 .vbadge{display:inline-flex;vertical-align:-2px;margin-left:6px}
 .vbadge svg{display:block}
+
+/* anadir token */
+.lh .addt{display:inline-flex;align-items:center;gap:6px;color:var(--b2);font-size:13px;font-weight:500}
+.unv{font-style:normal;color:var(--warn)}
+.ctdel{flex:none;margin-left:auto;padding:8px 12px;border-radius:12px;border:1px solid var(--ln);color:var(--mu);font-size:13px}
+.ctdel:hover{color:var(--bad);border-color:rgba(255,107,92,.4)}
+.ctres{padding:16px}
+.ctres .note a{color:var(--b2);text-decoration:underline}
 /* ---------- escritorio y tableta: sin marco de telefono ---------- */
 @media (min-width:521px) and (min-height:641px){
   .stage{padding:0;display:block;height:100%}
@@ -871,7 +879,10 @@ const NETS = {
 const NET_ORDER = ['eth', 'bnb', 'rh', 'sol'];
 const curNet = () => NETS[S.net] || NETS.eth;
 const addrOf = n => n.kind === 'sol' ? S.sol : S.addr;
-const tokOf = (n, s) => n.tokens.find(t => t.s === s) || n.tokens[0];
+const tid = t => t.id || t.s;
+const CT = { get(k) { try { return JSON.parse(store.get('ctok.' + k) || '[]'); } catch (e) { return []; } }, set(k, a) { store.set('ctok.' + k, JSON.stringify(a)); } };
+const toks = n => [...n.tokens, ...CT.get(n.id)];
+const tokOf = (n, s) => toks(n).find(t => tid(t) === s) || n.tokens[0];
 P.swap = '<path d="M7 4v14M3 14l4 4 4-4M17 20V6M13 10l4-4 4 4"/>';
 P.flip = '<path d="M12 4v16M6 14l6 6 6-6"/>';
 P.grid = '<rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/>';
@@ -879,7 +890,7 @@ P.grid = '<rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" widt
 /* iconos de token y red (neutros, sin logos de terceros salvo ETH y SECT) */
 const TLOGO = { ETH: 'tokens/eth.png', BNB: 'tokens/bnb.png', SOL: 'tokens/sol.png', USDT: 'tokens/usdt.png', USDC: 'tokens/usdc.png' };
 const VERI = (s = 16) => `<span class="vbadge" title="Verified token" aria-label="Verified token"><svg width="${s}" height="${s}" viewBox="0 0 24 24" aria-hidden="true" shape-rendering="geometricPrecision"><path fill="#1569ff" stroke="#1569ff" stroke-width="1.1" stroke-linejoin="round" d="M9.033 2.870 Q12.000 -0.900 14.967 2.870 Q19.582 1.564 19.767 6.357 Q24.269 8.014 21.600 12.000 Q24.269 15.986 19.767 17.643 Q19.582 22.436 14.967 21.130 Q12.000 24.900 9.033 21.130 Q4.418 22.436 4.233 17.643 Q-0.269 15.986 2.400 12.000 Q-0.269 8.014 4.233 6.357 Q4.418 1.564 9.033 2.870Z"/><path d="M7.75 12.35l2.85 2.85 5.65-5.9" fill="none" stroke="#fff" stroke-width="2.35" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
-const TOKI = (t, s = 40) => t.s === 'SECT' ? LOGO(s) : TLOGO[t.s] ? `<img class="tkl" src="${TLOGO[t.s]}" width="${s}" height="${s}" alt="${t.n}" decoding="async">` : (t.s === 'ETH' ? `<span class="tki" style="width:${s}px;height:${s}px">${ETH(Math.round(s * .48))}</span>`
+const TOKI = (t, s = 40) => t.custom ? (t.logo ? `<img class="tkl" src="${t.logo}" width="${s}" height="${s}" alt="" decoding="async" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'tki',textContent:'${esc(t.s).slice(0, 4)}',style:'width:${s}px;height:${s}px;font-size:${Math.round(s * .3)}px'}))">` : `<span class="tki" style="width:${s}px;height:${s}px;font-size:${Math.round(s * .3)}px">${esc(t.s).slice(0, 4)}</span>`) : t.s === 'SECT' ? LOGO(s) : TLOGO[t.s] ? `<img class="tkl" src="${TLOGO[t.s]}" width="${s}" height="${s}" alt="${t.n}" decoding="async">` : (t.s === 'ETH' ? `<span class="tki" style="width:${s}px;height:${s}px">${ETH(Math.round(s * .48))}</span>`
   : `<span class="tki" style="width:${s}px;height:${s}px;font-size:${Math.round(s * .3)}px">${t.s.slice(0, 4)}</span>`);
 const NDOT = n => `<i class="ndot" style="background:${n.dot}"></i>`;
 
@@ -908,14 +919,14 @@ async function loadBalances(force) {
   try {
     const out = {}, me = addrOf(n);
     if (n.kind === 'evm') {
-      for (const t of n.tokens) {
-        if (t.native) out[t.s] = ethers.formatUnits(BigInt(await rpc(n, 'eth_getBalance', [me, 'latest'])), t.d);
-        else { const data = '0x70a08231' + me.slice(2).toLowerCase().padStart(64, '0'); out[t.s] = ethers.formatUnits(BigInt(await rpc(n, 'eth_call', [{ to: t.a, data }, 'latest'])), t.d); }
+      for (const t of toks(n)) {
+        if (t.native) out[tid(t)] = ethers.formatUnits(BigInt(await rpc(n, 'eth_getBalance', [me, 'latest'])), t.d);
+        else { const data = '0x70a08231' + me.slice(2).toLowerCase().padStart(64, '0'); try { out[tid(t)] = ethers.formatUnits(BigInt(await rpc(n, 'eth_call', [{ to: t.a, data }, 'latest'])), t.d); } catch (e) { if (!t.custom) throw e; out[tid(t)] = '0'; } }
       }
     } else {
       out.SOL = String((await rpc(n, 'getBalance', [me])).value / 1e9);
-      for (const t of n.tokens.filter(t => !t.native)) { const r = await rpc(n, 'getTokenAccountsByOwner', [me, { mint: t.mint }, { encoding: 'jsonParsed' }]);
-        out[t.s] = String(r.value.reduce((a, x) => a + (x.account.data.parsed.info.tokenAmount.uiAmount || 0), 0)); }
+      for (const t of toks(n).filter(t => !t.native)) { try { const r = await rpc(n, 'getTokenAccountsByOwner', [me, { mint: t.mint }, { encoding: 'jsonParsed' }]);
+        out[tid(t)] = String(r.value.reduce((a, x) => a + (x.account.data.parsed.info.tokenAmount.uiAmount || 0), 0)); } catch (e) { if (!t.custom) throw e; out[tid(t)] = '0'; } }
     }
     S.bal[key] = out; S.balSt[key] = 'ok'; S.balAt = { ...(S.balAt || {}), [key]: Date.now() };
   } catch (e) { S.balSt[key] = 'off'; }
@@ -937,7 +948,7 @@ const SHEET = () => {
     <p class="snote">Ethereum, BNB Chain and Robinhood Chain share one address. Solana uses its own.</p></div>`;
   const n = curNet(), which = S.sheet; // 'from' | 'to' | 'send'
   return `<div class="sbg" data-close="1"></div><div class="bsheet" role="dialog" aria-label="Choose token"><div class="grab"></div><h3>Choose token · ${n.name}</h3>
-    ${n.tokens.map(t => `<button class="nrow" data-pick="${which}:${t.s}">${TOKI(t, 36)}<span><b>${t.s}${VERI(14)}</b><small>${t.n}</small></span><span class="bv" data-bal="${t.s}">—</span></button>`).join('')}</div>`;
+    ${(which === 'send' ? toks(n) : toks(n).filter(t => !t.custom || t.listed)).map(t => `<button class="nrow" data-pick="${which}:${tid(t)}">${TOKI(t, 36)}<span><b>${esc(t.s)}${!t.custom || t.listed ? VERI(14) : ''}</b><small>${esc(t.n)}${t.custom && !t.listed ? ' · <em class="unv">Unverified</em>' : ''}</small></span><span class="bv" data-bal="${tid(t)}">—</span></button>`).join('')}</div>`;
 };
 const NETPILL = () => `<button class="npill" data-sheet="net">${NDOT(curNet())}${curNet().name}${ic(P.down, 14, '#8b93a6', 2.4)}</button>`;
 
@@ -955,8 +966,8 @@ V.home = () => { const sc = sec(), n = curNet(); return SCREEN(`<div class="top"
   <div class="acts4"><button class="pri" data-go="send">${ic(P.send, 22, '#fff', 2.2)}<span>Send</span></button><button data-go="receive">${ic(P.recv, 22, '#5c9bff', 2.2)}<span>Receive</span></button><button data-go="swap">${ic(P.swap, 21, '#5c9bff')}<span>Swap</span></button><button data-go="security">${ic(P.shield, 21, '#5c9bff')}<span>Security</span></button></div>
   <button class="secp card" data-go="security"><span class="shd">${ic(P.shield, 24, '#fff', 1.9)}</span><span class="t"><b>${sc.score === sc.total ? 'Your wallet is protected' : 'Improve your protection'}</b><small>${sc.score} of ${sc.total} security checks passed</small><span class="segs">${sc.items.map(i => `<i class="${i.ok ? 'on' : ''}"></i>`).join('')}</span></span>${ic(P.chev, 16, '#545c6e', 2.2)}</button>
   <button class="hr2 card" data-go="assets"><span class="shd">${ic(P.rwa, 22)}</span><span class="t"><b>Tokenize real-world assets</b><small>In development · launches with SectoraEVM</small></span>${ic(P.chev, 16, '#545c6e', 2.2)}</button>
-  <div class="lh">Tokens<span>${n.name}</span></div>
-  <div>${n.tokens.map(t => `<div class="li"><span class="av" style="background:none">${TOKI(t, 44)}</span><div><b>${t.n}${VERI()}</b><small>${t.s}${t.a ? ' · ' + short(t.a) : t.mint && !t.native ? ' · ' + short(t.mint) : ' · native'}</small></div><div class="r"><b data-bal="${t.s}" class="na">—</b><small>${t.s}</small></div></div>`).join('')}</div>
+  <div class="lh">Tokens<button class="addt" data-go="addtok">${ic(P.plus || '<path d="M12 5v14M5 12h14"/>', 15, '#5c9bff', 2.4)}Add token</button></div>
+  <div>${toks(n).map(t => `<div class="li"><span class="av" style="background:none">${TOKI(t, 44)}</span><div><b>${esc(t.n)}${!t.custom || t.listed ? VERI() : ''}</b><small>${esc(t.s)}${t.a ? ' · ' + short(t.a) : t.mint && !t.native ? ' · ' + short(t.mint) : ' · native'}${t.custom && !t.listed ? ' · <em class="unv">Unverified</em>' : ''}</small></div><div class="r"><b data-bal="${tid(t)}" class="na">—</b><small>${esc(t.s)}</small></div></div>`).join('')}</div>
   <div class="note" style="margin-top:10px" id="offNote" ${!PREVIEW && n.rpc.length ? 'hidden' : ''}>${ic(P.info, 16, '#f0b54a')}<span>${n.rpc.length ? (PREVIEW ? 'Balances load from the network. This private preview runs offline, so they show once the wallet is online.' : "Couldn't reach the network right now. Balances update when the connection is back.") : (PREVIEW ? 'Robinhood Chain support is ready; its network connection is configured at launch.' : 'Robinhood Chain connection opens soon. Balances and sends will show here.')}</span></div>
   ${TABS('home')}${SHEET()}`, '', 'has-tabs'); };
 
@@ -1008,7 +1019,7 @@ const txRow = t => { const n = NETS[t.netId || 'eth'] || NETS.eth; return `<div 
 
 /* ---------- Swap en la misma red ---------- */
 const SWAP_ROUTER = n => n.kind === 'sol' ? 'Jupiter' : n.kyber ? 'KyberSwap' : null;
-function swapPair() { const n = curNet(); const from = tokOf(n, S.sf || n.tokens[0].s); let to = tokOf(n, S.st || (n.tokens.find(t => t.s === 'USDC') || n.tokens[1] || n.tokens[0]).s); if (to.s === from.s) to = n.tokens.find(t => t.s !== from.s) || to; return { n, from, to }; }
+function swapPair() { const n = curNet(); const from = tokOf(n, S.sf || n.tokens[0].s); let to = tokOf(n, S.st || (n.tokens.find(t => t.s === 'USDC') || n.tokens[1] || n.tokens[0]).s); if (tid(to) === tid(from)) to = n.tokens.find(t => tid(t) !== tid(from)) || to; return { n, from, to }; }
 V.swap = () => { const { n, from, to } = swapPair(), a = S.samt || '', q = S.quote, can = !!SWAP_ROUTER(n) && n.tokens.length > 1; return SCREEN(`${NAV('Swap', 0, 'home')}
   <div class="nbar" style="justify-content:center;margin-top:2px">${NETPILL()}</div>
   ${can ? `<div class="sw card"><div class="swl"><span>You pay</span><span>Balance <b data-bal="${from.s}">—</b></span></div>
@@ -1204,7 +1215,7 @@ function bindMulti() {
   qa('[data-sheet]').forEach(b => b.addEventListener('click', () => { S.sheet = b.dataset.sheet; render(); }));
   qa('[data-close]').forEach(b => b.addEventListener('click', () => { S.sheet = null; render(); }));
   qa('[data-net]').forEach(b => b.addEventListener('click', () => { S.net = b.dataset.net; store.set('net', S.net); S.sheet = null; S.tok = null; S.sf = null; S.st = null; S.to = ''; S.amt = ''; S.samt = ''; S.quote = null; render(); }));
-  qa('[data-pick]').forEach(b => b.addEventListener('click', () => { const [w, s] = b.dataset.pick.split(':'); if (w === 'send') S.tok = s; else if (w === 'from') { if (s === swapPair().to.s) S.st = swapPair().from.s; S.sf = s; } else { if (s === swapPair().from.s) S.sf = swapPair().to.s; S.st = s; } S.sheet = null; render(); if (S.view === 'swap' && S.samt) requestQuote(); }));
+  qa('[data-pick]').forEach(b => b.addEventListener('click', () => { const [w, s] = b.dataset.pick.split(':'); if (w === 'send') S.tok = s; else if (w === 'from') { if (s === tid(swapPair().to)) S.st = tid(swapPair().from); S.sf = s; } else { if (s === tid(swapPair().from)) S.sf = tid(swapPair().to); S.st = s; } S.sheet = null; render(); if (S.view === 'swap' && S.samt) requestQuote(); }));
   // enviar: validacion por tipo de red
   const to = q('#to');
   if (to && S.view === 'send') { const n = curNet(), t = tokOf(n, S.tok);
@@ -1342,7 +1353,7 @@ function bindTok() {
 function render() {
   if (S.view === 'boot') { S.addr = store.get('addr') || ''; S.lockMin = +(store.get('lock') || 5); S.name = store.get('name') || 'Account 1'; S.sol = store.get('sol') || ''; S.net = store.get('net') || 'eth'; S.since = +(store.get('since') || 0); S.backed = store.get('backed') || ''; S.view = store.get('vault') ? 'unlock' : 'welcome'; }
   if (!window.ethers) { $app.innerHTML = SCREEN(`<div class="wel" style="margin-top:120px">${LOGO(72)}<h1 class="h1">Loading…</h1><p class="lead">Loading the cryptography library. If this stays, check your connection and reload.</p></div>`); return; }
-  $app.innerHTML = V[S.view](); bind(); bindMulti(); bindTok(); GLOBE.mount();
+  $app.innerHTML = V[S.view](); bind(); bindMulti(); bindTok(); bindCT(); GLOBE.mount();
   if (!S.introDone && (S.view === 'welcome' || S.view === 'unlock')) runIntro();
 }
 function bind() {
@@ -1438,6 +1449,56 @@ function bind() {
 async function signNow() {
   try { keepTx(await signSend()); setTimeout(() => go('sent'), 350); }
   catch (e) { console.warn('[wallet] send', e); go('send'); toast(errMsg(e, PREVIEW ? 'Could not sign. Check the amount.' : 'Could not send. Check the amount and your balance.'), 1); }
+}
+/* ---------- anadir token: lee el contrato y busca el logo en el directorio de Trust Wallet ---------- */
+const TWCHAIN = { eth: 'ethereum', bnb: 'smartchain', sol: 'solana' };
+const TWBASE = 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/';
+const tokPage = (n, a) => n.exp ? n.exp.replace(/\/tx\/$/, '/token/') + a : '';
+V.addtok = () => { const n = curNet(), list = CT.get(n.id), can = !!TWCHAIN[n.id] && n.rpc.length;
+  return SCREEN(`${NAV('Add token', 0, 'home')}
+  <div class="nbar" style="justify-content:center;margin-top:2px">${NETPILL()}</div>
+  ${can ? `<p class="lead" style="margin-top:14px">Paste the ${n.kind === 'sol' ? 'token mint' : 'token contract'} address on ${n.name}. The wallet reads the token from the blockchain.</p>
+  <div class="fld" style="margin-top:14px"><div class="in"><input id="ctAddr" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="${n.kind === 'sol' ? 'Mint address' : 'Contract address 0x…'}"></div></div>
+  <div id="ctRes"></div>` : `<div class="note" style="margin-top:18px">${ic(P.info, 16, '#f0b54a')}<span>Adding tokens on ${n.name} opens with its network connection.</span></div>`}
+  ${list.length ? `<div class="lh" style="margin-top:22px">Your added tokens<span>${n.name}</span></div><div>${list.map(t => `<div class="li"><span class="av" style="background:none">${TOKI(t, 40)}</span><div><b>${esc(t.n)}${t.listed ? VERI() : ''}</b><small>${esc(t.s)} · ${short(t.a || t.mint)}${t.listed ? '' : ' · <em class="unv">Unverified</em>'}</small></div><button class="ctdel" data-ctdel="${tid(t)}" aria-label="Remove ${esc(t.s)}">Remove</button></div>`).join('')}</div>` : ''}
+  ${SHEET()}`, can ? `<button class="btn" id="ctAdd" disabled>Add token</button>` : '');
+};
+async function twInfo(n, a) { const ch = TWCHAIN[n.id]; if (!ch) return null;
+  try { const ctl = new AbortController(), tm = setTimeout(() => ctl.abort(), 8000); const r = await fetch(TWBASE + ch + '/assets/' + a + '/info.json', { signal: ctl.signal, credentials: 'omit', referrerPolicy: 'no-referrer' }); clearTimeout(tm);
+    if (!r.ok) return null; const j = await r.json(); return j && j.status === 'active' ? j : null; } catch (e) { return null; } }
+async function readToken(n, raw) {
+  if (n.kind === 'sol') { const mint = raw.trim(); if (!isSolAddr(mint)) throw new UErr('This is not a valid Solana mint address.');
+    const r = await rpc(n, 'getAccountInfo', [mint, { encoding: 'jsonParsed' }]); const p = r && r.value && r.value.data && r.value.data.parsed;
+    if (!p || p.type !== 'mint') throw new UErr('No token found at this address on Solana.');
+    const tw = await twInfo(n, mint), d = p.info.decimals; const listed = !!tw && (tw.decimals == null || +tw.decimals === d);
+    return { id: 'c:' + mint, mint, d, s: listed ? String(tw.symbol).slice(0, 12) : mint.slice(0, 4).toUpperCase(), n: listed ? String(tw.name).slice(0, 40) : 'Unlisted token', custom: true, listed, logo: listed ? TWBASE + 'solana/assets/' + mint + '/logo.png' : '' }; }
+  if (!ethers.isAddress(raw.trim())) throw new UErr('This is not a valid contract address.');
+  const a = ethers.getAddress(raw.trim()), call = async sel => rpc(n, 'eth_call', [{ to: a, data: sel }, 'latest']);
+  const code = await rpc(n, 'eth_getCode', [a, 'latest']); if (!code || code === '0x') throw new UErr(`No contract at this address on ${n.name}.`);
+  const str = h => { if (!h || h === '0x') return ''; try { return ethers.AbiCoder.defaultAbiCoder().decode(['string'], h)[0]; } catch (e) { try { return ethers.decodeBytes32String(h.slice(0, 66)); } catch (e2) { return ''; } } };
+  let d; try { d = Number(BigInt(await call('0x313ce567'))); } catch (e) { throw new UErr('This contract is not a standard token.'); }
+  if (!(d >= 0 && d <= 36)) throw new UErr('This contract is not a standard token.');
+  const sym = (str(await call('0x95d89b41').catch(() => '')) || '').replace(/[^\x20-\x7e]/g, '').trim().slice(0, 12), nm = (str(await call('0x06fdde03').catch(() => '')) || '').replace(/[^\x20-\x7e]/g, '').trim().slice(0, 40);
+  if (!sym) throw new UErr('This contract is not a standard token.');
+  const tw = await twInfo(n, a); const listed = !!tw && String(tw.symbol || '').toUpperCase() === sym.toUpperCase() && (tw.decimals == null || +tw.decimals === d);
+  return { id: 'c:' + a.toLowerCase(), a, d, s: sym, n: nm || sym, custom: true, listed, logo: listed ? TWBASE + TWCHAIN[n.id] + '/assets/' + a + '/logo.png' : '' }; }
+function bindCT() {
+  if (S.view !== 'addtok') return; const n = curNet(), inp = $app.querySelector('#ctAddr'), res = $app.querySelector('#ctRes'), btn = $app.querySelector('#ctAdd');
+  $app.querySelectorAll('[data-ctdel]').forEach(b => b.addEventListener('click', () => { CT.set(n.id, CT.get(n.id).filter(t => tid(t) !== b.dataset.ctdel)); S.bal = {}; S.balSt = {}; render(); toast('Token removed'); }));
+  if (!inp) return; let found = null, seq = 0, tmr = 0;
+  const paint = (html) => { res.innerHTML = html; };
+  const look = async () => { const v = inp.value.trim(), my = ++seq; found = null; btn.disabled = true; if (!v) return paint('');
+    if (toks(n).some(t => (t.a && t.a.toLowerCase() === v.toLowerCase()) || t.mint === v)) return paint(`<p class="err" style="margin-top:12px">This token is already in your list.</p>`);
+    paint(`<div class="card ctres" style="margin-top:14px"><span class="lead" style="margin:0">Reading the token…</span></div>`);
+    try { const t = await readToken(n, v); if (my !== seq) return; found = t; btn.disabled = false;
+      const pg = tokPage(n, t.a || t.mint);
+      paint(`<div class="card ctres" style="margin-top:14px"><div class="li" style="border:0;padding:0"><span class="av" style="background:none">${TOKI(t, 44)}</span><div><b>${esc(t.n)}${t.listed ? VERI() : ''}</b><small>${esc(t.s)} · ${t.d} decimals · ${short(t.a || t.mint)}</small></div></div>
+      ${t.listed ? `<div class="note" style="margin-top:12px">${ic(P.chk, 16, '#5c9bff', 2.6)}<span>Listed in the Trust Wallet token directory. Name, symbol and logo match the contract.</span></div>`
+      : `<div class="note" style="margin-top:12px">${ic(P.info, 16, '#f0b54a')}<span><b>Unverified token.</b> Anyone can create a token with any name. Check the contract on the explorer before you use it.${pg ? ` <a href="${pg}" target="_blank" rel="noopener noreferrer">Open in explorer</a>` : ''}</span></div>`}</div>`); }
+    catch (e) { if (my !== seq) return; paint(`<p class="err" style="margin-top:12px">${esc(e instanceof UErr ? e.message : 'Could not read this token. Check the address and the network.')}</p>`); } };
+  inp.addEventListener('input', () => { clearTimeout(tmr); tmr = setTimeout(look, 450); });
+  inp.addEventListener('paste', () => { clearTimeout(tmr); tmr = setTimeout(look, 50); });
+  btn.addEventListener('click', () => { if (!found) return; const l = CT.get(n.id); if (l.length >= 30) return toast('You can add up to 30 tokens per network', 1); l.push(found); CT.set(n.id, l); S.bal = {}; S.balSt = {}; toast(found.listed ? 'Token added' : 'Unverified token added'); go('home'); });
 }
 (function start() { if (window.ethers) return go('boot'); let n = 0; render(); const t = setInterval(() => { if (window.ethers || ++n > 60) { clearInterval(t); go('boot'); } }, 150); })();
 })();
