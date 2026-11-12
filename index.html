@@ -8,6 +8,7 @@
 <title>Sectora Wallet</title>
 <meta name="description" content="Sectora Wallet: a self-custody multichain wallet for Ethereum, BNB Chain, Robinhood Chain and Solana. Your keys stay on your device.">
 <meta name="theme-color" content="#000000">
+<script>try { var m = localStorage.getItem('sw.theme') || 'dark', L = m === 'light' || (m === 'auto' && matchMedia('(prefers-color-scheme: light)').matches); document.documentElement.dataset.theme = L ? 'light' : 'dark'; if (L) document.querySelector('meta[name="theme-color"]').content = '#ffffff'; } catch (e) {}</script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%231569ff'/%3E%3Ccircle cx='50' cy='50' r='27' fill='none' stroke='white' stroke-width='9'/%3E%3C/svg%3E">
 <script>if (window.top !== window.self) { try { window.top.location = window.self.location.href; } catch (e) { document.documentElement.style.display = 'none'; } }</script>
 </head>
@@ -499,6 +500,36 @@ button.lg:hover{transform:translate(-50%,-50%) scale(1.04)}
   .tabs button:not(.on):hover{background:var(--s1);color:var(--tx)}
   .has-tabs .sbg{position:fixed;left:264px}
 }
+
+/* ---------- tema claro ---------- */
+html[data-theme="light"]{--bg:#ffffff;--s1:#f5f7fa;--s2:#eef1f6;--s3:#e2e7ef;--ln:rgba(11,14,20,.09);--tx:#0b0e14;--mu:#5b6474;--fa:#8a93a3;--b:#1569ff;--b2:#1569ff;--ok:#0f9d63;--warn:#b26b00;--bad:#d93b2b;--lime:#3c8a0a;--ring:#e2e7ef;--dotc:#e9edf3;--onw:#ffffff;color-scheme:light}
+html[data-theme="light"],html[data-theme="light"] body{background:#ffffff}
+html[data-theme="light"] .device{background:#ffffff}
+html[data-theme="light"] .pager button{background:var(--s3)}
+html[data-theme="light"] .pager button.on{background:var(--tx)}
+html[data-theme="light"] .btn.white,html[data-theme="light"] .btn.wht{background:#0b0e14;color:#ffffff}
+html[data-theme="light"] .btn.dark{background:var(--s2);color:var(--tx)}
+html[data-theme="light"] .intro{background:#ffffff;color:var(--tx)}
+html[data-theme="light"] .sbg{background:rgba(11,14,20,.32)}
+html[data-theme="light"] .bsheet{background:#ffffff;box-shadow:0 -12px 40px rgba(11,14,20,.12)}
+html[data-theme="light"] .bsheet .grab{background:#d5dbe5}
+html[data-theme="light"] .flipb{box-shadow:0 0 0 5px var(--bg)}
+html[data-theme="light"] .globe .lg,html[data-theme="light"] .zoomer{box-shadow:0 0 0 9px var(--bg)}
+html[data-theme="light"] .cbadge{box-shadow:0 0 0 6px var(--bg)}
+html[data-theme="light"] .sg .bdg{box-shadow:0 0 0 8px var(--bg)}
+html[data-theme="light"] .w{background:var(--s2)}
+html[data-theme="light"] .veil{background:rgba(245,247,250,.9)}
+html[data-theme="light"] .op{color:var(--mu)}
+html[data-theme="light"] .op.on,html[data-theme="light"] .tf2 button.on,html[data-theme="light"] .tabs button.on,html[data-theme="light"] .pill3 button.on{background:#0b0e14;color:#ffffff;border-color:#0b0e14}
+html[data-theme="light"] .reqs span.on,html[data-theme="light"] .ck,html[data-theme="light"] .slist div.ok,html[data-theme="light"] .feat div{color:var(--tx)}
+html[data-theme="light"] .toast{background:#0b0e14;color:#ffffff}
+html[data-theme="light"] .tkp{background:linear-gradient(160deg,#f5f7fa,#e9eef6)}
+html[data-theme="light"] .tkl{background:var(--s2)}
+html[data-theme="light"] .tki{color:var(--tx);background:var(--s2)}
+html[data-theme="light"] .mcard .sc2{color:#bcff2f}
+html[data-theme="light"] .card{box-shadow:0 1px 2px rgba(11,14,20,.04)}
+html[data-theme="light"] .tabs{background:var(--s1);box-shadow:0 10px 30px -12px rgba(11,14,20,.18)}
+@media (min-width:1024px) and (min-height:641px){html[data-theme="light"] .tabs{box-shadow:none}}
 </style>
 
 <div class="stage"><div class="device"><div class="app" id="app"></div></div></div>
@@ -542,7 +573,8 @@ const store = {
   set(k, v) { try { localStorage.setItem('sw.' + k, v); } catch (e) {} },
   del(k) { try { localStorage.removeItem('sw.' + k); } catch (e) {} },
 };
-const ic = (d, s = 20, c = 'currentColor', w = 1.9) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+const ICV = { '#f6f7fb': 'var(--tx)', '#8b93a6': 'var(--mu)', '#545c6e': 'var(--fa)', '#5c9bff': 'var(--b2)', '#f0b54a': 'var(--warn)', '#ff6b5c': 'var(--bad)', '#000': 'var(--onw,#000)' };
+const ic = (d, s = 20, c = 'currentColor', w = 1.9) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="${c}"${ICV[c] ? ` style="stroke:${ICV[c]}"` : ''} stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
 const P = {
   back: '<path d="M15 5l-7 7 7 7"/>', chk: '<path d="M5 12.5l4.5 4.5L19 7.5"/>', send: '<path d="M7 17L17 7M9 7h8v8"/>', recv: '<path d="M17 7L7 17M15 17H7V9"/>',
   home: '<path d="M3 11l9-7 9 7v9h-6v-6H9v6H3z"/>', act: '<path d="M4 6h16M4 12h10M4 18h7"/>', lock: '<rect x="5" y="11" width="14" height="10" rx="2.5"/><path d="M8 11V7a4 4 0 018 0v4"/>',
@@ -593,20 +625,20 @@ const GLOBE = (() => {
  const Tw = Math.min(Math.round(Wc * dpr), 880); if (cv.width !== Tw) cv.width = cv.height = Tw;
     const x = cv.getContext('2d'), S2 = cv.width, R = S2 * .48, cx = S2 / 2, cy = S2 / 2, lon = -38 + t * 7, tilt = 17, nodes = NODES.map(([la, lo]) => vec(la, lo)), hub = vec(40.42, -3.7);
  const _a = Math.cos(-lon * D), _b = Math.sin(-lon * D), _c = Math.cos(tilt * D), _s = Math.sin(tilt * D), rot = v => { const X = v[0] * _a + v[2] * _b, Z = -v[0] * _b + v[2] * _a; return [X, v[1] * _c - Z * _s, v[1] * _s + Z * _c]; };
-    x.clearRect(0, 0, S2, S2);
-    x.strokeStyle = 'rgba(255,255,255,.14)'; x.lineWidth = S2 * .002; x.beginPath(); x.arc(cx, cy, R, 0, 7); x.stroke();
+    x.clearRect(0, 0, S2, S2); const LT = document.documentElement.dataset.theme === 'light';
+    x.strokeStyle = LT ? 'rgba(11,14,20,.14)' : 'rgba(255,255,255,.14)'; x.lineWidth = S2 * .002; x.beginPath(); x.arc(cx, cy, R, 0, 7); x.stroke();
     x.save(); x.beginPath(); x.arc(cx, cy, R * .995, 0, 7); x.clip();   // nada se dibuja fuera del globo
-    { const ca = Math.cos(-lon * D), sa = Math.sin(-lon * D), ct = Math.cos(tilt * D), st = Math.sin(tilt * D), NB = 12, PB = []; for (let k = 0; k < NB; k++) PB.push(new Path2D()); for (const v of land()) { const X = v[0] * ca + v[2] * sa, Z = -v[0] * sa + v[2] * ca, ry = v[1] * ct - Z * st, rz = v[1] * st + Z * ct; if (rz < 0) continue; const px = cx + X * R, py = cy - ry * R, rd = S2 * .0036 * (.55 + .45 * rz), pb = PB[Math.min(NB - 1, (rz * NB) | 0)]; pb.moveTo(px + rd, py); pb.arc(px, py, rd, 0, 6.2832); } for (let k = 0; k < NB; k++) { x.fillStyle = `rgba(205,220,255,${(.16 + .74 * (k + .5) / NB).toFixed(3)})`; x.fill(PB[k]); } }
+    { const ca = Math.cos(-lon * D), sa = Math.sin(-lon * D), ct = Math.cos(tilt * D), st = Math.sin(tilt * D), NB = 12, PB = []; for (let k = 0; k < NB; k++) PB.push(new Path2D()); for (const v of land()) { const X = v[0] * ca + v[2] * sa, Z = -v[0] * sa + v[2] * ca, ry = v[1] * ct - Z * st, rz = v[1] * st + Z * ct; if (rz < 0) continue; const px = cx + X * R, py = cy - ry * R, rd = S2 * .0036 * (.55 + .45 * rz), pb = PB[Math.min(NB - 1, (rz * NB) | 0)]; pb.moveTo(px + rd, py); pb.arc(px, py, rd, 0, 6.2832); } for (let k = 0; k < NB; k++) { x.fillStyle = LT ? `rgba(30,48,88,${(.12 + .62 * (k + .5) / NB).toFixed(3)})` : `rgba(205,220,255,${(.16 + .74 * (k + .5) / NB).toFixed(3)})`; x.fill(PB[k]); } }
     x.lineCap = 'round';
     nodes.forEach((b, i) => { if (i % 2) return; const a = hub, om = Math.acos(Math.min(1, a[0] * b[0] + a[1] * b[1] + a[2] * b[2])); if (om < .06) return;
       const pts = []; for (let s = 0; s <= 40; s++) { const u = s / 40, k1 = Math.sin((1 - u) * om) / Math.sin(om), k2 = Math.sin(u * om) / Math.sin(om), h = 1 + .05 * Math.sin(Math.PI * u) * om;
         pts.push(rot([(a[0] * k1 + b[0] * k2) * h, (a[1] * k1 + b[1] * k2) * h, (a[2] * k1 + b[2] * k2) * h], lon, tilt)); }
       x.strokeStyle = 'rgba(21,105,255,.85)'; x.lineWidth = S2 * .0024; x.beginPath(); let on = false;
       for (const r of pts) { const px = cx + r[0] * R, py = cy - r[1] * R; if (r[2] > .02) { on ? x.lineTo(px, py) : x.moveTo(px, py); on = true; } else on = false; } x.stroke();
-      const r = pts[Math.round(((t * .42 + i * .137) % 1) * 40)]; if (r[2] > 0) { x.fillStyle = '#fff'; x.beginPath(); x.arc(cx + r[0] * R, cy - r[1] * R, S2 * .0055, 0, 7); x.fill(); } });
+      const r = pts[Math.round(((t * .42 + i * .137) % 1) * 40)]; if (r[2] > 0) { x.fillStyle = LT ? '#1569ff' : '#fff'; x.beginPath(); x.arc(cx + r[0] * R, cy - r[1] * R, S2 * .0055, 0, 7); x.fill(); } });
     nodes.forEach((v, i) => { const r = rot(v, lon, tilt); if (r[2] < .06) return; const px = cx + r[0] * R, py = cy - r[1] * R, ph = (t * .7 + i * .31) % 1;
       x.strokeStyle = `rgba(92,155,255,${((1 - ph) * .8).toFixed(3)})`; x.lineWidth = S2 * .002; x.beginPath(); x.arc(px, py, S2 * (.01 + .03 * ph), 0, 7); x.stroke();
-      x.fillStyle = '#000'; x.beginPath(); x.arc(px, py, S2 * .011, 0, 7); x.fill(); x.fillStyle = '#1569ff'; x.beginPath(); x.arc(px, py, S2 * .0078, 0, 7); x.fill();
+      x.fillStyle = LT ? '#ffffff' : '#000'; x.beginPath(); x.arc(px, py, S2 * .011, 0, 7); x.fill(); x.fillStyle = '#1569ff'; x.beginPath(); x.arc(px, py, S2 * .0078, 0, 7); x.fill();
       x.fillStyle = '#fff'; x.beginPath(); x.arc(px, py, S2 * .003, 0, 7); x.fill(); });
     x.restore();
   }
@@ -625,7 +657,7 @@ function qrSvg(text) {
     <g transform="translate(${c0 + .6} ${c0 + .6}) scale(.058)"><rect width="100" height="100" rx="9" fill="#1569ff"/><circle cx="50" cy="50" r="30" fill="none" stroke="#fff" stroke-width="11"/></g></svg>`;
 }
 /* grafica de puntos vacia hasta que haya historial */
-const DOTS = (n = 28, rows = 8, p = 11) => { let d = ''; for (let i = 0; i < n; i++) for (let y = 0; y < rows; y++) d += `<circle cx="${(i + .5) * p}" cy="${(y + .5) * p}" r="${(p * .3).toFixed(2)}" fill="#14171c"/>`;
+const DOTS = (n = 28, rows = 8, p = 11) => { let d = ''; for (let i = 0; i < n; i++) for (let y = 0; y < rows; y++) d += `<circle cx="${(i + .5) * p}" cy="${(y + .5) * p}" r="${(p * .3).toFixed(2)}" fill="#14171c" style="fill:var(--dotc,#14171c)"/>`;
   return `<svg viewBox="0 0 ${n * p} ${rows * p}" aria-hidden="true">${d}</svg>`; };
 
 /* ---------- utilidades ---------- */
@@ -722,7 +754,7 @@ const SLIDES = [
   ['Multichain', 'Four networks.<br><em>One wallet.</em>', 'Ethereum, BNB Chain and Robinhood Chain on one address, plus Solana from the same 12 words.'],
   ['On-device signing', 'Review it.<br><em>Slide to sign.</em>', 'See every transfer before it leaves. Your private key never leaves your phone.'],
 ];
-V.welcome = () => SCREEN(`<div class="otop"><span class="brand">${LOGO(34)}<span>Sectora Wallet<small>${PREVIEW ? 'Private preview' : 'Beta'}</small></span></span><span class="lang">${ic(P.net, 16, '#f6f7fb')}EN</span></div>
+V.welcome = () => SCREEN(`<div class="otop"><span class="brand">${LOGO(34)}<span>Sectora Wallet<small>${PREVIEW ? 'Private preview' : 'Beta'}</small></span></span><span style="display:flex;gap:8px"><button class="lang" id="themeTgl" aria-label="Switch light or dark theme">${document.documentElement.dataset.theme === 'light' ? ic('<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>', 16, '#f6f7fb') : ic('<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>', 16, '#f6f7fb')}</button><span class="lang">${ic(P.net, 16, '#f6f7fb')}EN</span></span></div>
   <div class="globe"><canvas class="gl" aria-label="Rotating globe with the Sectora network" role="img"></canvas><button class="lg" id="logoGo" aria-label="Start: create a new wallet">${LOGO(100)}</button></div>
   <div class="car" id="car" aria-roledescription="carousel"><div class="track">${SLIDES.map(([t, h, p], i) => `<div class="cs" role="group" aria-label="${i + 1} of ${SLIDES.length}"><div class="tg2 ${i === 0 ? 'g' : ''}">${t}</div><h1>${h}</h1><p>${p}</p></div>`).join('')}</div></div>
   <div class="pager">${SLIDES.map((_, i) => `<button aria-label="Show slide ${i + 1}"></button>`).join('')}</div>`,
@@ -835,11 +867,11 @@ V.settings = () => SCREEN(`<h1 class="h1" style="margin-top:14px">Settings</h1>
   <div class="lbl gl2">Network</div><div class="grp card">
     <div class="row"><span class="si">${ic(P.net, 18, '#5c9bff')}</span><div><b>SECT token</b><small class="mono">${short(SECT)} · Ethereum</small></div></div>
     <div class="row"><span class="si">${ic(P.info, 18, '#5c9bff')}</span><div>${PREVIEW ? '<b>Preview mode</b><small>Signing only · no network sync</small>' : '<b>Beta · live</b><small>Ethereum · BNB Chain · Solana</small>'}</div></div></div>
-  <div class="lbl gl2">This device</div><div class="grp card">
+  <div class="lbl gl2">Appearance</div><div class="grp card"> <div class="row"><span class="si">${ic(P.sun || '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>', 18, '#5c9bff')}</span><div><b>Theme</b><small>${THEME() === 'auto' ? 'Follows your device' : THEME() === 'light' ? 'Light' : 'Dark'}</small></div><span class="end pill3">${[['dark', 'Dark'], ['light', 'Light'], ['auto', 'Auto']].map(([k, n]) => `<button class="${THEME() === k ? 'on' : ''}" data-themeset="${k}">${n}</button>`).join('')}</span></div></div> <div class="lbl gl2">This device</div><div class="grp card">
     <button class="row" id="wipe"><span class="si">${ic(P.trash, 18, '#ff6b5c')}</span><div><b style="color:var(--bad)">${S.wipeArm ? 'Tap again to delete' : 'Delete wallet from this device'}</b><small>Only your recovery phrase can restore it</small></div></button></div>
   ${TABS('settings')}`, '', 'has-tabs');
 V.security = () => { const sc = sec(); return SCREEN(`${NAV('Security', 0, 'home')}
-  <div class="shero card"><div class="ring"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="42" fill="none" stroke="#1d2128" stroke-width="8"/><circle cx="50" cy="50" r="42" fill="none" stroke="#1569ff" stroke-width="8" stroke-linecap="round" stroke-dasharray="${(264 * sc.score / sc.total).toFixed(1)} 264" transform="rotate(-90 50 50)"/></svg><b>${sc.score}/${sc.total}</b></div>
+  <div class="shero card"><div class="ring"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="42" fill="none" stroke="#1d2128" style="stroke:var(--ring,#1d2128)" stroke-width="8"/><circle cx="50" cy="50" r="42" fill="none" stroke="#1569ff" stroke-width="8" stroke-linecap="round" stroke-dasharray="${(264 * sc.score / sc.total).toFixed(1)} 264" transform="rotate(-90 50 50)"/></svg><b>${sc.score}/${sc.total}</b></div>
     <div><b class="big">${sc.score === sc.total ? 'Fully protected' : 'Almost there'}</b><small>Your wallet, ${esc(S.name)}, is secured on this device only.</small></div></div>
   ${SECLIST()}
   <div class="lbl gl2">Controls</div><div class="grp card">
@@ -1353,7 +1385,7 @@ function bindTok() {
 function render() {
   if (S.view === 'boot') { S.addr = store.get('addr') || ''; S.lockMin = +(store.get('lock') || 5); S.name = store.get('name') || 'Account 1'; S.sol = store.get('sol') || ''; S.net = store.get('net') || 'eth'; S.since = +(store.get('since') || 0); S.backed = store.get('backed') || ''; S.view = store.get('vault') ? 'unlock' : 'welcome'; }
   if (!window.ethers) { $app.innerHTML = SCREEN(`<div class="wel" style="margin-top:120px">${LOGO(72)}<h1 class="h1">Loading…</h1><p class="lead">Loading the cryptography library. If this stays, check your connection and reload.</p></div>`); return; }
-  $app.innerHTML = V[S.view](); bind(); bindMulti(); bindTok(); bindCT(); GLOBE.mount();
+  $app.innerHTML = V[S.view](); bind(); bindMulti(); bindTok(); bindCT(); bindTheme(); GLOBE.mount();
   if (!S.introDone && (S.view === 'welcome' || S.view === 'unlock')) runIntro();
 }
 function bind() {
@@ -1523,6 +1555,13 @@ function bindCT() {
   inp.addEventListener('paste', () => { clearTimeout(tmr); tmr = setTimeout(look, 50); });
   btn.addEventListener('click', () => { if (!found) return; const l = CT.get(n.id); if (l.length >= 30) return toast('You can add up to 30 tokens per network', 1); l.push(found); CT.set(n.id, l); S.bal = {}; S.balSt = {}; toast(found.listed ? 'Token added' : 'Unverified token added'); go('home'); });
 }
+/* ---------- tema claro / oscuro ---------- */
+const THEME = () => store.get('theme') || 'dark';
+function applyTheme() { const m = THEME(), L = m === 'light' || (m === 'auto' && matchMedia('(prefers-color-scheme: light)').matches);
+  document.documentElement.dataset.theme = L ? 'light' : 'dark'; const mt = document.querySelector('meta[name="theme-color"]'); if (mt) mt.content = L ? '#ffffff' : '#000000'; }
+try { matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => { if (THEME() === 'auto') applyTheme(); }); } catch (e) {}
+function bindTheme() { $app.querySelectorAll('[data-themeset]').forEach(b => b.addEventListener('click', () => { store.set('theme', b.dataset.themeset); applyTheme(); render(); }));
+  const t = $app.querySelector('#themeTgl'); if (t) t.addEventListener('click', () => { const L = document.documentElement.dataset.theme === 'light'; store.set('theme', L ? 'dark' : 'light'); applyTheme(); render(); }); }
 (function start() { if (window.ethers) return go('boot'); let n = 0; render(); const t = setInterval(() => { if (window.ethers || ++n > 60) { clearInterval(t); go('boot'); } }, 150); })();
 })();
 </script>
