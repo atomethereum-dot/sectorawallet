@@ -834,6 +834,30 @@ html.iosapp .stage,html.iosapp .device,html.iosapp .app{height:var(--app-h)}
   .ft .legal{padding-top:6px}
   .ft .co{line-height:1.6;margin-top:6px}
 }
+/* total, ocultos, contactos, comision */
+.hcap{font-size:13.5px;color:var(--mu);margin-bottom:2px}
+.hidl{display:flex;align-items:center;gap:8px;margin:8px auto 0;padding:10px 14px;border-radius:12px;color:var(--mu);font-size:14px;font-weight:500}
+.hrw .unh{flex:none;padding:8px 14px;border-radius:10px;background:var(--tile);color:var(--b2);font-weight:500;font-size:14px}
+.thide{margin-top:16px;height:50px}
+.clist{margin-top:8px}
+.crow{width:100%;display:flex;align-items:center;gap:14px;padding:12px 2px;text-align:left;color:var(--tx);border-bottom:1px solid var(--ln)}
+.crow:last-child{border-bottom:0}
+.crow .cav{width:40px;height:40px;border-radius:50%;overflow:hidden;flex:none;display:grid;place-items:center}
+.crow .ct{flex:1;min-width:0}.crow .ct b{display:block;font-size:16px;font-weight:500}.crow .ct small{display:block;color:var(--mu);font-size:13px;margin-top:2px}
+.crow .ckd{flex:none;font:500 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--fa);padding:6px 8px;border-radius:8px;background:var(--tile)}
+.cempty{text-align:center;color:var(--mu);margin-top:70px;padding:0 20px}.cempty p{margin:12px 0 0;font-size:14.5px;line-height:1.5}
+.cnm{font-style:normal;color:var(--b2);font-weight:500}
+.feeq{margin-top:12px;padding:14px 16px}
+.feeq .fh{display:flex;align-items:baseline;justify-content:space-between;gap:10px}.feeq .fh b{font-weight:500;font-size:15px}.feeq .fh small{color:var(--mu);font-size:13px;font-variant-numeric:tabular-nums}
+.sp3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}
+.sp3 button{padding:10px 6px;border-radius:12px;background:var(--tile);border:1.5px solid transparent;text-align:center;color:var(--tx)}
+.sp3 button b{display:block;font-weight:500;font-size:14px}.sp3 button small{display:block;margin-top:3px;color:var(--mu);font-size:12.5px;font-variant-numeric:tabular-nums}
+.sp3 button.on{border-color:var(--b);background:rgba(21,105,255,.1)}
+.fnote{margin:10px 0 0;color:var(--mu);font-size:12.5px;line-height:1.45}
+.hact{display:flex;gap:8px;margin:-2px 0 10px;margin-inline-start:52px}
+.hact button{display:inline-flex;align-items:center;justify-content:center;padding:7px 12px;border-radius:10px;background:var(--tile);color:var(--b2);font-size:13px;font-weight:500}
+.hact button[data-bump="cancel"]{color:var(--bad)}
+.hact.big{margin:12px 0 0}.hact.big button{flex:1;padding:12px;font-size:14.5px}
 /* barra inferior en movil: cuatro secciones con su nombre */
 @media (max-width:1023px),(max-height:640px){
   .tabs{left:0;right:0;bottom:0;width:auto;margin:0;height:auto;border-radius:0;border:0;border-top:1px solid var(--ln);background:var(--bg);padding:6px 6px calc(8px + env(safe-area-inset-bottom,0px));justify-content:space-around;box-shadow:none}
@@ -919,7 +943,8 @@ const P = {
   home: '<path d="M3 11l9-7 9 7v9h-6v-6H9v6H3z"/>', act: '<path d="M4 6h16M4 12h10M4 18h7"/>', lock: '<rect x="5" y="11" width="14" height="10" rx="2.5"/><path d="M8 11V7a4 4 0 018 0v4"/>',
   gear: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/>',
   eye: '<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
-  eyeoff: '<path d="M3 3l18 18M10.6 5.1A10.4 10.4 0 0112 5c6.4 0 10 7 10 7a17 17 0 01-3.2 4.1M6.6 6.6A17.5 17.5 0 002 12s3.6 7 10 7a9.7 9.7 0 005.4-1.6"/><path d="M9.9 9.9a3 3 0 004.2 4.2"/>',
+  user: '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/>',
+eyeoff: '<path d="M3 3l18 18M10.6 5.1A10.4 10.4 0 0112 5c6.4 0 10 7 10 7a17 17 0 01-3.2 4.1M6.6 6.6A17.5 17.5 0 002 12s3.6 7 10 7a9.7 9.7 0 005.4-1.6"/><path d="M9.9 9.9a3 3 0 004.2 4.2"/>',
   copy: '<rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15V5a1 1 0 011-1h10"/>', warn: '<path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18v.01"/>',
   key: '<circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3M15 8l2 2"/>', clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
   info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/>', trash: '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
@@ -1243,23 +1268,24 @@ async function loadHist(force) {
 }
 function histItems(n, sym) {
   const h = HIST[hKey(n)], on = (h && h.items) || [], seen = new Set(on.map(e => e.hash.toLowerCase()));
-  const me = (addrOf(n) || '').toLowerCase(), loc = txs().filter(t => (t.netId || 'eth') === n.id && t.hash && !seen.has(t.hash.toLowerCase()) && (t.from ? t.from.toLowerCase() === me : ACCI() === 0)).map(t => ({ hash: t.hash, time: t.time, ok: t.st !== 'fail', local: t,
-    legs: t.kind === 'swap' ? [{ s: t.token, amt: t.amount, dir: 'out', peer: '' }, { s: t.outToken, amt: '', dir: 'in', peer: '' }] : [{ s: t.token, amt: t.amount, dir: 'out', peer: (t.to || '').toLowerCase() }] }));
+  const me = (addrOf(n) || '').toLowerCase(), loc = txs().filter(t => (t.netId || 'eth') === n.id && t.hash && !seen.has(t.hash.toLowerCase()) && (t.from ? t.from.toLowerCase() === me : ACCI() === 0)).map(t => ({ hash: t.hash, time: t.time, ok: t.st !== 'fail', local: t, cancel: t.kind === 'cancel',
+    legs: t.kind === 'cancel' ? [] : t.kind === 'swap' ? [{ s: t.token, amt: t.amount, dir: 'out', peer: '' }, { s: t.outToken, amt: '', dir: 'in', peer: '' }] : [{ s: t.token, amt: t.amount, dir: 'out', peer: (t.to || '').toLowerCase() }] }));
   const dust = e => !e.local && e.legs.length > 0 && e.legs.every(l => { if (l.dir !== 'in') return false; const tk = toks(n).find(t => t.s === l.s), p = tk && pxOf(n, tk), a = Number(l.amt);   // recibos de menos de $0.01: polvo y envenenamiento de direcciones
     return p ? a * p.usd < 0.01 : a < 1e-9; });
   return [...loc, ...on].filter(e => !dust(e) && (!sym || e.legs.some(l => l.s === sym))).sort((a, b) => b.time - a.time);
 }
-const HICON = k => ({ in: P.recv, out: P.send, swap: P.swap, self: P.swap, fail: P.info })[k];
+const HICON = k => ({ in: P.recv, out: P.send, swap: P.swap, self: P.swap, fail: P.info, cancel: '<path d="M6 6l12 12M18 6L6 18"/>' })[k];
 function hRow(n, e) {
   const o = e.legs.filter(l => l.dir === 'out'), i = e.legs.filter(l => l.dir === 'in'), kind = !e.ok && !e.legs.length ? 'fail' : o.length && i.length ? 'swap' : i.length ? 'in' : o.length ? 'out' : 'self';
   const main = kind === 'swap' ? i[0] : (i[0] || o[0] || e.legs[0]), peer = main && main.peer, tm = new Date(e.time).toLocaleTimeString(LOC(), { hour: 'numeric', minute: '2-digit' });
-  const title = kind === 'fail' ? 'Failed transaction' : kind === 'swap' ? `${esc(o[0].s)} → ${esc(i[0].s)}` : `${kind === 'in' ? 'Received' : kind === 'out' ? 'Sent' : 'Moved'} ${esc(main.s)}`;
+  const title = e.cancel ? 'Transfer cancelled' : kind === 'fail' ? 'Failed transaction' : kind === 'swap' ? `${esc(o[0].s)} → ${esc(i[0].s)}` : `${kind === 'in' ? 'Received' : kind === 'out' ? 'Sent' : 'Moved'} ${esc(main.s)}`;
   const st = e.local ? stOf(e.local) : !e.ok ? TXST.fail : null;
   const sub = `${st ? `<em style="color:${st[1]}">${st[0]}</em> · ` : ''}${kind === 'swap' ? 'Swap · ' + tm : !peer ? tm : `${kind === 'in' ? 'From' : 'To'} ${short(peer)} · ${tm}`}`;
   const tk = main && toks(n).find(t => t.s === main.s), p = tk && pxOf(n, tk), amt = main && main.amt ? Number(main.amt) : null;
-  const right = kind === 'fail' ? '' : `<b class="${kind === 'in' || kind === 'swap' ? 'up' : ''}">${amt === null ? '' : (kind === 'in' || kind === 'swap' ? '+' : '−') + fmtAmt(main.amt)} ${esc(main.s)}</b><small>${kind === 'swap' && o[0].amt ? '−' + fmtAmt(o[0].amt) + ' ' + esc(o[0].s) : p && amt !== null ? fmtUsd(amt * p.usd) : ''}</small>`;
+  const right = kind === 'fail' || e.cancel ? '' : `<b class="${kind === 'in' || kind === 'swap' ? 'up' : ''}">${amt === null ? '' : (kind === 'in' || kind === 'swap' ? '+' : '−') + fmtAmt(main.amt)} ${esc(main.s)}</b><small>${kind === 'swap' && o[0].amt ? '−' + fmtAmt(o[0].amt) + ' ' + esc(o[0].s) : p && amt !== null ? fmtUsd(amt * p.usd) : ''}</small>`;
   const href = n.exp ? n.exp + e.hash : '';
-  return `<${href ? `a href="${href}" target="_blank" rel="noopener noreferrer"` : 'div'} class="hrow"><span class="hic k-${kind}">${ic(HICON(kind), 18, 'currentColor', 1.9)}</span><div class="ht"><b>${title}</b><small>${sub}</small></div><div class="hr">${right}</div></${href ? 'a' : 'div'}>`;
+  const bump = e.local && e.local.st === 'pend' && n.kind === 'evm' && e.local.nonce != null && e.local.maxFee && Date.now() - e.local.time < 6 * 3600e3 ? `<div class="hact"><button data-bump="speed" data-h="${e.hash}">Speed up</button>${e.cancel ? '' : `<button data-bump="cancel" data-h="${e.hash}">Cancel</button>`}</div>` : '';
+  return `<${href ? `a href="${href}" target="_blank" rel="noopener noreferrer"` : 'div'} class="hrow"><span class="hic k-${e.cancel ? 'fail' : kind}">${ic(HICON(e.cancel ? 'cancel' : kind), 18, 'currentColor', 1.9)}</span><div class="ht"><b>${title}</b><small>${sub}</small></div><div class="hr">${right}</div></${href ? 'a' : 'div'}>` + bump;
 }
 function HLIST(sym) {
   const n = curNet(), h = HIST[hKey(n)], L = histItems(n, sym), eb = expBase(n), me = addrOf(n);
@@ -1268,7 +1294,7 @@ function HLIST(sym) {
   for (const e of L.slice(0, sym ? 15 : 50)) { const d = new Date(e.time).toDateString(); if (d !== day) { day = d; out += `<div class="hday">${d === today ? 'Today' : d === yest ? 'Yesterday' : new Date(e.time).toLocaleDateString(LOC(), { month: 'short', day: 'numeric', year: 'numeric' })}</div>`; } out += hRow(n, e); }
   return out;
 }
-function paintHist() { const el = $app && $app.querySelector('#hlist'); if (el) el.innerHTML = HLIST(el.dataset.tok || '');
+function paintHist() { const el = $app && $app.querySelector('#hlist'); if (el) { el.innerHTML = HLIST(el.dataset.tok || ''); el.querySelectorAll('[data-bump]').forEach(b => b.addEventListener('click', () => onBump(b))); }
   const s = $app && $app.querySelector('#hsync'), h = HIST[hKey(curNet())]; if (s) s.innerHTML = h && h.st === 'loading' ? '<span class="dot off"></span>Updating…' : h && h.st === 'ok' ? '<span class="dot"></span>Up to date' : ''; }
 V.activity = () => { const n = curNet(), eb = expBase(n), me = addrOf(n); return SCREEN(`<h1 class="h1" style="margin-top:14px">Activity</h1>
   <div class="hsub" style="margin-top:14px">${NETPILL()}<span class="sync" id="hsync"></span></div>
@@ -1297,7 +1323,7 @@ V.send = () => { const tk = S.tok, a = S.amt || '', rec = [...new Set(txs().map(
   `<button class="btn" id="revGo" disabled>Review</button>`); };
 V.review = () => { const tk = S.tok, ck = checks(); return SCREEN(`${NAV('Review', 0, 'send')}
   <div class="rvh"><small>You are sending</small><div class="big"><b>${esc(S.amt)}</b><span>${tk === 'sect' ? 'SECT' : 'ETH'}</span></div></div>
-  <div class="flow card"><div class="p">${LOGO(42)}<b>${esc(S.name)}</b><small>${short(S.addr)}</small></div><div class="ar">${ic(P.arrow, 22, '#5c9bff', 2)}</div><div class="p">${IDN(42, S.to)}<b>Recipient</b><small>${short(S.to)}</small></div></div>
+  <div class="flow card"><div class="p">${LOGO(42)}<b>${esc(S.name)}</b><small>${short(S.addr)}</small></div><div class="ar">${ic(P.arrow, 22, '#5c9bff', 2)}</div><div class="p">${IDN(42, S.to)}<b class="${contactOf(S.to) ? 'notr' : ''}">${contactOf(S.to) ? esc(contactOf(S.to).n) : 'Recipient'}</b><small>${short(S.to)}</small></div></div>
   <div class="checks card"><div class="chh">${ic(P.shield, 18, '#5c9bff', 2)}<b>Security checks</b><span>${ck.filter(c => c.s === 'ok').length} of ${ck.length} passed</span></div>
     ${ck.map(c => `<div class="ck ${c.s === 'ok' ? 'ok' : 'wn'}">${c.s === 'ok' ? ic(P.chk, 15, '#5c9bff', 2.8) : ic(P.info, 15, '#f0b54a', 2.2)}<span>${c.t}</span></div>`).join('')}</div>
   <div class="kv card"><div>Network<b>${NET[tk].name}</b></div><div>Mode<b>Sign only · not broadcast</b></div></div>`,
@@ -1310,6 +1336,7 @@ V.sent = () => { const t = txs()[0] || {}; return SCREEN(`<div class="sg" style=
 V.settings = () => SCREEN(`<h1 class="h1" style="margin-top:14px">Settings</h1>
   <div class="prof card">${AVBOX(56, 1)}<div style="min-width:0;flex:1"><label class="lbl" for="rename">Account name</label><input id="rename" class="rename" maxlength="24" value="${esc(/^Account \d+$/.test(S.name) && trStr(S.name) ? trStr(S.name).trim() : S.name)}"><small>${S.since ? 'Member since ' + new Date(S.since).toLocaleDateString(LOC(), { month: 'short', year: 'numeric' }) : short(S.addr)}</small></div></div>
   <div class="lbl gl2">Account</div><div class="grp card">
+    <button class="row" data-go="contacts"><span class="si">${ic(P.user, 18, '#5c9bff')}</span><div><b>Contacts</b><small>${CONTACTS.get().length ? `${CONTACTS.get().length} saved` : 'Save addresses you send to'}</small></div><span class="end">${ic(P.chev, 15)}</span></button>
     <button class="row" data-go="security"><span class="si">${ic(P.shield, 18, '#5c9bff')}</span><div><b>Security center</b><small>${sec().score} of ${sec().total} checks passed</small></div><span class="end">${ic(P.chev, 15)}</span></button>
     <button class="row" data-copy="${S.addr}"><span class="si">${ic(P.copy, 18, '#5c9bff')}</span><div><b>Copy address</b><small class="mono">${short(S.addr)}</small></div></button></div>
   <div class="lbl gl2">Network</div><div class="grp card">
@@ -1433,6 +1460,13 @@ function openWallet(w) { S.seed = seedOf(w.mnemonic); useAcct(ACCI()); }
 function addAcct() { const L = ACCTS(); if (L.length >= 20) return toast('You can have up to 20 accounts', 1); const i = Math.max(...L.map(a => a.i)) + 1;
   L.push({ i, name: `Account ${i + 1}`, addr: '', sol: '' }); saveAccts(L); useAcct(i); S.sheet = null; render(); toast(`Account ${i + 1} added`); }
 const isSolAddr = a => { try { return /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(a) && ethers.toBeArray(ethers.decodeBase58(a)).length <= 32; } catch (e) { return false; } };
+/* ---------- tokens ocultos, contactos ---------- */
+const HID = { get(n) { try { const a = JSON.parse(store.get('hide.' + n.id) || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } }, set(n, a) { store.set('hide.' + n.id, JSON.stringify(a)); } };
+const isHid = (n, t) => !t.native && HID.get(n).includes(tid(t));
+const visToks = n => toks(n).filter(t => !isHid(n, t));
+const CONTACTS = { get() { try { const a = JSON.parse(store.get('contacts') || '[]'); return Array.isArray(a) ? a.filter(c => c && c.a && c.n) : []; } catch (e) { return []; } }, set(a) { store.set('contacts', JSON.stringify(a.slice(0, 200))); } };
+const kindOf = a => { try { return ethers.isAddress(a) ? 'evm' : isSolAddr(a) ? 'sol' : null; } catch (e) { return null; } };
+const contactOf = a => { if (!a) return null; const lo = String(a).toLowerCase(); return CONTACTS.get().find(c => c.k === 'evm' ? c.a.toLowerCase() === lo : c.a === a) || null; };
 const validTo = (n, a) => n.kind === 'sol' ? isSolAddr(a) : ethers.isAddress(a);
 
 /* ---------- red: llamadas RPC con limite de tiempo ---------- */
@@ -1463,7 +1497,7 @@ const TSUB = (n, t) => { const p = pxOf(n, t), unv = t.custom && !t.listed ? ' �
 let PXBUSY = false;
 async function loadPrices(force) {
   const n = curNet(), now = Date.now(); if (PXBUSY) return;
-  const need = [...new Set(toks(n).map(t => pxKey(n, t)).filter(Boolean))].filter(k => force || !PX[k] || now - PX[k].at > 60000); if (!need.length) return;
+  const need = [...new Set(NET_ORDER.flatMap(k => visToks(NETS[k]).map(t => pxKey(NETS[k], t))).filter(Boolean))].filter(k => force || !PX[k] || now - PX[k].at > 60000); if (!need.length) return;
   PXBUSY = true;
   const get = async url => { const ac = new AbortController(), tm = setTimeout(() => ac.abort(), 8000);
     try { const r = await fetch(url, { signal: ac.signal, credentials: 'omit', referrerPolicy: 'no-referrer' }); if (!r.ok) throw new Error('http ' + r.status); return await r.json(); } finally { clearTimeout(tm); } };
@@ -1492,8 +1526,9 @@ async function loadPrices(force) {
   } finally { PXBUSY = false; }
   paintBalances();
 }
-async function loadBalances(force) {
-  const n = curNet(), key = n.id; S.bal = S.bal || {}; S.balSt = S.balSt || {};
+function loadAll(force) { NET_ORDER.map(k => NETS[k]).filter(n => n.rpc.length && addrOf(n)).forEach(n => loadBalances(force, n)); }
+async function loadBalances(force, nArg) {
+  const n = nArg || curNet(), key = n.id; S.bal = S.bal || {}; S.balSt = S.balSt || {};
   if (!force && S.balSt[key] === 'ok' && Date.now() - (S.balAt?.[key] || 0) < 30000) return;
   S.balSt[key] = 'loading'; paintBalances();
   try {
@@ -1516,15 +1551,17 @@ function paintBalances() {
   const n = curNet(), st = (S.balSt || {})[n.id], b = (S.bal || {})[n.id] || {};
   $app.querySelectorAll('[data-bal]').forEach(e => { const v = b[e.dataset.bal]; e.textContent = st === 'ok' ? fmtAmt(v) : st === 'loading' ? '···' : '—'; e.classList.toggle('na', st !== 'ok'); });
   const c = $app.querySelector('#syncChip'); if (c) c.innerHTML = st === 'ok' ? '<span class="dot"></span>Synced' : st === 'loading' ? '<span class="dot off"></span>Syncing…' : !PREVIEW && !n.rpc.length ? '<span class="dot off"></span>Soon' : '<span class="dot off"></span>Offline';
-  let tot = 0, prev = 0, miss = false;
-  for (const t of toks(n)) { const amt = Number(b[tid(t)] || 0), p = pxOf(n, t);
-    if (amt > 0) { if (p) { tot += amt * p.usd; prev += p.ch !== null ? amt * p.usd / (1 + p.ch / 100) : amt * p.usd; } else miss = true; } }
+  let tot = 0, prev = 0, miss = false, part = false, anyOk = false;   // total de todas las redes (sin tokens ocultos)
+  for (const k of NET_ORDER) { const nn = NETS[k]; if (!nn.rpc.length || !addrOf(nn)) continue; const s2 = (S.balSt || {})[k], b2 = (S.bal || {})[k];
+    if (!b2 || s2 === 'off') { if (s2 === 'off') part = true; continue; } anyOk = true;   // al refrescar se usa el ultimo saldo para que el total no parpadee
+    for (const t of visToks(nn)) { const amt = Number(b2[tid(t)] || 0), p = pxOf(nn, t);
+      if (amt > 0) { if (p) { tot += amt * p.usd; prev += p.ch !== null ? amt * p.usd / (1 + p.ch / 100) : amt * p.usd; } else miss = true; } } }
   $app.querySelectorAll('[data-usd]').forEach(e => { const t = toks(n).find(x => tid(x) === e.dataset.usd), p = t && pxOf(n, t), amt = Number(b[e.dataset.usd] || 0);
     e.textContent = st === 'ok' ? (p ? fmtUsd(amt * p.usd) : amt > 0 ? '—' : '$0.00') : st === 'loading' ? '···' : '—'; e.classList.toggle('na', st !== 'ok' || (!p && amt > 0)); });
   $app.querySelectorAll('[data-px]').forEach(e => { const t = toks(n).find(x => tid(x) === e.dataset.px); if (t) e.innerHTML = TSUB(n, t); });
-  const nb = $app.querySelector('#netBal'); if (nb) { const ok = st === 'ok' && (tot > 0 || !miss); nb.textContent = ok ? fmtUsd(tot) : '—'; nb.classList.toggle('na', !ok); }
+  const nb = $app.querySelector('#netBal'); if (nb) { const ok = anyOk && (tot > 0 || !miss); nb.textContent = ok ? fmtUsd(tot) : '—'; nb.classList.toggle('na', !ok); }
   const nc = $app.querySelector('#netChg'); if (nc) { const d = tot - prev, pc = prev > 0 ? (tot / prev - 1) * 100 : 0;
-    nc.innerHTML = st === 'ok' && tot > 0 ? `<em class="${d >= 0 ? 'up' : 'dn'}">${d >= 0 ? '+' : '−'}${fmtUsd(Math.abs(d))} (${d >= 0 ? '+' : '−'}${Math.abs(pc).toFixed(2)}%)</em><span>Today</span>${miss ? '<span>· some prices unavailable</span>' : ''}` : st === 'ok' && miss ? '<span>Prices unavailable right now</span>' : ''; }
+    nc.innerHTML = anyOk && tot > 0 ? `<em class="${d >= 0 ? 'up' : 'dn'}">${d >= 0 ? '+' : '−'}${fmtUsd(Math.abs(d))} (${d >= 0 ? '+' : '−'}${Math.abs(pc).toFixed(2)}%)</em><span>Today</span>${miss ? '<span>· some prices unavailable</span>' : ''}${part ? '<span>· some networks unavailable</span>' : ''}` : anyOk && miss ? '<span>Prices unavailable right now</span>' : ''; }
   const on = $app.querySelector('#offNote'); if (on && !PREVIEW && n.rpc.length) on.hidden = st !== 'off';
   paintSwapUsd();
 }
@@ -1534,6 +1571,9 @@ const SHEET = () => {
   if (!S.sheet) return '';
   if (S.sheet === 'avatar') { const k = AVK(); return `<div class="sbg" data-close="1"></div><div class="bsheet" role="dialog" aria-label="Profile picture"><div class="grab"></div><h3>Profile picture</h3><div class="avgrid"><button class="avopt sq ${k.startsWith('img:') ? '' : 'on'}" data-av="logo" aria-label="Sectora logo" title="Sectora">${LOGO(52)}</button>${k.startsWith('img:') ? `<span class="avopt on">${AVATAR(52)}</span>` : ''}</div><label class="btn avup"><input type="file" id="avFile" accept="image/*" hidden>${ic('<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>', 18, '#fff', 2)}${k.startsWith('img:') ? 'Change photo' : 'Upload a photo'}</label>${k.startsWith('img:') ? `<button class="btn dark" data-av="logo" style="margin-top:8px">Remove photo</button>` : ''}<p class="avnote">${ic(P.lock, 14, '#8b93a6', 2)}Saved only on this device. It is never uploaded.</p></div>`; }
   if (S.sheet === 'install') return INSTSHEET();
+  if (S.sheet === 'hidden') { const n = curNet(), L = toks(n).filter(t => isHid(n, t)); return `<div class="sbg" data-close="1"></div><div class="bsheet" role="dialog" aria-label="Hidden tokens"><div class="grab"></div><h3>Hidden tokens</h3>
+    <div class="aclist">${L.length ? L.map(t => `<div class="nrow hrw"><span class="tki" style="width:36px;height:36px;background:none">${TOKI(t, 36)}</span><span><b>${esc(t.n)}</b><small>${esc(t.s)} · ${n.name}</small></span><button class="unh" data-unhide="${tid(t)}">Show</button></div>`).join('') : '<p class="snote">No hidden tokens on this network.</p>'}</div>
+    <p class="snote">Hidden tokens don't count in your total. You can still send them.</p></div>`; }
   if (S.sheet === 'lang') return `<div class="sbg" data-close="1"></div><div class="bsheet" role="dialog" aria-label="Choose language"><div class="grab"></div><h3>Language</h3><div class="aclist notr">${LANGS.map(([c, nm]) => `<button class="nrow lgrow ${c === LANG ? 'on' : ''}" data-lang="${c}" lang="${c}"><span><b>${nm}</b><small>${c.toUpperCase()}</small></span>${c === LANG ? `<em class="acok">${ic(P.chk, 16, 'currentColor', 2.6)}</em>` : ''}</button>`).join('')}</div></div>`;
   if (S.sheet === 'acct') { const L = ACCTS(), cur = ACCI(), n = curNet(); return `<div class="sbg" data-close="1"></div><div class="bsheet" role="dialog" aria-label="Accounts"><div class="grab"></div><h3>Accounts</h3>
     <div class="aclist">${L.map(a => { const ad = n.kind === 'sol' ? a.sol : a.addr; return `<button class="nrow acrow ${a.i === cur ? 'on' : ''}" data-acct="${a.i}"><span class="acid">${IDN(36, a.addr || '0x' + String(a.i).padStart(40, '0'))}</span><span><b>${esc(a.name)}</b><small class="mono">${ad ? short(ad) : '—'}</small></span>${a.i === cur ? `<em class="acok">${ic(P.chk, 16, 'currentColor', 2.6)}</em>` : ''}</button>`; }).join('')}</div>
@@ -1561,14 +1601,15 @@ const MCARD2 = () => { const n = curNet(), a = addrOf(n); return `<div class="mc
 const NBADGE = n => n.id !== 'rh' && TLOGO[n.native] ? `<img class="nbdg" src="${TLOGO[n.native]}" width="18" height="18" alt="" decoding="async">` : '';
 V.home = () => { const sc = sec(), n = curNet(); return SCREEN(`<div class="top hmt"><div class="acct">${AVBOX(32)}<button class="acsel" data-sheet="acct" aria-label="Switch account"><b>${esc(S.name)}</b>${ic(P.down, 16, 'currentColor', 2.2)}</button></div>
     <div class="ib3"><button class="ib" data-copy="${addrOf(n)}" aria-label="Copy address" title="Copy address">${ic(P.copy, 22, 'currentColor', 1.7)}</button><button class="ib" data-go="activity" aria-label="Activity" title="Activity">${ic(P.clock, 22, 'currentColor', 1.7)}</button><button class="ib" id="lockNow" aria-label="Lock" title="Lock">${ic(P.lock, 22, 'currentColor', 1.7)}</button></div></div>
-  <div class="hero"><div class="hbal na" id="netBal">—</div><div class="hchg" id="netChg"></div>
+  <div class="hero"><div class="hcap">Total · all networks</div><div class="hbal na" id="netBal">—</div><div class="hchg" id="netChg"></div>
     <div class="hsub">${NETPILL()}<span class="sync" id="syncChip"><span class="dot off"></span>Offline</span></div></div>
   <div class="acts4 mm"><button data-go="send">${ic(P.send, 24, 'currentColor', 1.7)}<span>Send</span></button><button data-go="receive">${ic(P.recv, 24, 'currentColor', 1.7)}<span>Receive</span></button><button data-go="swap">${ic(P.swap, 24, 'currentColor', 1.7)}<span>Swap</span></button><button data-go="security">${ic(P.shield, 24, 'currentColor', 1.7)}<span>Security</span></button></div>
   ${!STANDALONE() && !store.get('instHide') ? `<div class="mmc inst"><button class="instgo" data-install="1"><span class="mmi">${ic(P.import, 22, '#fff', 1.8)}</span><span class="t"><b>Install the app</b><small>Add Sectora to your home screen. It opens full screen, like an app.</small></span></button><button class="instx" data-insthide="1" aria-label="Hide">${ic('<path d="M6 6l12 12M18 6L6 18"/>', 16, 'currentColor', 2)}</button></div>` : ''}
   <button class="mmc" data-go="security"><span class="mmi">${ic(P.shield, 22, '#fff', 1.8)}</span><span class="t"><b>${sc.score === sc.total ? 'Your wallet is protected' : 'Improve your protection'}</b><small>${sc.score} of ${sc.total} security checks passed</small><span class="segs">${sc.items.map(i => `<i class="${i.ok ? 'on' : ''}"></i>`).join('')}</span></span>${ic(P.chev, 18, 'currentColor', 1.8)}</button>
   <button class="mmc" data-go="assets"><span class="mmi alt">${ic(P.rwa, 22, 'currentColor', 1.7)}</span><span class="t"><b>Tokenize real-world assets</b><small>In development · launches with SectoraEVM</small></span>${ic(P.chev, 18, 'currentColor', 1.8)}</button>
   <div class="mmh"><span>Tokens</span><button class="addt" data-go="addtok">${ic('<path d="M12 5v14M5 12h14"/>', 16, 'currentColor', 1.9)}Add token</button></div>
-  <div class="tlist">${toks(n).map(t => `<button class="li" data-tokv="${tid(t)}" aria-label="${esc(t.n)} details"><span class="tkw">${TOKI(t, 44)}${NBADGE(n)}</span><div><b>${esc(t.n)}${!t.custom || t.listed ? VERI() : ''}</b><small data-px="${tid(t)}">${TSUB(n, t)}</small></div><div class="r"><b data-usd="${tid(t)}" class="na">—</b><small><span data-bal="${tid(t)}">—</span> ${esc(t.s)}</small></div></button>`).join('')}</div>
+  <div class="tlist">${visToks(n).map(t => `<button class="li" data-tokv="${tid(t)}" aria-label="${esc(t.n)} details"><span class="tkw">${TOKI(t, 44)}${NBADGE(n)}</span><div><b>${esc(t.n)}${!t.custom || t.listed ? VERI() : ''}</b><small data-px="${tid(t)}">${TSUB(n, t)}</small></div><div class="r"><b data-usd="${tid(t)}" class="na">—</b><small><span data-bal="${tid(t)}">—</span> ${esc(t.s)}</small></div></button>`).join('')}</div>  ${toks(n).some(t => isHid(n, t)) ? `<button class="hidl" data-sheet="hidden">${ic(P.eyeoff, 16, 'currentColor', 1.8)}<span>Hidden tokens (${toks(n).filter(t => isHid(n, t)).length})</span></button>` : ''}
+
   <div class="note" style="margin-top:14px" id="offNote" ${!PREVIEW && n.rpc.length ? 'hidden' : ''}>${ic(P.info, 16, '#f0b54a')}<span>${n.rpc.length ? (PREVIEW ? 'Balances load from the network. This private preview runs offline, so they show once the wallet is online.' : "Couldn't reach the network right now. Balances update when the connection is back.") : (PREVIEW ? 'Robinhood Chain support is ready; its network connection is configured at launch.' : 'Robinhood Chain connection opens soon. Balances and sends will show here.')}</span></div>
   ${TABS('home')}${SHEET()}`, '', 'has-tabs'); };
 
@@ -1593,6 +1634,7 @@ V.token = () => { const n = curNet(), t = tokOf(n, S.tokv), p = pxOf(n, t), r = 
   <div class="mmh"><span>Your activity</span></div>
   <div id="hlist" class="hlist" data-tok="${esc(t.s)}">${HLIST(t.s)}</div>
   ${full ? `<a class="tfull" href="${full}" target="_blank" rel="noopener noreferrer">${ic(P.ext, 16, 'currentColor', 1.8)}Full history on ${new URL(eb).hostname}</a>` : ''}
+  ${t.native ? '' : `<button class="btn sec thide" data-hide="${tid(t)}">${ic(isHid(n, t) ? P.eye : P.eyeoff, 18, 'currentColor', 1.8)}${isHid(n, t) ? 'Show token' : 'Hide token'}</button>`}
   <div class="mmh"><span>About</span></div>
   <div class="tinf"><div><span>Network</span><b>${n.name}</b></div>${ca ? `<div><span>Contract</span><button class="m" data-copy="${ca}">${short(ca)} ${ic(P.copy, 14, 'currentColor', 1.8)}</button></div>` : `<div><span>Type</span><b>Native coin</b></div>`}<div><span>Price source</span><b id="tsrc">${p && p.src ? p.src : 'CoinGecko'}</b></div></div>
   ${SHEET()}`); };
@@ -1650,6 +1692,17 @@ function bindTV() {
   $app.querySelectorAll('[data-tact]').forEach(b => b.addEventListener('click', () => { const a = b.dataset.tact; S.dir = 'fwd'; if (a === 'send') { S.tok = S.tokv; S.amt = ''; S.to = ''; } if (a === 'swap') S.sf = S.tokv; go(a); }));
   paintBalances(); loadBalances(); loadPrices().then(() => { const p = pxOf(curNet(), tokOf(curNet(), S.tokv)), s = $app.querySelector('#tsrc'); if (s && p && p.src) s.textContent = p.src; paintHist(); }); loadChart(); loadHist();
 }
+V.contacts = () => { const L = CONTACTS.get(); return SCREEN(`${NAV('Contacts', 0, 'settings')}
+  ${L.length ? `<div class="clist">${L.map((c, i) => `<button class="crow" data-cedit="${i}"><span class="cav">${c.k === 'evm' ? IDN(40, c.a) : `<span class="tki" style="width:40px;height:40px">${ic(P.user, 18, 'currentColor', 1.8)}</span>`}</span><span class="ct notr"><b>${esc(c.n)}</b><small class="mono">${short(c.a)}</small></span><span class="ckd">${c.k === 'evm' ? 'EVM' : 'Solana'}</span></button>`).join('')}</div>`
+    : `<div class="cempty">${ic(P.user, 34, '#545c6e', 1.6)}<p>No contacts yet. Save the addresses you send to often, so you never paste a wrong one.</p></div>`}`,
+  `<button class="btn" data-cnew="1">${ic('<path d="M12 5v14M5 12h14"/>', 18, '#fff', 2.2)}Add contact</button>`); };
+V.contact = () => { const e = S.cEdit || { i: -1, n: '', a: '' }; return SCREEN(`${NAV(e.i >= 0 ? 'Edit contact' : 'New contact', 0, 'contacts')}
+  <div class="fld" style="margin-top:12px"><label class="lbl" for="cname">Name</label><div class="in"><input id="cname" maxlength="32" autocomplete="off" placeholder="e.g. Ana" value="${esc(e.n || '')}"></div></div>
+  <div class="fld" style="margin-top:14px"><label class="lbl" for="caddr">Address</label><div class="in"><input id="caddr" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="0x… or Solana address" value="${esc(e.a || '')}"></div></div>
+  <div class="err" id="cerr"></div>
+  <div class="note" style="margin-top:6px">${ic(P.info, 16, '#5c9bff')}<span>0x… addresses work on Ethereum, BNB Chain and Robinhood Chain. Solana addresses work on Solana.</span></div>
+  ${e.i >= 0 ? `<button class="link" id="cdel" style="color:var(--bad);margin-top:18px">${S.cdelArm ? 'Tap again to delete' : 'Delete contact'}</button>` : ''}`,
+  `<button class="btn" id="csave">Save contact</button>`); };
 V.receive = () => { const n = curNet(), a = addrOf(n); return SCREEN(`${NAV('Receive', 0, 'home')}
   <div class="nbar" style="justify-content:center">${NETPILL()}</div>
   <div class="qcard"><div class="r1"><span class="wm">${LOGOW()}SECTORA</span><span class="net">${NDOT(n)}${n.name}</span></div>
@@ -1660,10 +1713,11 @@ V.receive = () => { const n = curNet(), a = addrOf(n); return SCREEN(`${NAV('Rec
   <div class="note" style="margin-top:16px">${ic(P.info, 17, '#5c9bff')}<span>${n.kind === 'sol' ? 'Solana address. Receive only SOL and Solana tokens here.' : 'Same address on Ethereum, BNB Chain and Robinhood Chain. Check the network when you receive.'}</span></div>
   ${SHEET()}`); };
 
-V.send = () => { const n = curNet(), t = tokOf(n, S.tok), a = S.amt || '', rec = [...new Set(txs().filter(x => (x.netId || 'eth') === n.id && x.to).map(x => x.to))].slice(0, 3);
+V.send = () => { const n = curNet(), t = tokOf(n, S.tok), a = S.amt || '', cs = CONTACTS.get().filter(c => c.k === (n.kind === 'sol' ? 'sol' : 'evm')).slice(0, 12), rec = [...new Set(txs().filter(x => (x.netId || 'eth') === n.id && x.to).map(x => x.to))].filter(r => !contactOf(r)).slice(0, 3);
   const solSpl = n.kind === 'sol' && !t.native; return SCREEN(`${NAV('Send', 0, 'home')}
   <div class="nbar" style="justify-content:center;margin-top:2px">${NETPILL()}</div>
-  <div class="to card" style="margin-top:12px"><span id="idn">${IDN(38, S.to)}</span><div class="tx"><small>To · ${n.name}</small><input id="to" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="${n.kind === 'sol' ? 'Solana address' : 'Address 0x…'}" value="${esc(S.to || '')}" aria-label="Recipient address"></div><span class="ok" id="valid" hidden style="color:var(--b2)">${ic(P.chk, 14, '#5c9bff', 2.6)}Valid</span></div>
+  <div class="to card" style="margin-top:12px"><span id="idn">${IDN(38, S.to)}</span><div class="tx"><small>To · ${n.name}<em class="cnm notr" id="cnm"></em></small><input id="to" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="${n.kind === 'sol' ? 'Solana address' : 'Address 0x…'}" value="${esc(S.to || '')}" aria-label="Recipient address"></div><span class="ok" id="valid" hidden style="color:var(--b2)">${ic(P.chk, 14, '#5c9bff', 2.6)}Valid</span></div>
+  ${cs.length ? `<div class="recent"><span class="lbl">Contacts</span>${cs.map(c => `<button class="rc notr" data-rec="${esc(c.a)}">${c.k === 'evm' ? IDN(20, c.a) : ''}${esc(c.n)}</button>`).join('')}</div>` : ''}
   ${rec.length ? `<div class="recent"><span class="lbl">Recent</span>${rec.map(r => `<button class="rc" data-rec="${r}">${IDN(20, r)}${short(r)}</button>`).join('')}</div>` : ''}
   <div class="err" id="toerr" style="padding-left:6px"></div>
   <div class="amt" style="margin-top:0"><div class="v ${a ? '' : 'empty'}" id="amtv">${a || '0'}</div>
@@ -1675,24 +1729,27 @@ V.send = () => { const n = curNet(), t = tokOf(n, S.tok), a = S.amt || '', rec =
 function checks() { const n = curNet(), hist = txs().map(t => (t.to || '').toLowerCase()), to = (S.to || '').toLowerCase();
   return [{ s: 'ok', t: n.kind === 'sol' ? 'Valid Solana address' : 'Valid address · checksum verified' },
     to === addrOf(n).toLowerCase() ? { s: 'warn', t: 'This is your own address' } : { s: 'ok', t: 'Not your own address' },
+    ...(contactOf(S.to) ? [{ s: 'ok', t: `Saved contact: ${esc(contactOf(S.to).n)}` }] : []),
     hist.includes(to) ? { s: 'ok', t: 'You have sent to this address before' } : { s: 'warn', t: 'First transfer to this address · double-check it' },
     { s: 'ok', t: `Network: ${n.name} · fees in ${n.native}` },
     { s: 'ok', t: 'Signed on this device · your key never leaves it' }]; }
 
 V.review = () => { const n = curNet(), t = tokOf(n, S.tok), ck = checks(); return SCREEN(`${NAV('Review', 0, 'send')}
   <div class="rvh"><small>You are sending</small><div class="big"><b>${esc(S.amt)}</b><span>${t.s}</span></div></div>
-  <div class="flow card"><div class="p">${LOGO(42)}<b>${esc(S.name)}</b><small>${short(addrOf(n))}</small></div><div class="ar">${ic(P.arrow, 22, '#5c9bff', 2)}</div><div class="p">${IDN(42, S.to)}<b>Recipient</b><small>${short(S.to)}</small></div></div>
+  <div class="flow card"><div class="p">${LOGO(42)}<b>${esc(S.name)}</b><small>${short(addrOf(n))}</small></div><div class="ar">${ic(P.arrow, 22, '#5c9bff', 2)}</div><div class="p">${IDN(42, S.to)}<b class="${contactOf(S.to) ? 'notr' : ''}">${contactOf(S.to) ? esc(contactOf(S.to).n) : 'Recipient'}</b><small>${short(S.to)}</small></div></div>
   <div class="checks card"><div class="chh">${ic(P.shield, 18, '#5c9bff', 2)}<b>Security checks</b><span>${ck.filter(c => c.s === 'ok').length} of ${ck.length} passed</span></div>
     ${ck.map(c => `<div class="ck ${c.s === 'ok' ? 'ok' : 'wn'}">${c.s === 'ok' ? ic(P.chk, 15, '#5c9bff', 2.8) : ic(P.info, 15, '#f0b54a', 2.2)}<span>${c.t}</span></div>`).join('')}</div>
+  ${n.kind === 'evm' && !PREVIEW ? `<div class="feeq card"><div class="fh"><b>Network fee</b><small id="feeAll">Estimating…</small></div><div class="sp3">${[['slow', 'Slow'], ['normal', 'Normal'], ['fast', 'Fast']].map(([k, lb]) => `<button data-speed="${k}" class="${(S.speed || 'normal') === k ? 'on' : ''}"><b>${lb}</b><small id="fee-${k}">…</small></button>`).join('')}</div><p class="fnote">Fast pays a higher fee so the network confirms it sooner. Slow is cheaper and can take longer.</p></div>` : ''}
   <div class="kv card"><div>Network<b>${NDOT(n)} ${n.name}</b></div><div>Mode<b>${PREVIEW ? 'Sign only · not broadcast' : 'Sign and send'}</b></div></div>`,
   `<div class="slide" id="slide" role="slider" aria-label="Slide to sign" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0"><span class="tx">Slide to sign</span><span class="ch">${ic(P.chev, 16, '#545c6e', 2.4)}${ic(P.chev, 16, '#8b93a6', 2.4)}</span><span class="kn" id="knob">${ic(P.face, 26, '#fff', 2)}</span></div>`); };
 
 const TXST = { pend: ['Pending', 'var(--warn)'], ok: ['Confirmed', 'var(--b2)'], fail: ['Failed', 'var(--bad)'], old: ['Not confirmed', 'var(--warn)'] };
 const stOf = t => t.st === 'pend' && Date.now() - t.time > 15 * 60e3 ? TXST.old : TXST[t.st] || TXST.pend;
 V.sent = () => { const t = txs()[0] || {}, n = NETS[t.netId] || NETS.eth, st = stOf(t); return SCREEN(`<div class="sg" style="margin-top:20px"><canvas class="gl" aria-hidden="true"></canvas><span class="bdg">${ic(P.chk, 34, '#fff', 2.8)}</span></div>
-  <div style="text-align:center"><h1 class="h1" style="margin-top:22px">${PREVIEW ? (t.kind === 'swap' ? 'Swap signed' : 'Signed') : (t.kind === 'swap' ? 'Swap sent' : 'Sent')}</h1><p class="lead">${t.kind === 'swap' ? `${esc(t.amount)} ${t.token} → ${esc(t.out)} ${t.outToken}` : `${esc(t.amount)} ${t.token} to <span class="mono" style="color:var(--tx)">${short(t.to)}</span>`}</p></div>
-  <div class="kv card" style="margin-top:22px"><div>Status<b id="txst" style="color:${PREVIEW ? 'var(--warn)' : st[1]}">${PREVIEW ? 'Signed · not broadcast' : st[0]}</b></div><div>Network<b>${esc(t.net)}</b></div>${t.steps ? `<div>Steps<b>${esc(t.steps)}</b></div>` : ''}<div>Transaction<b class="m">${!PREVIEW && n.exp && t.hash ? `<a href="${n.exp + t.hash}" target="_blank" rel="noopener noreferrer">${short(t.hash)} ↗</a>` : short(t.hash)}</b></div></div>`,
-  `<button class="btn sec" data-copy="${t.hash || ''}">${ic(P.copy, 18, '#5c9bff', 2)}Copy transaction id</button><button class="btn" data-go="home">Done</button>`); };
+  <div style="text-align:center"><h1 class="h1" style="margin-top:22px">${PREVIEW ? (t.kind === 'swap' ? 'Swap signed' : 'Signed') : (t.kind === 'swap' ? 'Swap sent' : 'Sent')}</h1><p class="lead">${t.kind === 'swap' ? `${esc(t.amount)} ${t.token} → ${esc(t.out)} ${t.outToken}` : `${esc(t.amount)} ${t.token} to <span class="${contactOf(t.to) ? 'notr' : 'mono'}" style="color:var(--tx)">${contactOf(t.to) ? esc(contactOf(t.to).n) : short(t.to)}</span>`}</p></div>
+  <div class="kv card" style="margin-top:22px"><div>Status<b id="txst" style="color:${PREVIEW ? 'var(--warn)' : st[1]}">${PREVIEW ? 'Signed · not broadcast' : st[0]}</b></div><div>Network<b>${esc(t.net)}</b></div>${t.steps ? `<div>Steps<b>${esc(t.steps)}</b></div>` : ''}<div>Transaction<b class="m">${!PREVIEW && n.exp && t.hash ? `<a href="${n.exp + t.hash}" target="_blank" rel="noopener noreferrer">${short(t.hash)} ↗</a>` : short(t.hash)}</b></div></div>
+  ${!PREVIEW && t.st === 'pend' && n.kind === 'evm' && t.nonce != null && t.maxFee ? `<div class="hact big"><button data-bump="speed" data-h="${t.hash}">Speed up</button>${t.kind === 'cancel' ? '' : `<button data-bump="cancel" data-h="${t.hash}">Cancel</button>`}</div>` : ''}`,
+  `${t.kind === 'send' && t.to && !contactOf(t.to) ? `<button class="btn sec" data-csave="${esc(t.to)}">${ic(P.user, 18, '#5c9bff', 2)}Save address as contact</button>` : ''}<button class="btn sec" data-copy="${t.hash || ''}">${ic(P.copy, 18, '#5c9bff', 2)}Copy transaction id</button><button class="btn" data-go="home">Done</button>`); };
 
 const txRow = t => { const n = NETS[t.netId || 'eth'] || NETS.eth; return `<div class="li"><span class="av">${t.kind === 'swap' ? ic(P.swap, 20, '#5c9bff') : IDN(44, t.to)}</span><div><b>${t.kind === 'swap' ? `${esc(t.amount)} ${t.token} → ${t.outToken}` : `${esc(t.amount)} ${t.token}`}</b><small>${n.name} · ${t.kind === 'swap' ? 'swap' : 'to ' + short(t.to)} · ${new Date(t.time).toLocaleDateString()}</small></div><div class="r">${PREVIEW ? '<b style="color:var(--warn);font-size:13px">Signed</b>' : `<b style="color:${stOf(t)[1]};font-size:13px">${stOf(t)[0]}</b>`}${!PREVIEW && n.exp && t.hash ? `<a class="mono txl" href="${n.exp + t.hash}" target="_blank" rel="noopener noreferrer">${short(t.hash)} ↗</a>` : `<small class="mono">${short(t.hash)}</small>`}</div></div>`; };
 
@@ -1770,7 +1827,7 @@ V.swapReview = () => { const { n, from, to } = swapPair(), q = S.quote; return S
 
 /* ---------- firmas ---------- */
 const cu16 = n => { const o = []; for (;;) { let b = n & 0x7f; n >>= 7; if (!n) { o.push(b); return o; } o.push(b | 0x80); } };
-async function evmTxBase(n) {
+async function evmTxBase(n, speed = S.speed || 'normal') {
   if (PREVIEW) { let nonce = 0, fee = { maxFeePerGas: ethers.parseUnits('30', 'gwei'), maxPriorityFeePerGas: ethers.parseUnits('1', 'gwei') };
     try { nonce = Number(BigInt(await rpc(n, 'eth_getTransactionCount', [S.addr, 'pending']))); const gp = BigInt(await rpc(n, 'eth_gasPrice', [])); fee = { maxFeePerGas: gp * 2n, maxPriorityFeePerGas: gp / 10n || 1n }; } catch (e) {}
     return { type: 2, chainId: n.chainId, nonce, ...fee }; }
@@ -1781,8 +1838,17 @@ async function evmTxBase(n) {
   if (base === 0n && tip < price) tip = price;                                   // BNB Chain: sin base fee, la propina es el precio del gas
   if (n.chainId === 1 && tip < 50000000n) tip = 50000000n;                       // Ethereum: propina minima 0.05 gwei
   let max = base * 2n + tip; if (max < price) max = price;
-  return { type: 2, chainId: n.chainId, nonce: Number(BigInt(nc)), maxFeePerGas: max, maxPriorityFeePerGas: tip };
+  if (base === 0n) { if (speed === 'fast') { tip = tip * 3n / 2n; max = tip; } }                                  // BNB Chain: precio unico; rapido = +50%
+  else if (speed === 'slow') { tip = tip * 8n / 10n; if (n.chainId === 1 && tip < 50000000n) tip = 50000000n; max = base * 5n / 4n + tip; }
+  else if (speed === 'fast') { tip = tip * 2n + (n.chainId === 1 ? 500000000n : 0n); max = base * 3n + tip; }
+  if (max < tip) max = tip;
+  return { type: 2, chainId: n.chainId, nonce: Number(BigInt(nc)), maxFeePerGas: max, maxPriorityFeePerGas: tip, baseFee: base };
 }
+async function feeQuote(n, t, amount, to) { const value = ethers.parseUnits(amount || '0', t.d);
+  const tx = t.native ? { to, value } : { to: t.a, value: 0n, data: new ethers.Interface(['function transfer(address,uint256)']).encodeFunctionData('transfer', [to, value]) };
+  const gas = await estGas(n, tx, t.native ? 21000n : 90000n).catch(() => t.native ? 21000n : 90000n), out = {};
+  for (const sp of ['slow', 'normal', 'fast']) { const b = await evmTxBase(n, sp), eff = b.baseFee > 0n ? (b.baseFee + b.maxPriorityFeePerGas < b.maxFeePerGas ? b.baseFee + b.maxPriorityFeePerGas : b.maxFeePerGas) : b.maxFeePerGas; out[sp] = Number(ethers.formatEther(gas * eff)); }
+  return out; }
 async function estGas(n, tx, fb) { if (PREVIEW) return fb;
   const g = BigInt(await rpc(n, 'eth_estimateGas', [{ from: S.addr, to: tx.to, value: ethers.toQuantity(tx.value || 0n), data: tx.data || '0x' }]));
   return g === 21000n ? g : g * 13n / 10n; }
@@ -1815,9 +1881,10 @@ async function signSend() {
     if (!PREVIEW && !t.native && await erc20Bal(n, t.a) < value) throw new UErr(`Not enough ${t.s} for this amount.`);
     const base = await evmTxBase(n), gasLimit = await estGas(n, tx, t.native ? 21000n : 90000n);
     if (!PREVIEW) await needNative(n, t.native ? value : 0n, gasLimit, base);
-    const raw = await S.wallet.signTransaction({ ...tx, gasLimit, ...base }); hash = ethers.keccak256(raw);
+    const { baseFee, ...fee } = base, raw = await S.wallet.signTransaction({ ...tx, gasLimit, ...fee }); hash = ethers.keccak256(raw);
     if (!PREVIEW) await sendRaw(n, raw);
-  } else {
+    S.lastEvm = { nonce: fee.nonce, maxFee: String(fee.maxFeePerGas), tip: String(fee.maxPriorityFeePerGas), gas: String(gasLimit), txTo: tx.to, txVal: String(tx.value || 0n), txData: tx.data || '0x' };
+  } else { S.lastEvm = null;
     if (!t.native || !S.solSk) throw new Error('sol-token');
     const lam = ethers.parseUnits(amount, 9);
     if (!PREVIEW) { const [mine, theirs] = await Promise.all([rpc(n, 'getBalance', [S.sol]), rpc(n, 'getBalance', [S.to])]); const have = BigInt(mine.value), left = have - lam - SOLFEE;
@@ -1828,7 +1895,7 @@ async function signSend() {
     hash = ethers.encodeBase58(sig);
     if (!PREVIEW) await solSend(n, new Uint8Array([...cu16(1), ...sig, ...msg]));
   }
-  return { hash, to: S.to, amount, token: t.s, net: n.name, netId: n.id, kind: 'send', time: Date.now(), st: PREVIEW ? undefined : 'pend' };
+  return { hash, to: S.to, amount, token: t.s, net: n.name, netId: n.id, kind: 'send', time: Date.now(), st: PREVIEW ? undefined : 'pend', ...(n.kind === 'evm' && S.lastEvm ? S.lastEvm : {}) };
 }
 async function kyberRoute(n, from, to, amt) {
   const ti = from.native ? NATIVE_EVM : from.a, to2 = to.native ? NATIVE_EVM : to.a;
@@ -1859,7 +1926,7 @@ async function signSwap(step = () => {}) {
       if (cur < amt) {
         const approve = async v => { const tx = { to: from.a, value: 0n, data: new ethers.Interface(['function approve(address,uint256)']).encodeFunctionData('approve', [spender, v]) };
           const gasLimit = await estGas(n, tx, 80000n); if (!PREVIEW) await needNative(n, 0n, gasLimit, base);
-          const ra = await S.wallet.signTransaction({ ...tx, gasLimit, ...base }); steps++;
+          const ra = await S.wallet.signTransaction({ ...tx, gasLimit, ...(({ baseFee, ...f }) => f)(base) }); steps++;
           if (PREVIEW) { base.nonce += 1; return; }
           step(`Approving ${from.s}…`); await sendRaw(n, ra);
           if (await waitEvm(n, ethers.keccak256(ra)) !== true) throw new UErr('The approval did not confirm yet. Try the swap again in a minute.');
@@ -1879,21 +1946,36 @@ async function signSwap(step = () => {}) {
     const tx = { to: d.routerAddress, data: d.data, value: from.native ? amt : 0n };
     const gasLimit = PREVIEW ? BigInt(Math.ceil(Number(d.gas || 400000) * 1.3)) : await estGas(n, tx, 0n);
     if (!PREVIEW) await needNative(n, tx.value, gasLimit, base);
-    const raw = await S.wallet.signTransaction({ ...tx, gasLimit, ...base });
+    const raw = await S.wallet.signTransaction({ ...tx, gasLimit, ...(({ baseFee, ...f }) => f)(base) });
     hash = ethers.keccak256(raw); if (!PREVIEW) await sendRaw(n, raw);
   }
   return { hash, amount: S.samt, token: from.s, out: fmtAmt(q.out), outToken: to.s, net: n.name, netId: n.id, kind: 'swap', steps: steps >= 2 ? 'Approve + swap' : 'Swap', time: Date.now(), st: PREVIEW ? undefined : 'pend' };
 }
 /* seguimiento de confirmaciones (solo en vivo) */
+async function onBump(b) { const h = b.dataset.h, mode = b.dataset.bump, rec = txs().find(x => x.hash === h); if (!rec || b.disabled) return;
+    if (mode === 'cancel' && b.dataset.arm !== '1') { b.dataset.arm = '1'; b.textContent = 'Tap again to cancel'; return; }
+    $app.querySelectorAll('[data-bump]').forEach(x => x.disabled = true); b.textContent = mode === 'cancel' ? 'Cancelling…' : 'Speeding up…';
+    try { await bumpTx(rec, mode); toast(mode === 'cancel' ? 'Cancel sent. It replaces the transfer if it confirms first.' : 'Sent again with a higher fee'); } catch (e) { toast(errMsg(e, "Couldn't change this transfer. It may have already confirmed."), 1); }
+    render(); }
+async function bumpTx(rec, mode) { const n = NETS[rec.netId || 'eth']; if (!n || n.kind !== 'evm' || rec.nonce == null || !rec.maxFee) throw new UErr("This transfer can't be changed."); if (!S.wallet) throw new UErr('Unlock the wallet first.');
+  if (rec.from && rec.from.toLowerCase() !== S.addr.toLowerCase()) throw new UErr('Switch to the account that sent it.');
+  const cur = await evmTxBase(n, 'fast'); let tip = BigInt(rec.tip) * 13n / 10n + 1n, max = BigInt(rec.maxFee) * 13n / 10n + 1n;
+  if (cur.maxPriorityFeePerGas > tip) tip = cur.maxPriorityFeePerGas; if (cur.maxFeePerGas > max) max = cur.maxFeePerGas; if (max < tip) max = tip;
+  const tx = mode === 'cancel' ? { to: S.addr, value: 0n, data: '0x' } : { to: rec.txTo, value: BigInt(rec.txVal || '0'), data: rec.txData || '0x' }, gasLimit = mode === 'cancel' ? 21000n : BigInt(rec.gas);
+  await needNative(n, tx.value, gasLimit, { maxFeePerGas: max });
+  const raw = await S.wallet.signTransaction({ ...tx, gasLimit, type: 2, chainId: n.chainId, nonce: rec.nonce, maxFeePerGas: max, maxPriorityFeePerGas: tip }), hash = ethers.keccak256(raw); await sendRaw(n, raw);
+  const L = txs(), x = L.find(y => y.hash === rec.hash); if (x) { x.prev = [...(x.prev || []), x.hash]; x.hash = hash; x.maxFee = String(max); x.tip = String(tip); x.gas = String(gasLimit); x.st = 'pend'; x.time = Date.now();
+    if (mode === 'cancel') { x.kind = 'cancel'; x.txTo = S.addr; x.txVal = '0'; x.txData = '0x'; } store.set('txs', JSON.stringify(L)); }
+  trackPending(); return hash; }
 async function txState(t) { const n = NETS[t.netId]; if (!n || !n.rpc.length) return null;
-  if (n.kind === 'evm') { const r = await rpc(n, 'eth_getTransactionReceipt', [t.hash]); return r ? (r.status === '0x1' ? 'ok' : 'fail') : 'pend'; }
+  if (n.kind === 'evm') { for (const h of [t.hash, ...(t.prev || [])]) { const r = await rpc(n, 'eth_getTransactionReceipt', [h]); if (r) { t._h = h; return r.status === '0x1' ? 'ok' : 'fail'; } } return 'pend'; }
   const r = await rpc(n, 'getSignatureStatuses', [[t.hash]]); const v = r && r.value && r.value[0];
   return !v ? 'pend' : v.err ? 'fail' : (v.confirmationStatus === 'confirmed' || v.confirmationStatus === 'finalized') ? 'ok' : 'pend'; }
 let tracking = false;
 async function trackPending() { if (PREVIEW || tracking) return; tracking = true;
   try { for (let i = 0; i < 120; i++) { const pend = txs().filter(t => t.st === 'pend' && Date.now() - t.time < 15 * 60e3).slice(0, 6); if (!pend.length) break;
-      for (const t of pend) { let st = null; try { st = await txState(t); } catch (e) {} if (st && st !== 'pend') { const L = txs(), x = L.find(y => y.hash === t.hash); if (x) { x.st = st; store.set('txs', JSON.stringify(L)); }
-          if (S.view === 'activity') render(); else if (S.view === 'sent' && (txs()[0] || {}).hash === t.hash) { const e = $app.querySelector('#txst'); if (e) { const s2 = TXST[st]; e.textContent = s2[0]; e.style.color = s2[1]; } } } }
+      for (const t of pend) { let st = null; try { st = await txState(t); } catch (e) {} if (st && st !== 'pend') { const L = txs(), x = L.find(y => y.hash === t.hash); if (x) { x.st = st; if (t._h && t._h !== x.hash) { x.hash = t._h; if (x.kind === 'cancel') x.kind = 'send'; } store.set('txs', JSON.stringify(L)); }
+          if (S.view === 'activity') render(); else if (S.view === 'sent' && [t.hash, t._h].includes((txs()[0] || {}).hash)) { const e = $app.querySelector('#txst'); if (e) { const s2 = TXST[st]; e.textContent = s2[0]; e.style.color = s2[1]; } const ha = $app.querySelector('.hact'); if (ha) ha.remove(); } } }
       await new Promise(r => setTimeout(r, 4000)); } } finally { tracking = false; } }
 function keepTx(rec) { const L = txs(); rec.from = rec.from || addrOf(NETS[rec.netId || 'eth'] || curNet()); L.unshift(rec); store.set('txs', JSON.stringify(L.slice(0, 40))); trackPending(); }
 
@@ -1903,6 +1985,24 @@ function bindMulti() {
   qa('[data-sheet]').forEach(b => b.addEventListener('click', () => { S.sheet = b.dataset.sheet; render(); }));
   qa('[data-close]').forEach(b => b.addEventListener('click', () => { S.sheet = null; render(); }));
   qa('[data-install]').forEach(b => b.addEventListener('click', doInstall));
+  if (S.view === 'review' && $app.querySelector('.feeq')) { const n = curNet(), t = tokOf(n, S.tok), nat = toks(n).find(x => x.native), p = nat && pxOf(n, nat);
+    const paint = r => { for (const k of ['slow', 'normal', 'fast']) { const e = $app.querySelector('#fee-' + k); if (e) e.textContent = r ? (p ? fmtUsd(r[k] * p.usd) : fmtAmt(r[k]) + ' ' + n.native) : '—'; } const a = $app.querySelector('#feeAll'); if (a) a.textContent = r ? `≈ ${fmtAmt(r[S.speed || 'normal'])} ${n.native}` : 'Estimate unavailable'; };
+    feeQuote(n, t, S.amt, S.to).then(r => { S.feeQ = r; if (S.view === 'review') paint(r); }).catch(() => paint(null)); if (!p) loadPrices();
+    qa('[data-speed]').forEach(b => b.addEventListener('click', () => { S.speed = b.dataset.speed; qa('[data-speed]').forEach(x => x.classList.toggle('on', x === b)); const a = $app.querySelector('#feeAll'); if (a && S.feeQ) a.textContent = `≈ ${fmtAmt(S.feeQ[S.speed])} ${n.native}`; })); }
+  qa('[data-bump]').forEach(b => b.addEventListener('click', () => onBump(b)));
+  qa('[data-cnew]').forEach(b => b.addEventListener('click', () => { S.cEdit = { i: -1, n: '', a: '' }; S.cdelArm = false; S.dir = 'fwd'; go('contact'); }));
+  qa('[data-cedit]').forEach(b => b.addEventListener('click', () => { const i = +b.dataset.cedit, c = CONTACTS.get()[i]; if (!c) return; S.cEdit = { ...c, i }; S.cdelArm = false; S.dir = 'fwd'; go('contact'); }));
+  qa('[data-csave]').forEach(b => b.addEventListener('click', () => { S.cEdit = { i: -1, n: '', a: b.dataset.csave }; S.cdelArm = false; S.dir = 'fwd'; go('contact'); }));
+  qa('#cname, #caddr').forEach(i => i.addEventListener('input', () => { const er = $app.querySelector('#cerr'); if (er) er.textContent = ''; }));
+  { const sv = $app.querySelector('#csave'); if (sv) sv.addEventListener('click', () => { const e = S.cEdit || { i: -1 }, nm = $app.querySelector('#cname').value.trim(), ad = $app.querySelector('#caddr').value.trim(), er = $app.querySelector('#cerr'), k = kindOf(ad);
+      if (!nm) { er.textContent = 'Write a name for this contact.'; return; } if (!k) { er.textContent = 'This is not a valid address.'; return; }
+      const a = k === 'evm' ? ethers.getAddress(ad) : ad, L = CONTACTS.get(), dup = L.findIndex((c, i) => i !== e.i && (k === 'evm' ? c.a.toLowerCase() === a.toLowerCase() : c.a === a));
+      if (dup >= 0) { er.textContent = `This address is already saved as ${L[dup].n}.`; return; }
+      const c = { n: nm.slice(0, 32), a, k }; if (e.i >= 0 && L[e.i]) L[e.i] = c; else L.push(c); CONTACTS.set(L); S.cEdit = null; S.dir = 'back'; go('contacts'); toast('Contact saved'); }); }
+  { const dl = $app.querySelector('#cdel'); if (dl) dl.addEventListener('click', () => { if (!S.cdelArm) { S.cdelArm = true; dl.textContent = 'Tap again to delete'; return; } const L = CONTACTS.get(); L.splice(S.cEdit.i, 1); CONTACTS.set(L); S.cdelArm = false; S.cEdit = null; S.dir = 'back'; go('contacts'); toast('Contact deleted'); }); }
+  qa('[data-unhide]').forEach(b => b.addEventListener('click', () => { const n = curNet(), id = b.dataset.unhide, t = toks(n).find(x => tid(x) === id); HID.set(n, HID.get(n).filter(x => x !== id)); if (!toks(n).some(x => isHid(n, x))) S.sheet = null; render(); loadPrices(); if (t) toast(`${t.s} is visible again`); }));
+  qa('[data-hide]').forEach(b => b.addEventListener('click', () => { const n = curNet(), id = b.dataset.hide, t = toks(n).find(x => tid(x) === id); if (!t) return; const L = HID.get(n);
+    if (L.includes(id)) { HID.set(n, L.filter(x => x !== id)); toast(`${t.s} is visible again`); render(); } else { HID.set(n, [...L, id]); toast(`${t.s} hidden`); S.dir = 'back'; go('home'); } }));
   { const ip = $app.querySelector('#ipoint'); if (ip) ip.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); ip.classList.remove('nudge'); void ip.offsetWidth; ip.classList.add('nudge'); toast(IOSDEV ? 'Tap the browser\'s own button, outside this page' : 'Tap the browser\'s own menu, outside this page'); }); }
   qa('[data-lang]').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
   qa('[data-acct]').forEach(b => b.addEventListener('click', () => { const i = +b.dataset.acct; if (!S.seed) return lock(); if (i !== ACCI()) { useAcct(i); toast(`Switched to ${S.name}`); } S.sheet = null; render(); }));
@@ -1917,7 +2017,7 @@ function bindMulti() {
   const to = q('#to');
   if (to && S.view === 'send') { const n = curNet(), t = tokOf(n, S.tok);
     const chk = () => { S.to = to.value.trim(); const ok = validTo(n, S.to); q('#valid').hidden = !ok; q('#toerr').textContent = S.to && !ok ? (n.kind === 'sol' ? 'This is not a valid Solana address.' : 'This is not a valid address for ' + n.name + '.') : '';
-      q('#idn').innerHTML = IDN(38, ok ? S.to : ''); q('#revGo').disabled = !(ok && +S.amt > 0) || (n.kind === 'sol' && !t.native) || (!PREVIEW && !n.rpc.length); };
+      q('#idn').innerHTML = IDN(38, ok ? S.to : ''); const cc = ok && contactOf(S.to), cn = q('#cnm'); if (cn) cn.textContent = cc ? ' · ' + cc.n : ''; q('#revGo').disabled = !(ok && +S.amt > 0) || (n.kind === 'sol' && !t.native) || (!PREVIEW && !n.rpc.length); };
     to.addEventListener('input', chk); to.addEventListener('paste', () => setTimeout(chk, 0)); chk();
     qa('[data-k]').forEach(b => b.addEventListener('click', () => { const k = b.dataset.k; let a = S.amt || '';
       if (k === 'del') a = a.slice(0, -1); else if (k === '.') { if (!a.includes('.')) a = (a || '0') + '.'; } else if (a.replace('.', '').length < 12) { const d = a.split('.')[1]; if (!(d && d.length >= Math.min(8, t.d))) a = (a === '0' ? '' : a) + k; }
@@ -1947,8 +2047,8 @@ function bindMulti() {
     kn.addEventListener('pointerup', () => { x0 = null; fin(); });
     sl.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === 'ArrowRight') { e.preventDefault(); setX(e.key === 'Enter' ? max() : dx + 50); if (dx >= max() - 4) fin(); } });
   }
-  if (['home', 'send', 'swap'].includes(S.view) || S.sheet) { paintBalances(); if (S.view === 'home') { loadBalances(); loadPrices(); } }
-  clearInterval(S.pxT); if (S.view === 'home') S.pxT = setInterval(() => { if (S.view !== 'home') return clearInterval(S.pxT); if (document.hidden) return; loadPrices(); loadBalances(); }, 60000);
+  if (['home', 'send', 'swap'].includes(S.view) || S.sheet) { paintBalances(); if (S.view === 'home') { loadAll(); loadPrices(); } }
+  clearInterval(S.pxT); if (S.view === 'home') S.pxT = setInterval(() => { if (S.view !== 'home') return clearInterval(S.pxT); if (document.hidden) return; loadPrices(); loadAll(); }, 60000);
   if (!PREVIEW && ['send', 'swap'].includes(S.view)) loadBalances();
   if (['swap', 'swapReview'].includes(S.view)) loadPrices();
   if (['sent', 'activity'].includes(S.view)) trackPending();
