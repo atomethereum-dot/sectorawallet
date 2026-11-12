@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://raw.githubusercontent.com https://coin-images.coingecko.com https://assets.coingecko.com; font-src 'self' data:; connect-src 'self' https://raw.githubusercontent.com https://api.coingecko.com https://ethereum-rpc.publicnode.com https://eth.drpc.org https://bsc-rpc.publicnode.com https://bsc-dataseed.bnbchain.org https://solana-rpc.publicnode.com https://api.mainnet-beta.solana.com https://aggregator-api.kyberswap.com https://lite-api.jup.ag; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://raw.githubusercontent.com https://coin-images.coingecko.com https://assets.coingecko.com; font-src 'self' data:; connect-src 'self' https://raw.githubusercontent.com https://api.coingecko.com https://api.dexscreener.com https://ethereum-rpc.publicnode.com https://eth.drpc.org https://bsc-rpc.publicnode.com https://bsc-dataseed.bnbchain.org https://solana-rpc.publicnode.com https://api.mainnet-beta.solana.com https://aggregator-api.kyberswap.com https://lite-api.jup.ag; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="no-referrer">
 <meta name="google" content="notranslate">
 <meta name="format-detection" content="telephone=no,date=no,address=no,email=no">
@@ -1148,7 +1148,7 @@ async function rpc(n, method, params) {
 }
 const fmtAmt = (v, d = 6) => { if (v === null || v === undefined) return '—'; const n = Number(v); if (!isFinite(n)) return '—'; if (n === 0) return '0';
   return n >= 1000 ? n.toLocaleString('en-US', { maximumFractionDigits: 2 }) : n >= 1 ? n.toLocaleString('en-US', { maximumFractionDigits: 4 }) : n.toPrecision(Math.min(d, 4)); };
-/* ---------- valor en dolares: precios de CoinGecko; si no responde, el precio de SECT sale del historico de CoinGecko que publica sectoraorg.com ---------- */
+/* ---------- valor en dolares: precio en vivo de CoinGecko; si un token no esta en CoinGecko, su precio en el DEX con mas liquidez (DexScreener, minimo $1,000 de liquidez); para SECT, ademas, el historico de CoinGecko que publica sectoraorg.com ---------- */
 const CGPF = { eth: 'ethereum', bnb: 'binance-smart-chain', sol: 'solana' };
 const CGID = { ETH: 'ethereum', BNB: 'binancecoin', SOL: 'solana', USDT: 'tether', USDC: 'usd-coin' };
 const PX = (() => { try { const o = JSON.parse(store.get('px') || '{}'); return o && typeof o === 'object' ? o : {}; } catch (e) { return {}; } })();
@@ -1175,6 +1175,12 @@ async function loadPrices(force) {
     for (const pf in byPf) jobs.push(get('https://api.coingecko.com/api/v3/simple/token_price/' + pf + '?contract_addresses=' + byPf[pf].join(',') + '&vs_currencies=usd&include_24hr_change=true')
       .then(j => byPf[pf].forEach(a => put('c:' + pf + ':' + a, j[a] || j[a.toLowerCase()]))).catch(() => {}));
     await Promise.all(jobs);
+    const DSCH = { ethereum: 'ethereum', 'binance-smart-chain': 'bsc', solana: 'solana' }, byCh = {};
+    need.filter(k => k.startsWith('c:') && !(PX[k] && PX[k].at === now)).forEach(k => { const [, pf, a] = k.split(':'); if (DSCH[pf]) (byCh[pf] = byCh[pf] || []).push(a); });
+    await Promise.all(Object.keys(byCh).map(pf => get('https://api.dexscreener.com/tokens/v1/' + DSCH[pf] + '/' + byCh[pf].join(',')).then(arr => byCh[pf].forEach(a => {
+      const best = (Array.isArray(arr) ? arr : []).filter(p => p && p.baseToken && (pf === 'solana' ? p.baseToken.address === a : String(p.baseToken.address).toLowerCase() === a)
+        && Number(p.liquidity && p.liquidity.usd) >= 1000 && Number(p.priceUsd) > 0).sort((x, y) => y.liquidity.usd - x.liquidity.usd)[0];
+      if (best) { const ch = Number(best.priceChange && best.priceChange.h24); PX['c:' + pf + ':' + a] = { usd: Number(best.priceUsd), ch: best.priceChange && best.priceChange.h24 != null && isFinite(ch) ? ch : null, at: now }; } })).catch(() => {})));
     const sk = 'c:ethereum:' + SECT.toLowerCase();
     if (need.includes(sk) && !(PX[sk] && PX[sk].at === now)) await get('https://raw.githubusercontent.com/atomethereum-dot/test2/claude/website-build-i9rofc/sect-price-30d.json').then(j => {
       const pts = (j && Array.isArray(j.prices) ? j.prices : []).filter(p => Array.isArray(p) && isFinite(p[0]) && isFinite(p[1]) && p[1] > 0); if (!pts.length) return;
