@@ -474,7 +474,6 @@ button.lg:hover{transform:translate(-50%,-50%) scale(1.04)}
 .avi.avx{overflow:hidden;background:var(--s2);padding:0}
 .avi.avx img,.avi.avx svg{width:100%;height:100%;display:block;object-fit:cover}
 .avi{cursor:pointer}
-.avini{display:grid;place-items:center;width:100%;height:100%;background:var(--b);color:#fff;font-weight:500;letter-spacing:.02em}
 .avgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:6px 0 16px}
 .avopt{aspect-ratio:1;border-radius:50%;overflow:hidden;display:grid;place-items:center;outline:2px solid transparent;outline-offset:3px;transition:outline-color .15s ease}
 .avopt.sq{border-radius:14%}
@@ -992,7 +991,7 @@ function paintBalances() {
 /* ---------- hoja para elegir red o token ---------- */
 const SHEET = () => {
   if (!S.sheet) return '';
-  if (S.sheet === 'avatar') { const k = AVK(); return `<div class="sbg" data-close="1"></div><div class="bsheet" role="dialog" aria-label="Profile picture"><div class="grab"></div><h3>Profile picture</h3><div class="avgrid">${['logo', 'ini', 'idn', ...AVP.map((_, i) => 'p' + i)].map(v => `<button class="avopt ${v === 'logo' ? 'sq' : ''} ${k === v ? 'on' : ''}" data-av="${v}" aria-label="${v === 'logo' ? 'Sectora logo' : v === 'ini' ? 'Initials' : v === 'idn' ? 'Address pattern' : 'Avatar ' + (+v.slice(1) + 1)}">${AVATAR(52, v)}</button>`).join('')}</div><label class="btn avup"><input type="file" id="avFile" accept="image/*" hidden>${ic('<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>', 18, '#fff', 2)}Upload a photo</label>${k.startsWith('img:') ? `<button class="btn dark" data-av="logo" style="margin-top:8px">Remove photo</button>` : ''}<p class="avnote">${ic(P.lock, 14, '#8b93a6', 2)}Saved only on this device. It is never uploaded.</p></div>`; }
+  if (S.sheet === 'avatar') { const k = AVK(); return `<div class="sbg" data-close="1"></div><div class="bsheet" role="dialog" aria-label="Profile picture"><div class="grab"></div><h3>Profile picture</h3><div class="avgrid">${['logo', ...Object.keys(AVS)].map(v => `<button class="avopt ${v === 'logo' ? 'sq' : ''} ${k === v ? 'on' : ''}" data-av="${v}" aria-label="${v === 'logo' ? 'Sectora logo' : AVS[v]}" title="${v === 'logo' ? 'Sectora' : AVS[v]}">${AVATAR(52, v)}</button>`).join('')}</div><label class="btn avup"><input type="file" id="avFile" accept="image/*" hidden>${ic('<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>', 18, '#fff', 2)}Upload a photo</label>${k.startsWith('img:') ? `<button class="btn dark" data-av="logo" style="margin-top:8px">Remove photo</button>` : ''}<p class="avnote">${ic(P.lock, 14, '#8b93a6', 2)}Saved only on this device. It is never uploaded.</p></div>`; }
   if (S.sheet === 'net') return `<div class="sbg" data-close="1"></div><div class="bsheet" role="dialog" aria-label="Choose network"><div class="grab"></div><h3>Network</h3>
     ${NET_ORDER.map(k => { const n = NETS[k]; return `<button class="nrow ${S.net === k ? 'on' : ''}" data-net="${k}">${NDOT(n)}<span><b>${n.name}</b><small>${n.kind === 'sol' ? short(S.sol) : short(S.addr)} · fees in ${n.native}</small></span>${S.net === k ? ic(P.chk, 18, '#5c9bff', 2.6) : ''}</button>`; }).join('')}
     <p class="snote">Ethereum, BNB Chain and Robinhood Chain share one address. Solana uses its own.</p></div>`;
@@ -1574,20 +1573,10 @@ function bindCT() {
   btn.addEventListener('click', () => { if (!found) return; const l = CT.get(n.id); if (l.length >= 30) return toast('You can add up to 30 tokens per network', 1); l.push(found); CT.set(n.id, l); S.bal = {}; S.balSt = {}; toast(found.listed ? 'Token added' : 'Unverified token added'); go('home'); });
 }
 /* ---------- foto de perfil: logo por defecto, avatares o foto propia (solo en este dispositivo) ---------- */
-const AVP = [
-  ['#1569ff', '#0b2a6b', '<circle cx="50" cy="50" r="22" fill="none" stroke="#fff" stroke-width="8"/>'],
-  ['#0b1e45', '#1569ff', '<path d="M18 60c10-18 22-27 32-27s22 9 32 27" fill="none" stroke="#9ec1ff" stroke-width="6" stroke-linecap="round"/><circle cx="50" cy="38" r="8" fill="#fff"/>'],
-  ['#1569ff', '#5ce1ff', '<path d="M50 24l22 26-22 26-22-26z" fill="#fff" fill-opacity=".92"/>'],
-  ['#0b0e14', '#1d2433', '<g fill="#5c9bff">' + [22, 36, 50, 64, 78].map(x => [22, 36, 50, 64, 78].map(y => `<circle cx="${x}" cy="${y}" r="${(x + y) % 28 === 0 ? 4.5 : 2.6}"/>`).join('')).join('') + '</g>'],
-  ['#3b2bff', '#1569ff', '<g fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"><path d="M30 64a24 24 0 0 1 40 0"/><path d="M38 64a14 14 0 0 1 24 0" stroke-opacity=".7"/></g><circle cx="50" cy="64" r="4" fill="#fff"/>'],
-  ['#0d9488', '#0b3b5a', '<path d="M20 56c8-8 16-8 24 0s16 8 24 0 12-6 16-4" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"/><path d="M20 42c8-8 16-8 24 0s16 8 24 0 12-6 16-4" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="6" stroke-linecap="round"/>'],
-  ['#f59e0b', '#b45309', '<circle cx="50" cy="50" r="16" fill="#fff"/><g stroke="#fff" stroke-width="5" stroke-linecap="round">' + [0, 45, 90, 135, 180, 225, 270, 315].map(a => `<path d="M${(50 + 24 * Math.cos(a * Math.PI / 180)).toFixed(1)} ${(50 + 24 * Math.sin(a * Math.PI / 180)).toFixed(1)}L${(50 + 31 * Math.cos(a * Math.PI / 180)).toFixed(1)} ${(50 + 31 * Math.sin(a * Math.PI / 180)).toFixed(1)}"/>`).join('') + '</g>'],
-  ['#e2e8f0', '#94a3b8', '<rect x="28" y="28" width="44" height="44" rx="12" fill="#0b0e14"/><circle cx="50" cy="50" r="10" fill="none" stroke="#5c9bff" stroke-width="5"/>']];
-const avp = (i, s) => { const [a, b, g] = AVP[i]; return `<svg width="${s}" height="${s}" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="avg${i}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient></defs><rect width="100" height="100" fill="url(#avg${i})"/>${g}</svg>`; };
+const AVS = { orb: 'Cobalt', ring: 'Chrome', prism: 'Prism', aurora: 'Aurora', eclipse: 'Eclipse', cube: 'Vault', planet: 'Orbit', gold: 'Bullion', pearl: 'Pearl', contour: 'Terrain', shield: 'Shield' };
 const AVK = () => store.get('avatar') || 'logo';
 const AVATAR = (s, k = AVK()) => k.startsWith('img:') ? `<img src="${k.slice(4)}" width="${s}" height="${s}" alt="">`
-  : k === 'ini' ? `<span class="avini" style="font-size:${Math.round(s * .36)}px">${initials()}</span>`
-  : k === 'idn' ? IDN(s, S.addr) : /^p\d$/.test(k) && AVP[+k.slice(1)] ? avp(+k.slice(1), s) : LOGO(s);
+  : Object.hasOwn(AVS, k) ? `<img src="avatars/${k}.webp" width="${s}" height="${s}" alt="">` : LOGO(s);
 const AVBOX = (s, big) => `<button class="avi${big ? ' big' : ''} ${AVK() === 'logo' ? 'lgav' : 'avx'}" data-sheet="avatar" aria-label="Change profile picture" title="Change profile picture">${AVATAR(s)}</button>`;
 function bindAv() {
   $app.querySelectorAll('[data-av]').forEach(b => b.addEventListener('click', () => { store.set('avatar', b.dataset.av); S.sheet = null; render(); toast('Profile picture updated'); }));
