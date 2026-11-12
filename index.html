@@ -991,7 +991,7 @@ function paintBalances() {
 /* ---------- hoja para elegir red o token ---------- */
 const SHEET = () => {
   if (!S.sheet) return '';
-  if (S.sheet === 'avatar') { const k = AVK(); return `<div class="sbg" data-close="1"></div><div class="bsheet" role="dialog" aria-label="Profile picture"><div class="grab"></div><h3>Profile picture</h3><div class="avgrid">${['logo', ...Object.keys(AVS)].map(v => `<button class="avopt ${v === 'logo' ? 'sq' : ''} ${k === v ? 'on' : ''}" data-av="${v}" aria-label="${v === 'logo' ? 'Sectora logo' : AVS[v]}" title="${v === 'logo' ? 'Sectora' : AVS[v]}">${AVATAR(52, v)}</button>`).join('')}</div><label class="btn avup"><input type="file" id="avFile" accept="image/*" hidden>${ic('<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>', 18, '#fff', 2)}Upload a photo</label>${k.startsWith('img:') ? `<button class="btn dark" data-av="logo" style="margin-top:8px">Remove photo</button>` : ''}<p class="avnote">${ic(P.lock, 14, '#8b93a6', 2)}Saved only on this device. It is never uploaded.</p></div>`; }
+  if (S.sheet === 'avatar') { const k = AVK(); return `<div class="sbg" data-close="1"></div><div class="bsheet" role="dialog" aria-label="Profile picture"><div class="grab"></div><h3>Profile picture</h3><div class="avgrid"><button class="avopt sq ${k.startsWith('img:') ? '' : 'on'}" data-av="logo" aria-label="Sectora logo" title="Sectora">${LOGO(52)}</button>${k.startsWith('img:') ? `<span class="avopt on">${AVATAR(52)}</span>` : ''}</div><label class="btn avup"><input type="file" id="avFile" accept="image/*" hidden>${ic('<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>', 18, '#fff', 2)}${k.startsWith('img:') ? 'Change photo' : 'Upload a photo'}</label>${k.startsWith('img:') ? `<button class="btn dark" data-av="logo" style="margin-top:8px">Remove photo</button>` : ''}<p class="avnote">${ic(P.lock, 14, '#8b93a6', 2)}Saved only on this device. It is never uploaded.</p></div>`; }
   if (S.sheet === 'net') return `<div class="sbg" data-close="1"></div><div class="bsheet" role="dialog" aria-label="Choose network"><div class="grab"></div><h3>Network</h3>
     ${NET_ORDER.map(k => { const n = NETS[k]; return `<button class="nrow ${S.net === k ? 'on' : ''}" data-net="${k}">${NDOT(n)}<span><b>${n.name}</b><small>${n.kind === 'sol' ? short(S.sol) : short(S.addr)} · fees in ${n.native}</small></span>${S.net === k ? ic(P.chk, 18, '#5c9bff', 2.6) : ''}</button>`; }).join('')}
     <p class="snote">Ethereum, BNB Chain and Robinhood Chain share one address. Solana uses its own.</p></div>`;
@@ -1573,11 +1573,10 @@ function bindCT() {
   btn.addEventListener('click', () => { if (!found) return; const l = CT.get(n.id); if (l.length >= 30) return toast('You can add up to 30 tokens per network', 1); l.push(found); CT.set(n.id, l); S.bal = {}; S.balSt = {}; toast(found.listed ? 'Token added' : 'Unverified token added'); go('home'); });
 }
 /* ---------- foto de perfil: logo por defecto, avatares o foto propia (solo en este dispositivo) ---------- */
-const AVS = { orb: 'Cobalt', ring: 'Chrome', prism: 'Prism', aurora: 'Aurora', eclipse: 'Eclipse', cube: 'Vault', planet: 'Orbit', gold: 'Bullion', pearl: 'Pearl', contour: 'Terrain', shield: 'Shield' };
 const AVK = () => store.get('avatar') || 'logo';
 const AVATAR = (s, k = AVK()) => k.startsWith('img:') ? `<img src="${k.slice(4)}" width="${s}" height="${s}" alt="">`
-  : Object.hasOwn(AVS, k) ? `<img src="avatars/${k}.webp" width="${s}" height="${s}" alt="">` : LOGO(s);
-const AVBOX = (s, big) => `<button class="avi${big ? ' big' : ''} ${AVK() === 'logo' ? 'lgav' : 'avx'}" data-sheet="avatar" aria-label="Change profile picture" title="Change profile picture">${AVATAR(s)}</button>`;
+  : LOGO(s);
+const AVBOX = (s, big) => `<button class="avi${big ? ' big' : ''} ${AVK().startsWith('img:') ? 'avx' : 'lgav'}" data-sheet="avatar" aria-label="Change profile picture" title="Change profile picture">${AVATAR(s)}</button>`;
 function bindAv() {
   $app.querySelectorAll('[data-av]').forEach(b => b.addEventListener('click', () => { store.set('avatar', b.dataset.av); S.sheet = null; render(); toast('Profile picture updated'); }));
   const f = $app.querySelector('#avFile'); if (!f) return;
