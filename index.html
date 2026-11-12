@@ -465,6 +465,23 @@ button.lg:hover{transform:translate(-50%,-50%) scale(1.04)}
 .ctdel:hover{color:var(--bad);border-color:rgba(255,107,92,.4)}
 .ctres{padding:16px}
 .ctres .note a{color:var(--b2);text-decoration:underline}
+
+/* avatar: logo de la wallet para todos */
+.avi.lgav{background:none;border-radius:0;overflow:visible}
+.avi.lgav svg{width:100%;height:100%}
+
+/* foto de perfil */
+.avi.avx{overflow:hidden;background:var(--s2);padding:0}
+.avi.avx img,.avi.avx svg{width:100%;height:100%;display:block;object-fit:cover}
+.avi{cursor:pointer}
+.avini{display:grid;place-items:center;width:100%;height:100%;background:var(--b);color:#fff;font-weight:500;letter-spacing:.02em}
+.avgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:6px 0 16px}
+.avopt{aspect-ratio:1;border-radius:50%;overflow:hidden;display:grid;place-items:center;outline:2px solid transparent;outline-offset:3px;transition:outline-color .15s ease}
+.avopt.sq{border-radius:14%}
+.avopt svg,.avopt img{width:100%;height:100%;display:block;object-fit:cover}
+.avopt.on{outline-color:var(--b)}
+.avup{width:100%;justify-content:center;display:flex;align-items:center;gap:8px;cursor:pointer}
+.avnote{display:flex;align-items:center;gap:7px;justify-content:center;margin:12px 0 0;font-size:12px;color:var(--mu)}
 /* ---------- escritorio y tableta: sin marco de telefono ---------- */
 @media (min-width:521px) and (min-height:641px){
   .stage{padding:0;display:block;height:100%}
@@ -814,7 +831,7 @@ V.ready = () => SCREEN(`<div class="rcard" style="margin-top:22px">${MCARD()}<sp
   <p class="lead" style="text-align:center">Your wallet is ready and protected. Only you hold its keys.</p>
   ${SECLIST()}`,
   `<button class="btn" data-go="home">Open my wallet</button>`);
-V.home = () => { const sc = sec(); return SCREEN(`<div class="top"><div class="me"><span class="avi">${initials()}</span><div><small>${greet()}</small><b>${esc(S.name)}</b></div></div>
+V.home = () => { const sc = sec(); return SCREEN(`<div class="top"><div class="me">${AVBOX(42)}<div><small>${greet()}</small><b>${esc(S.name)}</b></div></div>
     <div class="ibs"><button class="cb" data-copy="${S.addr}" aria-label="Copy address">${ic(P.copy, 18, '#f6f7fb')}</button><button class="cb" id="lockNow" aria-label="Lock">${ic(P.lock, 18, '#f6f7fb')}</button></div></div>
   <div style="margin-top:14px">${MCARD()}</div>
   <div class="acts4"><button class="pri" data-go="send">${ic(P.send, 22, '#fff', 2.2)}<span>Send</span></button><button data-go="receive">${ic(P.recv, 22, '#5c9bff', 2.2)}<span>Receive</span></button><button data-go="activity">${ic(P.act, 21, '#5c9bff')}<span>Activity</span></button><button data-go="security">${ic(P.shield, 21, '#5c9bff')}<span>Security</span></button></div>
@@ -860,7 +877,7 @@ V.sent = () => { const t = txs()[0] || {}; return SCREEN(`<div class="sg" style=
   `<button class="btn sec" data-copy="${t.hash || ''}">${ic(P.copy, 18, '#5c9bff', 2)}Copy transaction hash</button><button class="btn" data-go="home">Done</button>`); };
 
 V.settings = () => SCREEN(`<h1 class="h1" style="margin-top:14px">Settings</h1>
-  <div class="prof card"><span class="avi big">${initials()}</span><div style="min-width:0;flex:1"><label class="lbl" for="rename">Wallet name</label><input id="rename" class="rename" maxlength="24" value="${esc(S.name)}"><small>${S.since ? 'Member since ' + new Date(S.since).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : short(S.addr)}</small></div></div>
+  <div class="prof card">${AVBOX(56, 1)}<div style="min-width:0;flex:1"><label class="lbl" for="rename">Wallet name</label><input id="rename" class="rename" maxlength="24" value="${esc(S.name)}"><small>${S.since ? 'Member since ' + new Date(S.since).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : short(S.addr)}</small></div></div>
   <div class="lbl gl2">Account</div><div class="grp card">
     <button class="row" data-go="security"><span class="si">${ic(P.shield, 18, '#5c9bff')}</span><div><b>Security center</b><small>${sec().score} of ${sec().total} checks passed</small></div><span class="end">${ic(P.chev, 15)}</span></button>
     <button class="row" data-copy="${S.addr}"><span class="si">${ic(P.copy, 18, '#5c9bff')}</span><div><b>Copy address</b><small class="mono">${short(S.addr)}</small></div></button></div>
@@ -869,7 +886,7 @@ V.settings = () => SCREEN(`<h1 class="h1" style="margin-top:14px">Settings</h1>
     <div class="row"><span class="si">${ic(P.info, 18, '#5c9bff')}</span><div>${PREVIEW ? '<b>Preview mode</b><small>Signing only · no network sync</small>' : '<b>Beta · live</b><small>Ethereum · BNB Chain · Solana</small>'}</div></div></div>
   <div class="lbl gl2">Appearance</div><div class="grp card"> <div class="row"><span class="si">${ic(P.sun || '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>', 18, '#5c9bff')}</span><div><b>Theme</b><small>${THEME() === 'auto' ? 'Follows your device' : THEME() === 'light' ? 'Light' : 'Dark'}</small></div><span class="end pill3">${[['dark', 'Dark'], ['light', 'Light'], ['auto', 'Auto']].map(([k, n]) => `<button class="${THEME() === k ? 'on' : ''}" data-themeset="${k}">${n}</button>`).join('')}</span></div></div> <div class="lbl gl2">This device</div><div class="grp card">
     <button class="row" id="wipe"><span class="si">${ic(P.trash, 18, '#ff6b5c')}</span><div><b style="color:var(--bad)">${S.wipeArm ? 'Tap again to delete' : 'Delete wallet from this device'}</b><small>Only your recovery phrase can restore it</small></div></button></div>
-  ${TABS('settings')}`, '', 'has-tabs');
+  ${TABS('settings')}${SHEET()}`, '', 'has-tabs');
 V.security = () => { const sc = sec(); return SCREEN(`${NAV('Security', 0, 'home')}
   <div class="shero card"><div class="ring"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="42" fill="none" stroke="#1d2128" style="stroke:var(--ring,#1d2128)" stroke-width="8"/><circle cx="50" cy="50" r="42" fill="none" stroke="#1569ff" stroke-width="8" stroke-linecap="round" stroke-dasharray="${(264 * sc.score / sc.total).toFixed(1)} 264" transform="rotate(-90 50 50)"/></svg><b>${sc.score}/${sc.total}</b></div>
     <div><b class="big">${sc.score === sc.total ? 'Fully protected' : 'Almost there'}</b><small>Your wallet, ${esc(S.name)}, is secured on this device only.</small></div></div>
@@ -975,6 +992,7 @@ function paintBalances() {
 /* ---------- hoja para elegir red o token ---------- */
 const SHEET = () => {
   if (!S.sheet) return '';
+  if (S.sheet === 'avatar') { const k = AVK(); return `<div class="sbg" data-close="1"></div><div class="bsheet" role="dialog" aria-label="Profile picture"><div class="grab"></div><h3>Profile picture</h3><div class="avgrid">${['logo', 'ini', 'idn', ...AVP.map((_, i) => 'p' + i)].map(v => `<button class="avopt ${v === 'logo' ? 'sq' : ''} ${k === v ? 'on' : ''}" data-av="${v}" aria-label="${v === 'logo' ? 'Sectora logo' : v === 'ini' ? 'Initials' : v === 'idn' ? 'Address pattern' : 'Avatar ' + (+v.slice(1) + 1)}">${AVATAR(52, v)}</button>`).join('')}</div><label class="btn avup"><input type="file" id="avFile" accept="image/*" hidden>${ic('<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>', 18, '#fff', 2)}Upload a photo</label>${k.startsWith('img:') ? `<button class="btn dark" data-av="logo" style="margin-top:8px">Remove photo</button>` : ''}<p class="avnote">${ic(P.lock, 14, '#8b93a6', 2)}Saved only on this device. It is never uploaded.</p></div>`; }
   if (S.sheet === 'net') return `<div class="sbg" data-close="1"></div><div class="bsheet" role="dialog" aria-label="Choose network"><div class="grab"></div><h3>Network</h3>
     ${NET_ORDER.map(k => { const n = NETS[k]; return `<button class="nrow ${S.net === k ? 'on' : ''}" data-net="${k}">${NDOT(n)}<span><b>${n.name}</b><small>${n.kind === 'sol' ? short(S.sol) : short(S.addr)} · fees in ${n.native}</small></span>${S.net === k ? ic(P.chk, 18, '#5c9bff', 2.6) : ''}</button>`; }).join('')}
     <p class="snote">Ethereum, BNB Chain and Robinhood Chain share one address. Solana uses its own.</p></div>`;
@@ -991,7 +1009,7 @@ const MCARD2 = () => { const n = curNet(), a = addrOf(n); return `<div class="mc
   <div class="bl"><span>${n.name}</span><b id="netBal">— ${n.native}</b></div>
   <div class="r3"><button data-copy="${a}" aria-label="Copy address">${a.slice(0, 6)} •••• ${a.slice(-4)} ${ic(P.copy, 13)}</button><span>${S.since ? 'Since ' + new Date(S.since).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : n.kind.toUpperCase()}</span></div></div>`; };
 
-V.home = () => { const sc = sec(), n = curNet(); return SCREEN(`<div class="top"><div class="me"><span class="avi">${initials()}</span><div><small>${greet()}</small><b>${esc(S.name)}</b></div></div>
+V.home = () => { const sc = sec(), n = curNet(); return SCREEN(`<div class="top"><div class="me">${AVBOX(42)}<div><small>${greet()}</small><b>${esc(S.name)}</b></div></div>
     <div class="ibs"><button class="cb" data-copy="${addrOf(n)}" aria-label="Copy address">${ic(P.copy, 18, '#f6f7fb')}</button><button class="cb" id="lockNow" aria-label="Lock">${ic(P.lock, 18, '#f6f7fb')}</button></div></div>
   <div class="nbar">${NETPILL()}<span class="chip" id="syncChip"><span class="dot off"></span>Offline</span></div>
   <div style="margin-top:12px">${MCARD2()}</div>
@@ -1385,7 +1403,7 @@ function bindTok() {
 function render() {
   if (S.view === 'boot') { S.addr = store.get('addr') || ''; S.lockMin = +(store.get('lock') || 5); S.name = store.get('name') || 'Account 1'; S.sol = store.get('sol') || ''; S.net = store.get('net') || 'eth'; S.since = +(store.get('since') || 0); S.backed = store.get('backed') || ''; S.view = store.get('vault') ? 'unlock' : 'welcome'; }
   if (!window.ethers) { $app.innerHTML = SCREEN(`<div class="wel" style="margin-top:120px">${LOGO(72)}<h1 class="h1">Loading…</h1><p class="lead">Loading the cryptography library. If this stays, check your connection and reload.</p></div>`); return; }
-  $app.innerHTML = V[S.view](); bind(); bindMulti(); bindTok(); bindCT(); bindTheme(); GLOBE.mount();
+  $app.innerHTML = V[S.view](); bind(); bindMulti(); bindTok(); bindCT(); bindTheme(); bindAv(); GLOBE.mount();
   if (!S.introDone && (S.view === 'welcome' || S.view === 'unlock')) runIntro();
 }
 function bind() {
@@ -1554,6 +1572,33 @@ function bindCT() {
   inp.addEventListener('input', () => { clearTimeout(tmr); tmr = setTimeout(look, 450); });
   inp.addEventListener('paste', () => { clearTimeout(tmr); tmr = setTimeout(look, 50); });
   btn.addEventListener('click', () => { if (!found) return; const l = CT.get(n.id); if (l.length >= 30) return toast('You can add up to 30 tokens per network', 1); l.push(found); CT.set(n.id, l); S.bal = {}; S.balSt = {}; toast(found.listed ? 'Token added' : 'Unverified token added'); go('home'); });
+}
+/* ---------- foto de perfil: logo por defecto, avatares o foto propia (solo en este dispositivo) ---------- */
+const AVP = [
+  ['#1569ff', '#0b2a6b', '<circle cx="50" cy="50" r="22" fill="none" stroke="#fff" stroke-width="8"/>'],
+  ['#0b1e45', '#1569ff', '<path d="M18 60c10-18 22-27 32-27s22 9 32 27" fill="none" stroke="#9ec1ff" stroke-width="6" stroke-linecap="round"/><circle cx="50" cy="38" r="8" fill="#fff"/>'],
+  ['#1569ff', '#5ce1ff', '<path d="M50 24l22 26-22 26-22-26z" fill="#fff" fill-opacity=".92"/>'],
+  ['#0b0e14', '#1d2433', '<g fill="#5c9bff">' + [22, 36, 50, 64, 78].map(x => [22, 36, 50, 64, 78].map(y => `<circle cx="${x}" cy="${y}" r="${(x + y) % 28 === 0 ? 4.5 : 2.6}"/>`).join('')).join('') + '</g>'],
+  ['#3b2bff', '#1569ff', '<g fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"><path d="M30 64a24 24 0 0 1 40 0"/><path d="M38 64a14 14 0 0 1 24 0" stroke-opacity=".7"/></g><circle cx="50" cy="64" r="4" fill="#fff"/>'],
+  ['#0d9488', '#0b3b5a', '<path d="M20 56c8-8 16-8 24 0s16 8 24 0 12-6 16-4" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"/><path d="M20 42c8-8 16-8 24 0s16 8 24 0 12-6 16-4" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="6" stroke-linecap="round"/>'],
+  ['#f59e0b', '#b45309', '<circle cx="50" cy="50" r="16" fill="#fff"/><g stroke="#fff" stroke-width="5" stroke-linecap="round">' + [0, 45, 90, 135, 180, 225, 270, 315].map(a => `<path d="M${(50 + 24 * Math.cos(a * Math.PI / 180)).toFixed(1)} ${(50 + 24 * Math.sin(a * Math.PI / 180)).toFixed(1)}L${(50 + 31 * Math.cos(a * Math.PI / 180)).toFixed(1)} ${(50 + 31 * Math.sin(a * Math.PI / 180)).toFixed(1)}"/>`).join('') + '</g>'],
+  ['#e2e8f0', '#94a3b8', '<rect x="28" y="28" width="44" height="44" rx="12" fill="#0b0e14"/><circle cx="50" cy="50" r="10" fill="none" stroke="#5c9bff" stroke-width="5"/>']];
+const avp = (i, s) => { const [a, b, g] = AVP[i]; return `<svg width="${s}" height="${s}" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="avg${i}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient></defs><rect width="100" height="100" fill="url(#avg${i})"/>${g}</svg>`; };
+const AVK = () => store.get('avatar') || 'logo';
+const AVATAR = (s, k = AVK()) => k.startsWith('img:') ? `<img src="${k.slice(4)}" width="${s}" height="${s}" alt="">`
+  : k === 'ini' ? `<span class="avini" style="font-size:${Math.round(s * .36)}px">${initials()}</span>`
+  : k === 'idn' ? IDN(s, S.addr) : /^p\d$/.test(k) && AVP[+k.slice(1)] ? avp(+k.slice(1), s) : LOGO(s);
+const AVBOX = (s, big) => `<button class="avi${big ? ' big' : ''} ${AVK() === 'logo' ? 'lgav' : 'avx'}" data-sheet="avatar" aria-label="Change profile picture" title="Change profile picture">${AVATAR(s)}</button>`;
+function bindAv() {
+  $app.querySelectorAll('[data-av]').forEach(b => b.addEventListener('click', () => { store.set('avatar', b.dataset.av); S.sheet = null; render(); toast('Profile picture updated'); }));
+  const f = $app.querySelector('#avFile'); if (!f) return;
+  f.addEventListener('change', () => { const file = f.files && f.files[0]; if (!file) return;
+    if (!/^image\//.test(file.type) || file.size > 15e6) return toast('Choose an image under 15 MB', 1);
+    const url = URL.createObjectURL(file), im = new Image();
+    im.onload = () => { const c = document.createElement('canvas'), N = 256, m = Math.min(im.naturalWidth, im.naturalHeight); c.width = c.height = N;
+      c.getContext('2d').drawImage(im, (im.naturalWidth - m) / 2, (im.naturalHeight - m) / 2, m, m, 0, 0, N, N); URL.revokeObjectURL(url);
+      try { store.set('avatar', 'img:' + c.toDataURL('image/jpeg', .86)); S.sheet = null; render(); toast('Profile picture updated'); } catch (e) { toast('Could not save this image', 1); } };
+    im.onerror = () => { URL.revokeObjectURL(url); toast('Could not read this image', 1); }; im.src = url; });
 }
 /* ---------- tema claro / oscuro ---------- */
 const THEME = () => store.get('theme') || 'dark';
