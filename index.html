@@ -31,6 +31,7 @@ button{cursor:pointer;border:0;background:none;padding:0;text-align:inherit}
 :focus-visible{outline:2px solid var(--b2);outline-offset:2px}
 /* portada estilo exchange de primer nivel: barra superior, globo vivo, carrusel con indicador y botones blanco/oscuro */
 .okx .sc{display:flex;flex-direction:column}
+.okx .car{flex:none}
 .otop{display:flex;align-items:center;justify-content:space-between;height:48px;flex:none}
 .otop .brand{display:flex;align-items:center;gap:10px;font-weight:500;font-size:16.5px;letter-spacing:-.015em}
 .otop .brand small{display:block;font:500 10px/1 var(--mono);letter-spacing:.18em;color:var(--fa);text-transform:uppercase;margin-top:3px}
@@ -481,6 +482,11 @@ button.lg:hover{transform:translate(-50%,-50%) scale(1.04)}
 .avopt.on{outline-color:var(--b)}
 .avup{width:100%;justify-content:center;display:flex;align-items:center;gap:8px;cursor:pointer}
 .avnote{display:flex;align-items:center;gap:7px;justify-content:center;margin:12px 0 0;font-size:12px;color:var(--mu)}
+/* datos de la empresa en la portada */
+.co{display:grid;gap:3px;justify-items:center;text-align:center;margin-top:8px;padding-top:14px;border-top:1px solid var(--ln);font-size:12px;line-height:1.45;color:var(--mu)}
+.co b{font-size:13px;font-weight:500;color:var(--tx);letter-spacing:-.005em}
+.co p{margin:0;display:grid;gap:3px;justify-items:center}
+@media (max-height:800px){.co{margin-top:2px;padding-top:9px;gap:1px;font-size:11.5px;line-height:1.4}.co b{font-size:12px}.co p{display:block}.co .cty::before{content:" · ";color:var(--fa)}}
 /* ---------- escritorio y tableta: sin marco de telefono ---------- */
 @media (min-width:521px) and (min-height:641px){
   .stage{padding:0;display:block;height:100%}
@@ -763,6 +769,9 @@ const MCARD = () => `<div class="mcard"><img class="gp" alt="" src="${cardPat()}
   <div class="bl"><span>Balance</span><b>— SECT</b></div>
   <div class="r3"><button data-copy="${S.addr}" aria-label="Copy address">${grouped(S.addr)} ${ic(P.copy, 13)}</button><span>${S.since ? 'Since ' + new Date(S.since).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : 'EVM'}</span></div></div>`;
 
+const THBTN = () => `<button class="lang" id="themeTgl" aria-label="Switch light or dark theme">${document.documentElement.dataset.theme === 'light' ? ic('<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>', 16, '#f6f7fb') : ic('<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>', 16, '#f6f7fb')}</button>`;
+/* datos de la empresa al pie de la portada */
+const CO = () => `<div class="co"><p><b>Sectora Foundation IL</b><span class="cty">Chicago, Illinois, United States</span></p><span>Illinois file no. 18523639 · EIN 32-0868576</span><span>© ${new Date().getFullYear()} Sectora Foundation IL. All rights reserved.</span></div>`;
 /* ---------- pantallas ---------- */
 const V = {};
 const SLIDES = [
@@ -770,19 +779,19 @@ const SLIDES = [
   ['Multichain', 'Four networks.<br><em>One wallet.</em>', 'Ethereum, BNB Chain and Robinhood Chain on one address, plus Solana from the same 12 words.'],
   ['On-device signing', 'Review it.<br><em>Slide to sign.</em>', 'See every transfer before it leaves. Your private key never leaves your phone.'],
 ];
-V.welcome = () => SCREEN(`<div class="otop"><span class="brand">${LOGO(34)}<span>Sectora Wallet<small>${PREVIEW ? 'Private preview' : 'Beta'}</small></span></span><span style="display:flex;gap:8px"><button class="lang" id="themeTgl" aria-label="Switch light or dark theme">${document.documentElement.dataset.theme === 'light' ? ic('<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>', 16, '#f6f7fb') : ic('<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>', 16, '#f6f7fb')}</button><span class="lang">${ic(P.net, 16, '#f6f7fb')}EN</span></span></div>
+V.welcome = () => SCREEN(`<div class="otop"><span class="brand">${LOGO(34)}<span>Sectora Wallet<small>${PREVIEW ? 'Private preview' : 'Beta'}</small></span></span><span style="display:flex;gap:8px">${THBTN()}<span class="lang">${ic(P.net, 16, '#f6f7fb')}EN</span></span></div>
   <div class="globe"><canvas class="gl" aria-label="Rotating globe with the Sectora network" role="img"></canvas><button class="lg" id="logoGo" aria-label="Start: create a new wallet">${LOGO(100)}</button></div>
   <div class="car" id="car" aria-roledescription="carousel"><div class="track">${SLIDES.map(([t, h, p], i) => `<div class="cs" role="group" aria-label="${i + 1} of ${SLIDES.length}"><div class="tg2 ${i === 0 ? 'g' : ''}">${t}</div><h1>${h}</h1><p>${p}</p></div>`).join('')}</div></div>
   <div class="pager">${SLIDES.map((_, i) => `<button aria-label="Show slide ${i + 1}"></button>`).join('')}</div>`,
-  `<button class="btn white" data-go="rules" data-mode="create">Create a new wallet</button><button class="btn dark" data-go="import" data-mode="import">I already have a wallet</button><div class="legal"><b>Self-custody</b> · BIP39 · Keys stay on this device</div>`, 'okx');
+  `<button class="btn white" data-go="rules" data-mode="create">Create a new wallet</button><button class="btn dark" data-go="import" data-mode="import">I already have a wallet</button><div class="legal"><b>Self-custody</b> · BIP39 · Keys stay on this device</div>${CO()}`, 'okx');
 
-V.unlock = () => SCREEN(`<div class="wel">
+V.unlock = () => SCREEN(`<div class="otop"><span class="brand">${LOGO(34)}<span>Sectora Wallet<small>${PREVIEW ? 'Private preview' : 'Beta'}</small></span></span>${THBTN()}</div><div class="wel">
   <div class="globe"><canvas class="gl" aria-label="Rotating globe with the Sectora network" role="img"></canvas><span class="lg">${LOGO(100)}</span></div>
   <div class="kick">${greet()}</div>
   <h1 class="h1">Welcome back,<br><em>${esc(S.name)}.</em></h1><div class="addr">${short(S.addr)}</div>
   <form id="unlockForm" style="width:100%"><div class="pwin"><input id="upw" type="password" autocomplete="current-password" placeholder="Password" aria-label="Password"><button type="button" class="ib" data-eye="upw" aria-label="Show password">${ic(P.eye, 19)}</button></div>
     <div class="err" id="uerr"></div><div class="prog" id="uprog" hidden><i></i></div><button type="submit" hidden></button></form></div>`,
-  `<button class="btn" id="uGo">Unlock</button><button class="link" data-go="import" data-mode="import">Forgot your password? Restore with your recovery phrase</button>`);
+  `<button class="btn" id="uGo">Unlock</button><button class="link" data-go="import" data-mode="import">Forgot your password? Restore with your recovery phrase</button>${CO()}`);
 V.rules = () => { const ch = S.rulesOk; return SCREEN(`${NAV('', 1, 'welcome')}
   <h1 class="h1">Before you start</h1><p class="lead">Three rules that keep your funds safe. Tap each one to accept it.</p>
   <div class="rules">${[['Sectora never sees your phrase', 'It is created on this device and never sent to any server.'],
@@ -1402,7 +1411,7 @@ function bindTok() {
 function render() {
   if (S.view === 'boot') { S.addr = store.get('addr') || ''; S.lockMin = +(store.get('lock') || 5); S.name = store.get('name') || 'Account 1'; S.sol = store.get('sol') || ''; S.net = store.get('net') || 'eth'; S.since = +(store.get('since') || 0); S.backed = store.get('backed') || ''; S.view = store.get('vault') ? 'unlock' : 'welcome'; }
   if (!window.ethers) { $app.innerHTML = SCREEN(`<div class="wel" style="margin-top:120px">${LOGO(72)}<h1 class="h1">Loading…</h1><p class="lead">Loading the cryptography library. If this stays, check your connection and reload.</p></div>`); return; }
-  $app.innerHTML = V[S.view](); bind(); bindMulti(); bindTok(); bindCT(); bindTheme(); bindAv(); GLOBE.mount();
+  $app.innerHTML = V[S.view](); bind(); bindMulti(); bindTok(); bindCT(); bindTheme(); bindAv(); GLOBE.mount(); fitGlobe(); refit();
   if (!S.introDone && (S.view === 'welcome' || S.view === 'unlock')) runIntro();
 }
 function bind() {
@@ -1593,6 +1602,11 @@ const THEME = () => store.get('theme') || 'dark';
 function applyTheme() { const m = THEME(), L = m === 'light' || (m === 'auto' && matchMedia('(prefers-color-scheme: light)').matches);
   document.documentElement.dataset.theme = L ? 'light' : 'dark'; const mt = document.querySelector('meta[name="theme-color"]'); if (mt) mt.content = L ? '#ffffff' : '#000000'; }
 try { matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => { if (THEME() === 'auto') applyTheme(); }); } catch (e) {}
+/* portada: si no cabe todo (globo, texto, clave y datos de la empresa), el globo se encoge */
+function fitGlobe() { const g = $app.querySelector('.okx .globe, .wel .globe'), sc = $app.querySelector('.sc'); if (!g || !sc || getComputedStyle(sc).display === 'contents') return;
+  g.style.width = ''; const over = sc.scrollHeight - sc.clientHeight; if (over > 0) g.style.width = Math.max(110, Math.floor(g.getBoundingClientRect().width - over - 2)) + 'px'; }
+addEventListener('resize', () => fitGlobe()); if (document.fonts) document.fonts.ready.then(() => fitGlobe());
+let fitT = 0; const refit = () => { clearTimeout(fitT); fitT = setTimeout(fitGlobe, 450); };
 function bindTheme() { $app.querySelectorAll('[data-themeset]').forEach(b => b.addEventListener('click', () => { store.set('theme', b.dataset.themeset); applyTheme(); render(); }));
   const t = $app.querySelector('#themeTgl'); if (t) t.addEventListener('click', () => { const L = document.documentElement.dataset.theme === 'light'; store.set('theme', L ? 'dark' : 'light'); applyTheme(); render(); }); }
 (function start() { if (window.ethers) return go('boot'); let n = 0; render(); const t = setInterval(() => { if (window.ethers || ++n > 60) { clearInterval(t); go('boot'); } }, 150); })();
