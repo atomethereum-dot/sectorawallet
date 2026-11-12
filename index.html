@@ -10,6 +10,26 @@
 <title>Sectora Wallet</title>
 <meta name="description" content="Sectora Wallet: a self-custody multichain wallet for Ethereum, BNB Chain, Robinhood Chain and Solana. Your keys stay on your device.">
 <meta name="theme-color" content="#000000">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Sectora">
+<meta name="application-name" content="Sectora Wallet">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 440px) and (device-height: 956px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/icons/splash-1320x2868.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 402px) and (device-height: 874px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/icons/splash-1206x2622.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/icons/splash-1290x2796.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/icons/splash-1179x2556.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 420px) and (device-height: 912px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/icons/splash-1260x2736.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/icons/splash-1284x2778.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/icons/splash-1170x2532.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/icons/splash-1125x2436.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/icons/splash-1242x2688.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/icons/splash-828x1792.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/icons/splash-1242x2208.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/icons/splash-750x1334.png">
+<link rel="apple-touch-startup-image" media="screen and (device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/icons/splash-640x1136.png">
 <script>try { var m = localStorage.getItem('sw.theme') || 'dark', L = m === 'light' || (m === 'auto' && matchMedia('(prefers-color-scheme: light)').matches); document.documentElement.dataset.theme = L ? 'light' : 'dark'; if (L) document.querySelector('meta[name="theme-color"]').content = '#ffffff'; } catch (e) {}</script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%231569ff'/%3E%3Ccircle cx='50' cy='50' r='27' fill='none' stroke='white' stroke-width='9'/%3E%3C/svg%3E">
 <script>if (window.top !== window.self) { try { window.top.location = window.self.location.href; } catch (e) { document.documentElement.style.display = 'none'; } }</script>
@@ -750,6 +770,16 @@ html[data-theme="light"] .bioT.on{background:rgba(15,157,99,.1)}
 .hr small{display:block;margin-top:2px;color:var(--mu);font-size:13px;white-space:nowrap}
 .hnone{margin:14px 0 0;color:var(--mu);font-size:14px}
 @media (hover:hover){.hrow:hover{background:var(--tile)}.hrow{margin:0 -8px;padding:10px 8px}}
+/* instalar como app */
+.mmc.inst{padding:0;position:relative}
+.instgo{flex:1;display:flex;align-items:center;gap:14px;padding:16px 44px 16px 16px;text-align:left;color:var(--tx);min-width:0}
+.instx{position:absolute;right:8px;top:8px;width:32px;height:32px;border-radius:10px;display:grid;place-items:center;color:var(--mu)}
+.ish{display:flex;align-items:center;gap:14px;margin:4px 0 14px}.ish h3{margin:0}.ish small{display:block;color:var(--mu);font-size:13px;margin-top:2px}
+.ist{display:flex;align-items:center;gap:14px;padding:13px 2px;border-top:1px solid var(--ln);font-size:15px}
+.isn{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;flex:none;background:var(--b);color:#fff;font-size:13.5px;font-weight:600}
+.ist-t{flex:1;line-height:1.4}.isi{flex:none;width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:var(--tile);color:var(--b2)}
+/* app instalada en iPhone con tema claro: la barra de estado es blanca, se le pone fondo oscuro */
+html.standalone[data-theme="light"] body::before{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-inset-top,0px);background:#0b0e14;z-index:100}
 /* barra inferior en movil: cuatro secciones con su nombre */
 @media (max-width:1023px),(max-height:640px){
   .tabs{left:0;right:0;bottom:0;width:auto;margin:0;height:auto;border-radius:0;border:0;border-top:1px solid var(--ln);background:var(--bg);padding:6px 6px calc(8px + env(safe-area-inset-bottom,0px));justify-content:space-around;box-shadow:none}
@@ -1204,6 +1234,7 @@ V.settings = () => SCREEN(`<h1 class="h1" style="margin-top:14px">Settings</h1>
   <div class="lbl gl2">Network</div><div class="grp card">
     <div class="row"><span class="si">${ic(P.net, 18, '#5c9bff')}</span><div><b>SECT token</b><small class="mono">${short(SECT)} · Ethereum</small></div></div>
     <div class="row"><span class="si">${ic(P.info, 18, '#5c9bff')}</span><div>${PREVIEW ? '<b>Preview mode</b><small>Signing only · no network sync</small>' : '<b>Beta · live</b><small>Ethereum · BNB Chain · Solana</small>'}</div></div></div>
+  ${STANDALONE() ? '' : `<div class="lbl gl2">App</div><div class="grp card"><button class="row" data-install="1"><span class="si">${ic(P.import, 18, '#5c9bff')}</span><div><b>Install the app</b><small>${IOSDEV ? 'Add to Home Screen on iPhone' : ANDROID ? 'Add to your Android home screen' : 'Install on this computer'}</small></div><span class="end">${ic(P.chev, 15)}</span></button></div>`}
   <div class="lbl gl2">Appearance</div><div class="grp card"> <div class="row"><span class="si">${ic(P.sun || '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>', 18, '#5c9bff')}</span><div><b>Theme</b><small>${THEME() === 'auto' ? 'Follows your device' : THEME() === 'light' ? 'Light' : 'Dark'}</small></div><span class="end pill3">${[['dark', 'Dark'], ['light', 'Light'], ['auto', 'Auto']].map(([k, n]) => `<button class="${THEME() === k ? 'on' : ''}" data-themeset="${k}">${n}</button>`).join('')}</span></div></div> <div class="lbl gl2">This device</div><div class="grp card">
     <button class="row" id="wipe"><span class="si">${ic(P.trash, 18, '#ff6b5c')}</span><div><b style="color:var(--bad)">${S.wipeArm ? 'Tap again to delete' : 'Delete wallet from this device'}</b><small>Only your recovery phrase can restore it</small></div></button></div>
   ${TABS('settings')}${SHEET()}`, '', 'has-tabs');
@@ -1403,6 +1434,7 @@ function paintBalances() {
 const SHEET = () => {
   if (!S.sheet) return '';
   if (S.sheet === 'avatar') { const k = AVK(); return `<div class="sbg" data-close="1"></div><div class="bsheet" role="dialog" aria-label="Profile picture"><div class="grab"></div><h3>Profile picture</h3><div class="avgrid"><button class="avopt sq ${k.startsWith('img:') ? '' : 'on'}" data-av="logo" aria-label="Sectora logo" title="Sectora">${LOGO(52)}</button>${k.startsWith('img:') ? `<span class="avopt on">${AVATAR(52)}</span>` : ''}</div><label class="btn avup"><input type="file" id="avFile" accept="image/*" hidden>${ic('<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>', 18, '#fff', 2)}${k.startsWith('img:') ? 'Change photo' : 'Upload a photo'}</label>${k.startsWith('img:') ? `<button class="btn dark" data-av="logo" style="margin-top:8px">Remove photo</button>` : ''}<p class="avnote">${ic(P.lock, 14, '#8b93a6', 2)}Saved only on this device. It is never uploaded.</p></div>`; }
+  if (S.sheet === 'install') return INSTSHEET();
   if (S.sheet === 'net') return `<div class="sbg" data-close="1"></div><div class="bsheet" role="dialog" aria-label="Choose network"><div class="grab"></div><h3>Network</h3>
     ${NET_ORDER.map(k => { const n = NETS[k]; return `<button class="nrow ${S.net === k ? 'on' : ''}" data-net="${k}">${NDOT(n)}<span><b>${n.name}</b><small>${n.kind === 'sol' ? short(S.sol) : short(S.addr)} · fees in ${n.native}</small></span><em class="ncon ${S.net === k ? 'on' : ''}">${S.net === k ? 'Connected' : 'Connect'}</em></button>`; }).join('')}
     <div class="evmsoon" role="note" aria-label="SectoraEVM, launching soon"><div class="es-top"><span class="es-q">Sectora L3 · Mainnet</span><span class="es-tag">Launching soon</span></div>
@@ -1428,6 +1460,7 @@ V.home = () => { const sc = sec(), n = curNet(); return SCREEN(`<div class="top 
   <div class="hero"><div class="hbal na" id="netBal">—</div><div class="hchg" id="netChg"></div>
     <div class="hsub">${NETPILL()}<span class="sync" id="syncChip"><span class="dot off"></span>Offline</span></div></div>
   <div class="acts4 mm"><button data-go="send">${ic(P.send, 24, 'currentColor', 1.7)}<span>Send</span></button><button data-go="receive">${ic(P.recv, 24, 'currentColor', 1.7)}<span>Receive</span></button><button data-go="swap">${ic(P.swap, 24, 'currentColor', 1.7)}<span>Swap</span></button><button data-go="security">${ic(P.shield, 24, 'currentColor', 1.7)}<span>Security</span></button></div>
+  ${!STANDALONE() && !store.get('instHide') ? `<div class="mmc inst"><button class="instgo" data-install="1"><span class="mmi">${ic(P.import, 22, '#fff', 1.8)}</span><span class="t"><b>Install the app</b><small>Add Sectora to your home screen. It opens full screen, like an app.</small></span></button><button class="instx" data-insthide="1" aria-label="Hide">${ic('<path d="M6 6l12 12M18 6L6 18"/>', 16, 'currentColor', 2)}</button></div>` : ''}
   <button class="mmc" data-go="security"><span class="mmi">${ic(P.shield, 22, '#fff', 1.8)}</span><span class="t"><b>${sc.score === sc.total ? 'Your wallet is protected' : 'Improve your protection'}</b><small>${sc.score} of ${sc.total} security checks passed</small><span class="segs">${sc.items.map(i => `<i class="${i.ok ? 'on' : ''}"></i>`).join('')}</span></span>${ic(P.chev, 18, 'currentColor', 1.8)}</button>
   <button class="mmc" data-go="assets"><span class="mmi alt">${ic(P.rwa, 22, 'currentColor', 1.7)}</span><span class="t"><b>Tokenize real-world assets</b><small>In development · launches with SectoraEVM</small></span>${ic(P.chev, 18, 'currentColor', 1.8)}</button>
   <div class="mmh"><span>Tokens</span><button class="addt" data-go="addtok">${ic('<path d="M12 5v14M5 12h14"/>', 16, 'currentColor', 1.9)}Add token</button></div>
@@ -1765,6 +1798,8 @@ function bindMulti() {
   const q = s => $app.querySelector(s), qa = s => $app.querySelectorAll(s);
   qa('[data-sheet]').forEach(b => b.addEventListener('click', () => { S.sheet = b.dataset.sheet; render(); }));
   qa('[data-close]').forEach(b => b.addEventListener('click', () => { S.sheet = null; render(); }));
+  qa('[data-install]').forEach(b => b.addEventListener('click', doInstall));
+  qa('[data-insthide]').forEach(b => b.addEventListener('click', () => { store.set('instHide', '1'); const c = b.closest('.inst'); if (c) c.remove(); }));
   qa('[data-net]').forEach(b => b.addEventListener('click', () => { const k = b.dataset.net; if (S.netBusy) return; if (k === S.net) { S.sheet = null; return render(); }
     // se ve el cambio: la red elegida pasa a verde con pulso y "Connected"; luego se cierra la hoja
     S.netBusy = true; qa('.nrow[data-net]').forEach(r => { const on = r === b; r.classList.toggle('on', on); const d = r.querySelector('.ndot'); if (d) d.className = 'ndot ' + (on ? 'live' : 'off'); const c = r.querySelector('.ncon'); if (c) { c.classList.toggle('on', on); c.textContent = on ? 'Connected' : 'Connect'; } });
@@ -2135,6 +2170,24 @@ function watchFit() { if (!window.ResizeObserver) return; if (fitRO) fitRO.disco
 let fitT = 0; const refit = () => { clearTimeout(fitT); fitT = setTimeout(fitGlobe, 450); };
 function bindTheme() { $app.querySelectorAll('[data-themeset]').forEach(b => b.addEventListener('click', () => { store.set('theme', b.dataset.themeset); applyTheme(); render(); }));
   const t = $app.querySelector('#themeTgl'); if (t) t.addEventListener('click', () => { const L = document.documentElement.dataset.theme === 'light'; store.set('theme', L ? 'dark' : 'light'); applyTheme(); render(); }); }
+/* ---------- instalar como app (Android, iPhone, ordenador) ---------- */
+const STANDALONE = () => matchMedia('(display-mode: standalone)').matches || matchMedia('(display-mode: minimal-ui)').matches || navigator.standalone === true;
+const IOSDEV = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const ANDROID = /Android/.test(navigator.userAgent);
+let BIP = null;
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); BIP = e; });
+window.addEventListener('appinstalled', () => { BIP = null; store.set('instHide', '1'); if (S.sheet === 'install') S.sheet = null; if ($app) { render(); toast('Sectora Wallet is installed'); } });
+if (STANDALONE()) document.documentElement.classList.add('standalone');
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(() => {}));
+async function doInstall() { if (BIP) { const e = BIP; BIP = null; try { await e.prompt(); const c = await e.userChoice; if (c && c.outcome === 'accepted') store.set('instHide', '1'); } catch (x) {} return render(); } S.sheet = 'install'; render(); }
+P.share = '<path d="M12 3v12"/><path d="M8 7l4-4 4 4"/><path d="M7 10H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-1"/>';
+P.addsq = '<rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 8.5v7M8.5 12h7"/>';
+P.dots = '<circle cx="12" cy="5" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="12" cy="19" r="1.4"/>';
+const INSTSHEET = () => { const st = (i, t, d) => `<div class="ist"><span class="isn">${i}</span><span class="ist-t">${t}</span>${d ? `<span class="isi">${d}</span>` : ''}</div>`;
+  const steps = IOSDEV ? [st(1, 'Open this page in Safari and tap Share', ic(P.share, 20, 'currentColor', 1.8)), st(2, 'Scroll down and tap Add to Home Screen', ic(P.addsq, 20, 'currentColor', 1.8)), st(3, 'Tap Add. Sectora opens from your home screen, full screen.', '')]
+    : ANDROID ? [st(1, 'Open the browser menu', ic(P.dots, 20, 'currentColor', 2.4)), st(2, 'Tap Install app or Add to Home screen', ic(P.import, 20, 'currentColor', 1.8)), st(3, 'Confirm. Sectora opens from your home screen, full screen.', '')]
+    : [st(1, 'In Chrome or Edge, click the install icon in the address bar', ic(P.import, 20, 'currentColor', 1.8)), st(2, 'Click Install. Sectora opens in its own window.', '')];
+  return `<div class="sbg" data-close="1"></div><div class="bsheet" role="dialog" aria-label="Install the app"><div class="grab"></div><div class="ish">${LOGO(52)}<div><h3>Install Sectora Wallet</h3><small>${IOSDEV ? 'iPhone and iPad' : ANDROID ? 'Android' : 'Computer'}</small></div></div>${steps.join('')}<p class="snote">${IOSDEV ? 'On iPhone the app installs from Safari. Chrome on iOS 16.4 or later also offers Add to Home Screen in its Share menu.' : 'Your wallet stays the same: same keys, same password, on this device.'}</p></div>`; };
 (function start() { if (window.ethers) return go('boot'); let n = 0; render(); const t = setInterval(() => { if (window.ethers || ++n > 60) { clearInterval(t); go('boot'); } }, 150); })();
 })();
 </script>
