@@ -521,7 +521,8 @@ a[x-apple-data-detectors]{color:inherit!important;text-decoration:none!important
 .wel .globe.code ~ form .pwin{margin-top:18px}
 .okx .ft .btn,.screen:has(.cbg) .ft .btn{height:50px;font-size:15.5px}
 .wel .globe.code ~ .kick{margin-top:12px}
-.wel .globe.code ~ .h1{font-size:34px;margin-top:10px}
+.wel .globe.code ~ .h1{font-size:32px;margin-top:10px}
+.wel .addr .anm{font-family:var(--sans);font-weight:500;color:var(--tx)}
 /* SectoraEVM en las redes: recuadro de proximo lanzamiento con el estilo del Roadmap de sectoraorg.com */
 .evmsoon{position:relative;margin-top:14px;padding:16px 16px 16px 32px;border:1px solid rgba(21,105,255,.3);border-radius:16px;background:radial-gradient(120% 140% at 100% 0%,rgba(21,105,255,.2),transparent 60%),var(--s1);overflow:hidden}
 .evmsoon::before{content:"";position:absolute;left:16px;top:22px;bottom:20px;width:1px;background:linear-gradient(180deg,#1569ff,rgba(21,105,255,.08))}
@@ -879,8 +880,8 @@ const MCARD = () => `<div class="mcard"><img class="gp" alt="" src="${cardPat()}
 
 const THBTN = () => `<button class="lang" id="themeTgl" aria-label="Switch light or dark theme">${document.documentElement.dataset.theme === 'light' ? ic('<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>', 16, '#f6f7fb') : ic('<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>', 16, '#f6f7fb')}</button>`;
 /* datos de la empresa al pie de la portada */
-const CO = () => `<div class="co"><p><b>SectoraEVM Wallet</b><span class="cty">Chicago, Illinois</span></p><span>Illinois file no. 18523639 · EIN 32-0868576</span><span>© ${new Date().getFullYear()} SectoraEVM Wallet. All rights reserved.</span></div>`;
-const CF = () => `<footer class="cofoot"><div class="cfi"><span class="cfl">${LOGO(20)}<span><b>SectoraEVM Wallet</b><i>Chicago, Illinois, United States</i></span></span><span class="cfm">Illinois file no. <b>18523639</b><em>·</em>EIN <b>32-0868576</b></span><span class="cfr">© ${new Date().getFullYear()} SectoraEVM Wallet. All rights reserved.</span></div></footer>`;
+const CO = () => `<div class="co"><p><b>Sectora Foundation IL</b><span class="cty">Chicago, Illinois</span></p><span>Illinois file no. 18523639 · EIN 32-0868576</span><span>© ${new Date().getFullYear()} Sectora Foundation IL. All rights reserved.</span></div>`;
+const CF = () => `<footer class="cofoot"><div class="cfi"><span class="cfl">${LOGO(20)}<span><b>Sectora Foundation IL</b><i>Chicago, Illinois, United States</i></span></span><span class="cfm">Illinois file no. <b>18523639</b><em>·</em>EIN <b>32-0868576</b></span><span class="cfr">© ${new Date().getFullYear()} Sectora Foundation IL. All rights reserved.</span></div></footer>`;
 /* ---------- pantallas ---------- */
 const V = {};
 const SLIDES = [
@@ -897,7 +898,7 @@ V.welcome = () => SCREEN(`<div class="otop"><span class="brand">${LOGO(34)}<span
 V.unlock = () => SCREEN(`<div class="otop"><span class="brand">${LOGO(34)}<span class="bn">Sectora <i>Wallet</i></span><span class="bchip">${PREVIEW ? 'Preview' : 'Beta'}</span></span>${THBTN()}</div><div class="wel">
   <canvas class="cbg" aria-hidden="true"></canvas><div class="globe code"><span class="lg">${LOGO(100)}</span></div>
   <div class="kick">${greet()}</div>
-  <h1 class="h1">Welcome back,<br><em>${esc(S.name)}.</em></h1><div class="addr">${short(S.addr)}</div>
+  <h1 class="h1">Welcome back to<br><em>SectoraEVM Wallet.</em></h1><div class="addr"><span class="anm">${esc(S.name)}</span> · ${short(S.addr)}</div>
   <form id="unlockForm" style="width:100%"><div class="pwin"><input id="upw" type="password" autocomplete="current-password" placeholder="Password" aria-label="Password"><button type="button" class="ib" data-eye="upw" aria-label="Show password">${ic(P.eye, 19)}</button></div>
     <div class="err" id="uerr"></div><div class="prog" id="uprog" hidden><i></i></div><button type="submit" hidden></button></form></div>`,
   `<button class="btn" id="uGo">Unlock</button><button class="link" data-go="import" data-mode="import">Forgot your password? Restore with your recovery phrase</button>${CO()}`, 'hasco') + CF();
