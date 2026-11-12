@@ -1483,7 +1483,7 @@ function paintQuote(state) {
   if (state === 'ok' && q && q.ok) {
     out.textContent = fmtAmt(q.out); out.classList.remove('empty'); st.textContent = `via ${q.router}`;
     const rate = Number(q.out) / Number(S.samt || 1);
-    qd.innerHTML = `<div>Rate<b>1 ${from.s} = ${fmtAmt(rate)} ${to.s}</b></div><div>Minimum received<b>${fmtAmt(q.min)} ${to.s}</b></div>${q.impact !== null ? `<div>Price impact<b>${q.impact.toFixed(2)}%</b></div>` : ''}${q.gasUsd ? `<div>Network fee<b>≈ $${Number(q.gasUsd).toFixed(2)}</b></div>` : ''}<div>Route<b>${q.router}${q.hops.length ? ' · ' + esc(q.hops.slice(0, 2).join(' → ')) : ''}</b></div>`;
+    qd.innerHTML = `<div>Rate<b>1 ${from.s} = ${fmtAmt(rate)} ${to.s}</b></div><div>Minimum received<b>${fmtAmt(q.min)} ${to.s}</b></div>${q.impact !== null ? `<div>Price impact<b>${q.impact.toFixed(2)}%</b></div>` : ''}${q.gasUsd ? `<div>Network fee<b>≈ $${Number(q.gasUsd).toFixed(2)}</b></div>` : ''}`;
     qd.hidden = false; go.disabled = false;
   } else {
     out.textContent = '0'; out.classList.add('empty'); go.disabled = true;
