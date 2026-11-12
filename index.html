@@ -450,6 +450,42 @@ button.lg:hover{transform:translate(-50%,-50%) scale(1.04)}
 .hr2 b{display:block;font-weight:500;font-size:15px}
 .hr2 small{display:block;color:var(--mu);font-size:12.5px;margin-top:2px}
 .ibtn{width:34px;height:34px;border-radius:12px;display:grid;place-items:center;background:var(--s2);border:1px solid var(--ln);color:var(--mu)}
+
+/* ---------- escritorio y tableta: sin marco de telefono ---------- */
+@media (min-width:521px) and (min-height:641px){
+  .stage{padding:0;display:block;height:100%}
+  .device{width:100%;height:100%;border:0;padding:0;border-radius:0;background:#000}
+  .app{border-radius:0}
+  .screen{left:0;right:0;width:auto;padding-top:40px;padding-left:max(28px,calc((100% - 520px) / 2));padding-right:max(28px,calc((100% - 520px) / 2))}
+  .ft{padding-bottom:40px}
+  .bsheet{left:50%;right:auto;width:480px;margin-left:-240px;bottom:auto;top:calc(50% - 230px);border:1px solid var(--ln);border-radius:26px;padding-bottom:22px}
+  .bsheet .grab{display:none}
+  .screen:not(.has-tabs):not(:has(.car)){top:max(0px,calc((100% - 900px) / 2));bottom:max(0px,calc((100% - 900px) / 2))}
+}
+@media (min-width:1024px) and (min-height:641px){
+  /* portada: el planeta a la izquierda y la entrada a la derecha */
+  .screen:has(.car){display:grid;grid-template-columns:minmax(0,1fr) minmax(380px,440px);grid-template-rows:auto 1fr auto auto auto 1fr;column-gap:clamp(48px,6vw,112px);padding:36px max(clamp(40px,6vw,112px),calc((100% - 1240px) / 2)) 28px}
+  .screen:has(.car) .sc{display:contents}
+  .screen:has(.car) .otop{grid-column:1/-1;grid-row:1}
+  .screen:has(.car) .globe{grid-column:1;grid-row:2/7;align-self:center;justify-self:center;width:min(100%,600px,64vh);margin:0}
+  .screen:has(.car) .car{grid-column:2;grid-row:3;margin-top:0}
+  .screen:has(.car) .pager{grid-column:2;grid-row:4}
+  .screen:has(.car) .ft{grid-column:2;grid-row:5;padding:30px 0 0}
+  .screen:has(.car) .cs h1{font-size:52px}
+  .screen:has(.car) .cs p{font-size:17px;max-width:420px}
+  /* dentro de la wallet: menu lateral fijo y contenido centrado */
+  .screen.has-tabs{left:264px;animation:none;padding:40px 0 0}
+  .screen.has-tabs .sc{padding-left:max(32px,calc((100% - 760px) / 2));padding-right:max(32px,calc((100% - 760px) / 2));padding-bottom:48px}
+  .screen.has-tabs .sc > :not(.tabs):not(.sbg):not(.bsheet){animation:fin .28s ease both}
+  .tabs{position:fixed;left:0;top:0;bottom:0;width:264px;height:auto;margin:0;border-radius:0;border:0;border-right:1px solid var(--ln);background:#07080b;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:6px;padding:108px 18px 24px}
+  .tabs::before{content:'Sectora Wallet';position:absolute;left:24px;top:38px;height:34px;padding-left:46px;display:flex;align-items:center;font-size:18px;font-weight:600;letter-spacing:-.01em;color:var(--tx);background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%231569ff'/%3E%3Ccircle cx='50' cy='50' r='27' fill='none' stroke='white' stroke-width='9'/%3E%3C/svg%3E") left center/34px 34px no-repeat}
+  .tabs::after{content:'Beta \00b7  Self-custody';position:absolute;left:26px;bottom:30px;font:500 10.5px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--fa)}
+  .tabs button{width:100%;justify-content:flex-start;gap:14px;height:50px;border-radius:14px;padding:0 16px;font-size:15px}
+  .tabs button.on{padding:0 16px}
+  .tabs button:not(.on)::after{content:attr(aria-label)}
+  .tabs button:not(.on):hover{background:var(--s1);color:var(--tx)}
+  .has-tabs .sbg{position:fixed;left:264px}
+}
 </style>
 
 <div class="stage"><div class="device"><div class="app" id="app"></div></div></div>
@@ -541,20 +577,21 @@ const GLOBE = (() => {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches, t0 = performance.now(); let raf = 0, list = [];
   function draw(cv, t) {
     const dpr = Math.min(2, devicePixelRatio || 1), Wc = cv.clientWidth; if (!Wc) return;
-    if (cv.width !== Math.round(Wc * dpr)) cv.width = cv.height = Math.round(Wc * dpr);
+ const Tw = Math.min(Math.round(Wc * dpr), 880); if (cv.width !== Tw) cv.width = cv.height = Tw;
     const x = cv.getContext('2d'), S2 = cv.width, R = S2 * .48, cx = S2 / 2, cy = S2 / 2, lon = -38 + t * 7, tilt = 17, nodes = NODES.map(([la, lo]) => vec(la, lo)), hub = vec(40.42, -3.7);
+ const _a = Math.cos(-lon * D), _b = Math.sin(-lon * D), _c = Math.cos(tilt * D), _s = Math.sin(tilt * D), rot = v => { const X = v[0] * _a + v[2] * _b, Z = -v[0] * _b + v[2] * _a; return [X, v[1] * _c - Z * _s, v[1] * _s + Z * _c]; };
     x.clearRect(0, 0, S2, S2);
     x.strokeStyle = 'rgba(255,255,255,.14)'; x.lineWidth = S2 * .002; x.beginPath(); x.arc(cx, cy, R, 0, 7); x.stroke();
     x.save(); x.beginPath(); x.arc(cx, cy, R * .995, 0, 7); x.clip();   // nada se dibuja fuera del globo
-    for (const v of land()) { const r = rotv(v, lon, tilt); if (r[2] < 0) continue; x.fillStyle = `rgba(205,220,255,${(.16 + .74 * r[2]).toFixed(3)})`; x.beginPath(); x.arc(cx + r[0] * R, cy - r[1] * R, S2 * .0036 * (.55 + .45 * r[2]), 0, 7); x.fill(); }
+    { const ca = Math.cos(-lon * D), sa = Math.sin(-lon * D), ct = Math.cos(tilt * D), st = Math.sin(tilt * D), NB = 12, PB = []; for (let k = 0; k < NB; k++) PB.push(new Path2D()); for (const v of land()) { const X = v[0] * ca + v[2] * sa, Z = -v[0] * sa + v[2] * ca, ry = v[1] * ct - Z * st, rz = v[1] * st + Z * ct; if (rz < 0) continue; const px = cx + X * R, py = cy - ry * R, rd = S2 * .0036 * (.55 + .45 * rz), pb = PB[Math.min(NB - 1, (rz * NB) | 0)]; pb.moveTo(px + rd, py); pb.arc(px, py, rd, 0, 6.2832); } for (let k = 0; k < NB; k++) { x.fillStyle = `rgba(205,220,255,${(.16 + .74 * (k + .5) / NB).toFixed(3)})`; x.fill(PB[k]); } }
     x.lineCap = 'round';
     nodes.forEach((b, i) => { if (i % 2) return; const a = hub, om = Math.acos(Math.min(1, a[0] * b[0] + a[1] * b[1] + a[2] * b[2])); if (om < .06) return;
       const pts = []; for (let s = 0; s <= 40; s++) { const u = s / 40, k1 = Math.sin((1 - u) * om) / Math.sin(om), k2 = Math.sin(u * om) / Math.sin(om), h = 1 + .05 * Math.sin(Math.PI * u) * om;
-        pts.push(rotv([(a[0] * k1 + b[0] * k2) * h, (a[1] * k1 + b[1] * k2) * h, (a[2] * k1 + b[2] * k2) * h], lon, tilt)); }
+        pts.push(rot([(a[0] * k1 + b[0] * k2) * h, (a[1] * k1 + b[1] * k2) * h, (a[2] * k1 + b[2] * k2) * h], lon, tilt)); }
       x.strokeStyle = 'rgba(21,105,255,.85)'; x.lineWidth = S2 * .0024; x.beginPath(); let on = false;
       for (const r of pts) { const px = cx + r[0] * R, py = cy - r[1] * R; if (r[2] > .02) { on ? x.lineTo(px, py) : x.moveTo(px, py); on = true; } else on = false; } x.stroke();
       const r = pts[Math.round(((t * .42 + i * .137) % 1) * 40)]; if (r[2] > 0) { x.fillStyle = '#fff'; x.beginPath(); x.arc(cx + r[0] * R, cy - r[1] * R, S2 * .0055, 0, 7); x.fill(); } });
-    nodes.forEach((v, i) => { const r = rotv(v, lon, tilt); if (r[2] < .06) return; const px = cx + r[0] * R, py = cy - r[1] * R, ph = (t * .7 + i * .31) % 1;
+    nodes.forEach((v, i) => { const r = rot(v, lon, tilt); if (r[2] < .06) return; const px = cx + r[0] * R, py = cy - r[1] * R, ph = (t * .7 + i * .31) % 1;
       x.strokeStyle = `rgba(92,155,255,${((1 - ph) * .8).toFixed(3)})`; x.lineWidth = S2 * .002; x.beginPath(); x.arc(px, py, S2 * (.01 + .03 * ph), 0, 7); x.stroke();
       x.fillStyle = '#000'; x.beginPath(); x.arc(px, py, S2 * .011, 0, 7); x.fill(); x.fillStyle = '#1569ff'; x.beginPath(); x.arc(px, py, S2 * .0078, 0, 7); x.fill();
       x.fillStyle = '#fff'; x.beginPath(); x.arc(px, py, S2 * .003, 0, 7); x.fill(); });
