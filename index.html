@@ -682,6 +682,13 @@ body{letter-spacing:-.006em}
 .li .r b.na{font-weight:400}
 .kp button{font-weight:400}
 @media (max-width:380px){.acts4.mm button{font-size:13px;height:74px}.hbal{font-size:36px}}
+/* valor en dolares */
+.hchg{display:flex;align-items:center;gap:6px;min-height:21px;margin-top:6px;font-size:15px;color:var(--mu);font-variant-numeric:tabular-nums}
+.hchg em,.tlist small em.up,.tlist small em.dn{font-style:normal;font-weight:500}
+.hchg .up,.tlist em.up{color:var(--ok)}.hchg .dn,.tlist em.dn{color:var(--bad)}
+.hero .hsub{margin-top:12px}
+.tlist .li .r small{font-variant-numeric:tabular-nums}
+.tlist .li .r small span.na{color:var(--mu)}
 /* barra inferior en movil: cuatro secciones con su nombre */
 @media (max-width:1023px),(max-height:640px){
   .tabs{left:0;right:0;bottom:0;width:auto;margin:0;height:auto;border-radius:0;border:0;border-top:1px solid var(--ln);background:var(--bg);padding:6px 6px calc(8px + env(safe-area-inset-bottom,0px));justify-content:space-around;box-shadow:none}
@@ -1141,6 +1148,43 @@ async function rpc(n, method, params) {
 }
 const fmtAmt = (v, d = 6) => { if (v === null || v === undefined) return '—'; const n = Number(v); if (!isFinite(n)) return '—'; if (n === 0) return '0';
   return n >= 1000 ? n.toLocaleString('en-US', { maximumFractionDigits: 2 }) : n >= 1 ? n.toLocaleString('en-US', { maximumFractionDigits: 4 }) : n.toPrecision(Math.min(d, 4)); };
+/* ---------- valor en dolares: precios de CoinGecko; si no responde, el precio de SECT sale del historico de CoinGecko que publica sectoraorg.com ---------- */
+const CGPF = { eth: 'ethereum', bnb: 'binance-smart-chain', sol: 'solana' };
+const CGID = { ETH: 'ethereum', BNB: 'binancecoin', SOL: 'solana', USDT: 'tether', USDC: 'usd-coin' };
+const PX = (() => { try { const o = JSON.parse(store.get('px') || '{}'); return o && typeof o === 'object' ? o : {}; } catch (e) { return {}; } })();
+const pxKey = (n, t) => !t.custom && CGID[t.s] ? 'id:' + CGID[t.s] : CGPF[n.id] && (n.kind === 'sol' ? t.mint : t.a) ? 'c:' + CGPF[n.id] + ':' + (n.kind === 'sol' ? t.mint : t.a.toLowerCase()) : null;
+const pxOf = (n, t) => { const k = pxKey(n, t), p = k && PX[k]; return p && isFinite(p.usd) && Date.now() - p.at < 6 * 3600e3 ? p : null; };
+const fmtUsd = v => !isFinite(v) ? '—' : v === 0 ? '$0.00' : v < 0.01 ? '<$0.01' : '$' + v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const fmtPx = v => '$' + (v >= 1 ? v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : v >= 0.01 ? v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 }) : Number(v.toPrecision(3)).toString());
+const fmtCh = c => `<em class="${c >= 0 ? 'up' : 'dn'}">${c >= 0 ? '+' : '−'}${Math.abs(c).toFixed(2)}%</em>`;
+const TSUB = (n, t) => { const p = pxOf(n, t), unv = t.custom && !t.listed ? ' · <em class="unv">Unverified</em>' : '';
+  return p ? `${fmtPx(p.usd)}${p.ch !== null ? ' · ' + fmtCh(p.ch) : ''}${unv}` : `${esc(t.s)}${t.a ? ' · ' + short(t.a) : t.mint && !t.native ? ' · ' + short(t.mint) : ' · native'}${unv}`; };
+let PXBUSY = false;
+async function loadPrices(force) {
+  const n = curNet(), now = Date.now(); if (PXBUSY) return;
+  const need = [...new Set(toks(n).map(t => pxKey(n, t)).filter(Boolean))].filter(k => force || !PX[k] || now - PX[k].at > 60000); if (!need.length) return;
+  PXBUSY = true;
+  const get = async url => { const ac = new AbortController(), tm = setTimeout(() => ac.abort(), 8000);
+    try { const r = await fetch(url, { signal: ac.signal, credentials: 'omit', referrerPolicy: 'no-referrer' }); if (!r.ok) throw new Error('http ' + r.status); return await r.json(); } finally { clearTimeout(tm); } };
+  const put = (k, o) => { const usd = Number(o && o.usd), ch = Number(o && o.usd_24h_change); if (isFinite(usd) && usd > 0) PX[k] = { usd, ch: o.usd_24h_change != null && isFinite(ch) ? ch : null, at: now }; };
+  const ids = need.filter(k => k.startsWith('id:')).map(k => k.slice(3)), byPf = {};
+  need.filter(k => k.startsWith('c:')).forEach(k => { const [, pf, a] = k.split(':'); (byPf[pf] = byPf[pf] || []).push(a); });
+  try {
+    const jobs = [];
+    if (ids.length) jobs.push(get('https://api.coingecko.com/api/v3/simple/price?ids=' + ids.join(',') + '&vs_currencies=usd&include_24hr_change=true').then(j => ids.forEach(id => put('id:' + id, j[id]))).catch(() => {}));
+    for (const pf in byPf) jobs.push(get('https://api.coingecko.com/api/v3/simple/token_price/' + pf + '?contract_addresses=' + byPf[pf].join(',') + '&vs_currencies=usd&include_24hr_change=true')
+      .then(j => byPf[pf].forEach(a => put('c:' + pf + ':' + a, j[a] || j[a.toLowerCase()]))).catch(() => {}));
+    await Promise.all(jobs);
+    const sk = 'c:ethereum:' + SECT.toLowerCase();
+    if (need.includes(sk) && !(PX[sk] && PX[sk].at === now)) await get('https://raw.githubusercontent.com/atomethereum-dot/test2/claude/website-build-i9rofc/sect-price-30d.json').then(j => {
+      const pts = (j && Array.isArray(j.prices) ? j.prices : []).filter(p => Array.isArray(p) && isFinite(p[0]) && isFinite(p[1]) && p[1] > 0); if (!pts.length) return;
+      const last = pts[pts.length - 1]; if (now - last[0] > 3 * 3600e3) return;
+      const ago = pts.reduce((a, p) => Math.abs(p[0] - (last[0] - 864e5)) < Math.abs(a[0] - (last[0] - 864e5)) ? p : a, pts[0]);
+      PX[sk] = { usd: last[1], ch: Math.abs(ago[0] - (last[0] - 864e5)) < 3 * 3600e3 ? (last[1] / ago[1] - 1) * 100 : null, at: now }; }).catch(() => {});
+    store.set('px', JSON.stringify(PX));
+  } finally { PXBUSY = false; }
+  paintBalances();
+}
 async function loadBalances(force) {
   const n = curNet(), key = n.id; S.bal = S.bal || {}; S.balSt = S.balSt || {};
   if (!force && S.balSt[key] === 'ok' && Date.now() - (S.balAt?.[key] || 0) < 30000) return;
@@ -1165,7 +1209,15 @@ function paintBalances() {
   const n = curNet(), st = (S.balSt || {})[n.id], b = (S.bal || {})[n.id] || {};
   $app.querySelectorAll('[data-bal]').forEach(e => { const v = b[e.dataset.bal]; e.textContent = st === 'ok' ? fmtAmt(v) : st === 'loading' ? '···' : '—'; e.classList.toggle('na', st !== 'ok'); });
   const c = $app.querySelector('#syncChip'); if (c) c.innerHTML = st === 'ok' ? '<span class="dot"></span>Synced' : st === 'loading' ? '<span class="dot off"></span>Syncing…' : !PREVIEW && !n.rpc.length ? '<span class="dot off"></span>Soon' : '<span class="dot off"></span>Offline';
-  const nb = $app.querySelector('#netBal'); if (nb) { const t = n.tokens[0]; nb.textContent = st === 'ok' ? `${fmtAmt(b[t.s])} ${t.s}` : `— ${t.s}`; nb.classList.toggle('na', st !== 'ok'); }
+  let tot = 0, prev = 0, miss = false;
+  for (const t of toks(n)) { const amt = Number(b[tid(t)] || 0), p = pxOf(n, t);
+    if (amt > 0) { if (p) { tot += amt * p.usd; prev += p.ch !== null ? amt * p.usd / (1 + p.ch / 100) : amt * p.usd; } else miss = true; } }
+  $app.querySelectorAll('[data-usd]').forEach(e => { const t = toks(n).find(x => tid(x) === e.dataset.usd), p = t && pxOf(n, t), amt = Number(b[e.dataset.usd] || 0);
+    e.textContent = st === 'ok' ? (p ? fmtUsd(amt * p.usd) : amt > 0 ? '—' : '$0.00') : st === 'loading' ? '···' : '—'; e.classList.toggle('na', st !== 'ok' || (!p && amt > 0)); });
+  $app.querySelectorAll('[data-px]').forEach(e => { const t = toks(n).find(x => tid(x) === e.dataset.px); if (t) e.innerHTML = TSUB(n, t); });
+  const nb = $app.querySelector('#netBal'); if (nb) { const ok = st === 'ok' && (tot > 0 || !miss); nb.textContent = ok ? fmtUsd(tot).replace('<$0.01', '$0.00') : '—'; nb.classList.toggle('na', !ok); }
+  const nc = $app.querySelector('#netChg'); if (nc) { const d = tot - prev, pc = prev > 0 ? (tot / prev - 1) * 100 : 0;
+    nc.innerHTML = st === 'ok' && tot > 0 ? `<em class="${d >= 0 ? 'up' : 'dn'}">${d >= 0 ? '+' : '−'}${fmtUsd(Math.abs(d)).replace('<$0.01', '$0.00')} (${d >= 0 ? '+' : '−'}${Math.abs(pc).toFixed(2)}%)</em><span>Today</span>${miss ? '<span>· some prices unavailable</span>' : ''}` : st === 'ok' && miss ? '<span>Prices unavailable right now</span>' : ''; }
   const on = $app.querySelector('#offNote'); if (on && !PREVIEW && n.rpc.length) on.hidden = st !== 'off';
 }
 
@@ -1195,13 +1247,13 @@ const MCARD2 = () => { const n = curNet(), a = addrOf(n); return `<div class="mc
 const NBADGE = n => n.id !== 'rh' && TLOGO[n.native] ? `<img class="nbdg" src="${TLOGO[n.native]}" width="18" height="18" alt="" decoding="async">` : '';
 V.home = () => { const sc = sec(), n = curNet(); return SCREEN(`<div class="top hmt"><div class="acct">${AVBOX(32)}<b>${esc(S.name)}</b></div>
     <div class="ib3"><button class="ib" data-copy="${addrOf(n)}" aria-label="Copy address" title="Copy address">${ic(P.copy, 22, 'currentColor', 1.7)}</button><button class="ib" data-go="activity" aria-label="Activity" title="Activity">${ic(P.clock, 22, 'currentColor', 1.7)}</button><button class="ib" id="lockNow" aria-label="Lock" title="Lock">${ic(P.lock, 22, 'currentColor', 1.7)}</button></div></div>
-  <div class="hero"><div class="hbal na" id="netBal">— ${n.native}</div>
+  <div class="hero"><div class="hbal na" id="netBal">—</div><div class="hchg" id="netChg"></div>
     <div class="hsub">${NETPILL()}<span class="sync" id="syncChip"><span class="dot off"></span>Offline</span></div></div>
   <div class="acts4 mm"><button data-go="send">${ic(P.send, 24, 'currentColor', 1.7)}<span>Send</span></button><button data-go="receive">${ic(P.recv, 24, 'currentColor', 1.7)}<span>Receive</span></button><button data-go="swap">${ic(P.swap, 24, 'currentColor', 1.7)}<span>Swap</span></button><button data-go="security">${ic(P.shield, 24, 'currentColor', 1.7)}<span>Security</span></button></div>
   <button class="mmc" data-go="security"><span class="mmi">${ic(P.shield, 22, '#fff', 1.8)}</span><span class="t"><b>${sc.score === sc.total ? 'Your wallet is protected' : 'Improve your protection'}</b><small>${sc.score} of ${sc.total} security checks passed</small><span class="segs">${sc.items.map(i => `<i class="${i.ok ? 'on' : ''}"></i>`).join('')}</span></span>${ic(P.chev, 18, 'currentColor', 1.8)}</button>
   <button class="mmc" data-go="assets"><span class="mmi alt">${ic(P.rwa, 22, 'currentColor', 1.7)}</span><span class="t"><b>Tokenize real-world assets</b><small>In development · launches with SectoraEVM</small></span>${ic(P.chev, 18, 'currentColor', 1.8)}</button>
   <div class="mmh"><span>Tokens</span><button class="addt" data-go="addtok">${ic('<path d="M12 5v14M5 12h14"/>', 16, 'currentColor', 1.9)}Add token</button></div>
-  <div class="tlist">${toks(n).map(t => `<div class="li"><span class="tkw">${TOKI(t, 44)}${NBADGE(n)}</span><div><b>${esc(t.n)}${!t.custom || t.listed ? VERI() : ''}</b><small>${esc(t.s)}${t.a ? ' · ' + short(t.a) : t.mint && !t.native ? ' · ' + short(t.mint) : ' · native'}${t.custom && !t.listed ? ' · <em class="unv">Unverified</em>' : ''}</small></div><div class="r"><b data-bal="${tid(t)}" class="na">—</b><small>${esc(t.s)}</small></div></div>`).join('')}</div>
+  <div class="tlist">${toks(n).map(t => `<div class="li"><span class="tkw">${TOKI(t, 44)}${NBADGE(n)}</span><div><b>${esc(t.n)}${!t.custom || t.listed ? VERI() : ''}</b><small data-px="${tid(t)}">${TSUB(n, t)}</small></div><div class="r"><b data-usd="${tid(t)}" class="na">—</b><small><span data-bal="${tid(t)}">—</span> ${esc(t.s)}</small></div></div>`).join('')}</div>
   <div class="note" style="margin-top:14px" id="offNote" ${!PREVIEW && n.rpc.length ? 'hidden' : ''}>${ic(P.info, 16, '#f0b54a')}<span>${n.rpc.length ? (PREVIEW ? 'Balances load from the network. This private preview runs offline, so they show once the wallet is online.' : "Couldn't reach the network right now. Balances update when the connection is back.") : (PREVIEW ? 'Robinhood Chain support is ready; its network connection is configured at launch.' : 'Robinhood Chain connection opens soon. Balances and sends will show here.')}</span></div>
   ${TABS('home')}${SHEET()}`, '', 'has-tabs'); };
 
@@ -1487,7 +1539,8 @@ function bindMulti() {
     kn.addEventListener('pointerup', () => { x0 = null; fin(); });
     sl.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === 'ArrowRight') { e.preventDefault(); setX(e.key === 'Enter' ? max() : dx + 50); if (dx >= max() - 4) fin(); } });
   }
-  if (['home', 'send', 'swap'].includes(S.view) || S.sheet) { paintBalances(); if (S.view === 'home') loadBalances(); }
+  if (['home', 'send', 'swap'].includes(S.view) || S.sheet) { paintBalances(); if (S.view === 'home') { loadBalances(); loadPrices(); } }
+  clearInterval(S.pxT); if (S.view === 'home') S.pxT = setInterval(() => { if (S.view !== 'home') return clearInterval(S.pxT); if (document.hidden) return; loadPrices(); loadBalances(); }, 60000);
   if (!PREVIEW && ['send', 'swap'].includes(S.view)) loadBalances();
   if (['sent', 'activity'].includes(S.view)) trackPending();
 }
@@ -1700,7 +1753,6 @@ V.addtok = () => { const n = curNet(), list = CT.get(n.id), can = !!TWCHAIN[n.id
   ${list.length ? `<div class="lh" style="margin-top:22px">Your added tokens<span>${n.name}</span></div><div>${list.map(t => `<div class="li"><span class="av" style="background:none">${TOKI(t, 40)}</span><div><b>${esc(t.n)}${t.listed ? VERI() : ''}</b><small>${esc(t.s)} · ${short(t.a || t.mint)}${t.listed ? '' : ' · <em class="unv">Unverified</em>'}</small></div><button class="ctdel" data-ctdel="${tid(t)}" aria-label="Remove ${esc(t.s)}">Remove</button></div>`).join('')}</div>` : ''}
   ${SHEET()}`, can ? `<button class="btn" id="ctAdd" disabled>Add token</button>` : '');
 };
-const CGPF = { eth: 'ethereum', bnb: 'binance-smart-chain', sol: 'solana' };
 async function cgInfo(n, a) { const pf = CGPF[n.id]; if (!pf) return null;
   try { const ctl = new AbortController(), tm = setTimeout(() => ctl.abort(), 8000);
     const r = await fetch('https://api.coingecko.com/api/v3/coins/' + pf + '/contract/' + (n.kind === 'sol' ? a : a.toLowerCase()), { signal: ctl.signal, credentials: 'omit', referrerPolicy: 'no-referrer' }); clearTimeout(tm);
