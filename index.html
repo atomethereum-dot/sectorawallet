@@ -1,10 +1,12 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" translate="no" class="notranslate">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://raw.githubusercontent.com https://coin-images.coingecko.com https://assets.coingecko.com; font-src 'self' data:; connect-src 'self' https://raw.githubusercontent.com https://api.coingecko.com https://ethereum-rpc.publicnode.com https://eth.drpc.org https://bsc-rpc.publicnode.com https://bsc-dataseed.bnbchain.org https://solana-rpc.publicnode.com https://api.mainnet-beta.solana.com https://aggregator-api.kyberswap.com https://lite-api.jup.ag; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="no-referrer">
+<meta name="google" content="notranslate">
+<meta name="format-detection" content="telephone=no,date=no,address=no,email=no">
 <title>Sectora Wallet</title>
 <meta name="description" content="Sectora Wallet: a self-custody multichain wallet for Ethereum, BNB Chain, Robinhood Chain and Solana. Your keys stay on your device.">
 <meta name="theme-color" content="#000000">
@@ -483,10 +485,12 @@ button.lg:hover{transform:translate(-50%,-50%) scale(1.04)}
 .avup{width:100%;justify-content:center;display:flex;align-items:center;gap:8px;cursor:pointer}
 .avnote{display:flex;align-items:center;gap:7px;justify-content:center;margin:12px 0 0;font-size:12px;color:var(--mu)}
 /* datos de la empresa en la portada */
-.co{display:grid;gap:3px;justify-items:center;text-align:center;margin-top:8px;padding-top:14px;border-top:1px solid var(--ln);font-size:12px;line-height:1.45;color:var(--mu)}
-.co b{font-size:13px;font-weight:500;color:var(--tx);letter-spacing:-.005em}
-.co p{margin:0;display:grid;gap:3px;justify-items:center}
-.co{margin-top:2px;padding-top:9px;gap:1px;font-size:11.5px;line-height:1.4}.co b{font-size:12px}.co p{display:block}.co .cty::before{content:" · ";color:var(--fa)}
+.co{display:grid;gap:2px;justify-items:center;text-align:center;margin-top:4px;font-size:11px;line-height:1.5;color:var(--fa);font-variant-numeric:tabular-nums;letter-spacing:.01em}
+.co b{font-weight:500;color:var(--mu)}
+.co p{margin:0}
+.co .cty::before{content:" · "}
+/* que el iPhone no convierta numeros y direcciones en enlaces subrayados */
+a[x-apple-data-detectors]{color:inherit!important;text-decoration:none!important;font:inherit!important}
 /* portada con el pulso de red: el fondo ocupa toda la pantalla y los textos dejan sitio a la animacion */
 .screen:has(.cbg){isolation:isolate}
 .cbg{position:absolute;left:0;top:0;width:100%;height:100%;display:block;z-index:-1;pointer-events:none}
@@ -495,7 +499,10 @@ button.lg:hover{transform:translate(-50%,-50%) scale(1.04)}
 .okx .cs h1{font-size:30px;margin-top:9px}
 .okx .cs p{font-size:13.5px;line-height:1.5;margin-top:7px}
 .okx .pager{margin-top:14px}
-.okx .ft,.screen:has(.cbg) .ft{gap:8px}
+.okx .ft,.screen:has(.cbg) .ft{gap:8px;padding-top:8px}
+.screen:has(.cbg) .sc{padding-bottom:4px}
+.wel .globe.code ~ form .err{min-height:0;margin-top:6px}
+.wel .globe.code ~ form .pwin{margin-top:18px}
 .okx .ft .btn,.screen:has(.cbg) .ft .btn{height:50px;font-size:15.5px}
 .wel .globe.code ~ .kick{margin-top:12px}
 .wel .globe.code ~ .h1{font-size:34px;margin-top:10px}
@@ -684,9 +691,9 @@ const CODEBG = (() => {
     const lt = document.documentElement.dataset.theme === 'light', sc = Math.min(devicePixelRatio || 1, W > 900 ? 1.5 : 2), cw = Math.round(W * sc), chh = Math.round(H * sc);
     if (cv.width !== cw || cv.height !== chh || !x) { cv.width = cw; cv.height = chh; x = cv.getContext('2d'); }
     const cr = cv.getBoundingClientRect(), r = g.getBoundingClientRect(), k = cr.width / W || 1, Fx = (r.left + r.width / 2 - cr.left) / k, Fy = (r.top + r.height / 2 - cr.top) / k;
-    const t = reduce ? 1.1 : (performance.now() - t0) / 1000, s = Math.max(9, Math.min(20, Math.sqrt(W * H) / 46)), Rm = Math.hypot(Math.max(Fx, W - Fx), Math.max(Fy, H - Fy)), per = 3.2;
+    const t = reduce ? 1.1 : (performance.now() - t0) / 1000, s = Math.max(9, Math.min(20, Math.sqrt(W * H) / 46)), Rm = Math.hypot(Math.max(Fx, W - Fx), Math.max(Fy, H - Fy)), per = 6.4;
     const split = W >= 1024 && H >= 641, fz = v => { const q = Math.min(1, Math.max(0, v)); return q * q * (3 - 2 * q); };   // los puntos se atenuan bajo los textos para que se lean bien
-    const rings = []; for (let j = 0; j < 3; j++) { const ph = ((t + j * per / 3) % per) / per; rings.push([ph * Rm, s * (1.4 + ph * 2.2), (1 - ph) ** 1.3]); }
+    const rings = []; for (let j = 0; j < 2; j++) { const ph = ((t + j * per / 2) % per) / per; rings.push([ph * Rm, s * (1.4 + ph * 2.2), (1 - ph) ** 1.3]); }
     for (let y = s / 2; y < H; y += s) for (let xx = s / 2; xx < W; xx += s) {
       const dx = xx - Fx, dy = y - Fy, d = Math.hypot(dx, dy) || 1; let I = 0;
       for (const [R, w, f] of rings) { const u = (d - R) / w; if (u > -3 && u < 3) { const e = Math.exp(-u * u) * f; if (e > I) I = e; } }
@@ -834,7 +841,7 @@ const MCARD = () => `<div class="mcard"><img class="gp" alt="" src="${cardPat()}
 
 const THBTN = () => `<button class="lang" id="themeTgl" aria-label="Switch light or dark theme">${document.documentElement.dataset.theme === 'light' ? ic('<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>', 16, '#f6f7fb') : ic('<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>', 16, '#f6f7fb')}</button>`;
 /* datos de la empresa al pie de la portada */
-const CO = () => `<div class="co"><p><b>Sectora Foundation IL</b><span class="cty">Chicago, Illinois, United States</span></p><span>Illinois file no. 18523639 · EIN 32-0868576</span><span>© ${new Date().getFullYear()} Sectora Foundation IL. All rights reserved.</span></div>`;
+const CO = () => `<div class="co"><p><b>Sectora Foundation IL</b><span class="cty">Chicago, Illinois</span></p><span>Illinois file no. 18523639 · EIN 32-0868576</span><span>© ${new Date().getFullYear()} Sectora Foundation IL. All rights reserved.</span></div>`;
 const CF = () => `<footer class="cofoot"><div class="cfi"><span class="cfl">${LOGO(20)}<span><b>Sectora Foundation IL</b><i>Chicago, Illinois, United States</i></span></span><span class="cfm">Illinois file no. <b>18523639</b><em>·</em>EIN <b>32-0868576</b></span><span class="cfr">© ${new Date().getFullYear()} Sectora Foundation IL. All rights reserved.</span></div></footer>`;
 /* ---------- pantallas ---------- */
 const V = {};
@@ -1475,7 +1482,7 @@ function bindTok() {
 function render() {
   if (S.view === 'boot') { S.addr = store.get('addr') || ''; S.lockMin = +(store.get('lock') || 5); S.name = store.get('name') || 'Account 1'; S.sol = store.get('sol') || ''; S.net = store.get('net') || 'eth'; S.since = +(store.get('since') || 0); S.backed = store.get('backed') || ''; S.view = store.get('vault') ? 'unlock' : 'welcome'; }
   if (!window.ethers) { $app.innerHTML = SCREEN(`<div class="wel" style="margin-top:120px">${LOGO(72)}<h1 class="h1">Loading…</h1><p class="lead">Loading the cryptography library. If this stays, check your connection and reload.</p></div>`); return; }
-  $app.innerHTML = V[S.view](); bind(); bindMulti(); bindTok(); bindCT(); bindTheme(); bindAv(); GLOBE.mount(); CODEBG.mount(); fitGlobe(); refit();
+  $app.innerHTML = V[S.view](); bind(); bindMulti(); bindTok(); bindCT(); bindTheme(); bindAv(); GLOBE.mount(); CODEBG.mount(); fitGlobe(); refit(); watchFit();
   if (!S.introDone && (S.view === 'welcome' || S.view === 'unlock')) runIntro();
 }
 function bind() {
@@ -1529,10 +1536,10 @@ function bind() {
   }
   // desbloquear
   const doUnlock = async e => { if (e) e.preventDefault(); const pw = q('#upw').value, pr = q('#uprog'), btn = q('#uGo'), er = q('#uerr');
-    if (!pw) return er.textContent = 'Enter your password.'; btn.disabled = true; pr.hidden = false; er.textContent = '';
+    if (!pw) { er.textContent = 'Enter your password.'; const u = q('#upw'); u.focus(); u.scrollIntoView({ block: 'center', behavior: 'smooth' }); return; } btn.disabled = true; pr.hidden = false; er.textContent = '';
     try { S.wallet = await ethers.Wallet.fromEncryptedJson(store.get('vault'), pw, p => { pr.firstChild.style.width = (p * 100).toFixed(0) + '%'; btn.textContent = `Unlocking… ${(p * 100).toFixed(0)}%`; });
       S.addr = S.wallet.address; adoptSol(S.wallet); armLock(); zoomTo('home');
-    } catch (err) { btn.disabled = false; btn.textContent = 'Unlock'; pr.hidden = true; er.textContent = 'Wrong password. Try again.'; } };
+    } catch (err) { btn.disabled = false; btn.textContent = 'Unlock'; pr.hidden = true; er.textContent = 'Wrong password. Try again.'; q('#upw').scrollIntoView({ block: 'center', behavior: 'smooth' }); } };
   on('#unlockForm', 'submit', doUnlock); on('#uGo', 'click', doUnlock);
   // enviar
   const to = q('#to');
@@ -1668,8 +1675,19 @@ function applyTheme() { const m = THEME(), L = m === 'light' || (m === 'auto' &&
 try { matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => { if (THEME() === 'auto') applyTheme(); }); } catch (e) {}
 /* portada: si no cabe todo (globo, texto, clave y datos de la empresa), el globo se encoge */
 function fitGlobe() { const g = $app.querySelector('.okx .globe, .wel .globe'), sc = $app.querySelector('.sc'); if (!g || !sc || getComputedStyle(sc).display === 'contents') return;
-  g.style.width = ''; const over = sc.scrollHeight - sc.clientHeight; if (over > 0) g.style.width = Math.max(110, Math.floor(g.getBoundingClientRect().width - over - 2)) + 'px'; }
+  const wel = g.closest('.wel'); if (wel) wel.style.marginTop = '';
+  g.style.width = ''; const over = sc.scrollHeight - sc.clientHeight; if (over > 0) { g.style.width = Math.max(110, Math.floor(g.getBoundingClientRect().width - over - 2)) + 'px'; return; }
+  if (!g.classList.contains('code')) return;   // si sobra espacio, el logo y la animacion crecen en vez de dejar un hueco antes del boton
+  let bot = 0; for (const el of sc.children) { if (getComputedStyle(el).position === 'absolute') continue; bot = Math.max(bot, el.getBoundingClientRect().bottom); }
+  const free = sc.getBoundingClientRect().bottom - parseFloat(getComputedStyle(sc).paddingBottom) - bot, w0 = g.getBoundingClientRect().width, maxW = Math.min(g.parentElement.clientWidth, 440);
+  if (free > 4 && w0 < maxW) g.style.width = Math.floor(Math.min(maxW, w0 + free - 2)) + 'px';
+  if (wel) { let b2 = 0; for (const el of sc.children) { if (getComputedStyle(el).position === 'absolute') continue; b2 = Math.max(b2, el.getBoundingClientRect().bottom); }
+    const rest = sc.getBoundingClientRect().bottom - parseFloat(getComputedStyle(sc).paddingBottom) - b2; if (rest > 2) wel.style.marginTop = Math.floor(rest) + 'px'; } }   // lo que sobre va arriba: la clave queda junto al boton
 addEventListener('resize', () => fitGlobe()); if (document.fonts) document.fonts.ready.then(() => fitGlobe());
+/* si algun texto cambia de tamano despues de pintar (traductor, letra grande del sistema), se reajusta el globo para que la clave siga a la vista */
+let fitRO = null;
+function watchFit() { if (!window.ResizeObserver) return; if (fitRO) fitRO.disconnect(); const els = $app.querySelectorAll('.okx .sc, .okx .ft, .okx .car, .wel, .wel ~ .ft, .screen:has(.wel) .sc, .screen:has(.wel) .ft, .wel .kick, .wel .h1, .wel .addr, #unlockForm, .screen .otop'); if (!els.length) return;
+  fitRO = new ResizeObserver(() => refit()); els.forEach(el => fitRO.observe(el)); }
 let fitT = 0; const refit = () => { clearTimeout(fitT); fitT = setTimeout(fitGlobe, 450); };
 function bindTheme() { $app.querySelectorAll('[data-themeset]').forEach(b => b.addEventListener('click', () => { store.set('theme', b.dataset.themeset); applyTheme(); render(); }));
   const t = $app.querySelector('#themeTgl'); if (t) t.addEventListener('click', () => { const L = document.documentElement.dataset.theme === 'light'; store.set('theme', L ? 'dark' : 'light'); applyTheme(); render(); }); }
