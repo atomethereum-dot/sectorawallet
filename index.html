@@ -451,6 +451,11 @@ button.lg:hover{transform:translate(-50%,-50%) scale(1.04)}
 .hr2 small{display:block;color:var(--mu);font-size:12.5px;margin-top:2px}
 .ibtn{width:34px;height:34px;border-radius:12px;display:grid;place-items:center;background:var(--s2);border:1px solid var(--ln);color:var(--mu)}
 
+
+/* logos oficiales y verificado */
+.tkl{display:block;flex:none;border-radius:50%;object-fit:cover;background:#15181e}
+.vbadge{display:inline-flex;vertical-align:-2px;margin-left:6px}
+.vbadge svg{display:block}
 /* ---------- escritorio y tableta: sin marco de telefono ---------- */
 @media (min-width:521px) and (min-height:641px){
   .stage{padding:0;display:block;height:100%}
@@ -872,7 +877,9 @@ P.flip = '<path d="M12 4v16M6 14l6 6 6-6"/>';
 P.grid = '<rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/>';
 
 /* iconos de token y red (neutros, sin logos de terceros salvo ETH y SECT) */
-const TOKI = (t, s = 40) => t.s === 'SECT' ? LOGO(s) : (t.s === 'ETH' ? `<span class="tki" style="width:${s}px;height:${s}px">${ETH(Math.round(s * .48))}</span>`
+const TLOGO = { ETH: 'tokens/eth.png', BNB: 'tokens/bnb.png', SOL: 'tokens/sol.png', USDT: 'tokens/usdt.png', USDC: 'tokens/usdc.png' };
+const VERI = (s = 15) => `<span class="vbadge" title="Verified token" aria-label="Verified token"><svg width="${s}" height="${s}" viewBox="0 0 24 24" aria-hidden="true"><path fill="#1569ff" d="M12 1.5l2.6 1.9 3.2-.2 1 3.1 2.6 1.9-1 3.1 1 3.1-2.6 1.9-1 3.1-3.2-.2L12 22.5l-2.6-1.9-3.2.2-1-3.1L2.6 15.8l1-3.1-1-3.1 2.6-1.9 1-3.1 3.2.2z"/><path d="M7.6 12.3l3 3 5.8-6.2" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
+const TOKI = (t, s = 40) => t.s === 'SECT' ? LOGO(s) : TLOGO[t.s] ? `<img class="tkl" src="${TLOGO[t.s]}" width="${s}" height="${s}" alt="${t.n}" decoding="async">` : (t.s === 'ETH' ? `<span class="tki" style="width:${s}px;height:${s}px">${ETH(Math.round(s * .48))}</span>`
   : `<span class="tki" style="width:${s}px;height:${s}px;font-size:${Math.round(s * .3)}px">${t.s.slice(0, 4)}</span>`);
 const NDOT = n => `<i class="ndot" style="background:${n.dot}"></i>`;
 
@@ -930,7 +937,7 @@ const SHEET = () => {
     <p class="snote">Ethereum, BNB Chain and Robinhood Chain share one address. Solana uses its own.</p></div>`;
   const n = curNet(), which = S.sheet; // 'from' | 'to' | 'send'
   return `<div class="sbg" data-close="1"></div><div class="bsheet" role="dialog" aria-label="Choose token"><div class="grab"></div><h3>Choose token · ${n.name}</h3>
-    ${n.tokens.map(t => `<button class="nrow" data-pick="${which}:${t.s}">${TOKI(t, 36)}<span><b>${t.s}</b><small>${t.n}</small></span><span class="bv" data-bal="${t.s}">—</span></button>`).join('')}</div>`;
+    ${n.tokens.map(t => `<button class="nrow" data-pick="${which}:${t.s}">${TOKI(t, 36)}<span><b>${t.s}${VERI(14)}</b><small>${t.n}</small></span><span class="bv" data-bal="${t.s}">—</span></button>`).join('')}</div>`;
 };
 const NETPILL = () => `<button class="npill" data-sheet="net">${NDOT(curNet())}${curNet().name}${ic(P.down, 14, '#8b93a6', 2.4)}</button>`;
 
@@ -949,7 +956,7 @@ V.home = () => { const sc = sec(), n = curNet(); return SCREEN(`<div class="top"
   <button class="secp card" data-go="security"><span class="shd">${ic(P.shield, 24, '#fff', 1.9)}</span><span class="t"><b>${sc.score === sc.total ? 'Your wallet is protected' : 'Improve your protection'}</b><small>${sc.score} of ${sc.total} security checks passed</small><span class="segs">${sc.items.map(i => `<i class="${i.ok ? 'on' : ''}"></i>`).join('')}</span></span>${ic(P.chev, 16, '#545c6e', 2.2)}</button>
   <button class="hr2 card" data-go="assets"><span class="shd">${ic(P.rwa, 22)}</span><span class="t"><b>Tokenize real-world assets</b><small>In development · launches with SectoraEVM</small></span>${ic(P.chev, 16, '#545c6e', 2.2)}</button>
   <div class="lh">Tokens<span>${n.name}</span></div>
-  <div>${n.tokens.map(t => `<div class="li"><span class="av" style="background:none">${TOKI(t, 44)}</span><div><b>${t.n}</b><small>${t.s}${t.a ? ' · ' + short(t.a) : t.mint && !t.native ? ' · ' + short(t.mint) : ' · native'}</small></div><div class="r"><b data-bal="${t.s}" class="na">—</b><small>${t.s}</small></div></div>`).join('')}</div>
+  <div>${n.tokens.map(t => `<div class="li"><span class="av" style="background:none">${TOKI(t, 44)}</span><div><b>${t.n}${VERI()}</b><small>${t.s}${t.a ? ' · ' + short(t.a) : t.mint && !t.native ? ' · ' + short(t.mint) : ' · native'}</small></div><div class="r"><b data-bal="${t.s}" class="na">—</b><small>${t.s}</small></div></div>`).join('')}</div>
   <div class="note" style="margin-top:10px" id="offNote" ${!PREVIEW && n.rpc.length ? 'hidden' : ''}>${ic(P.info, 16, '#f0b54a')}<span>${n.rpc.length ? (PREVIEW ? 'Balances load from the network. This private preview runs offline, so they show once the wallet is online.' : "Couldn't reach the network right now. Balances update when the connection is back.") : (PREVIEW ? 'Robinhood Chain support is ready; its network connection is configured at launch.' : 'Robinhood Chain connection opens soon. Balances and sends will show here.')}</span></div>
   ${TABS('home')}${SHEET()}`, '', 'has-tabs'); };
 
