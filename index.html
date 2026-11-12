@@ -821,6 +821,19 @@ html[lang="ar"],html[lang="hi"],html[lang="zh"],html[lang="ja"],html[lang="ko"]{
 .screen:has(.ipoint.dn) .bsheet,.app:has(.ipoint.dn) .bsheet{padding-bottom:calc(86px + env(safe-area-inset-bottom,0px))}
 .igot{margin-top:12px;height:50px}
 @media (prefers-reduced-motion:reduce){.ipoint{animation:none}}
+/* app instalada en iPhone: altura completa */
+html.iosapp,html.iosapp body{height:var(--app-h)}
+html.iosapp .stage,html.iosapp .device,html.iosapp .app{height:var(--app-h)}
+/* portada y desbloqueo en movil: el logo centrado en el espacio libre y textos con aire */
+@media (max-width:1023px),(max-height:640px){
+  .okx .globe{margin-top:auto!important;margin-bottom:auto!important}
+  .okx .car{margin-top:8px}
+  .okx .cs p{line-height:1.6}
+  .okx .pager{margin-top:18px;margin-bottom:6px}
+  .screen:has(.car) .ft,.screen:has(.wel) .ft{gap:12px;padding-top:14px}
+  .ft .legal{padding-top:6px}
+  .ft .co{line-height:1.6;margin-top:6px}
+}
 /* barra inferior en movil: cuatro secciones con su nombre */
 @media (max-width:1023px),(max-height:640px){
   .tabs{left:0;right:0;bottom:0;width:auto;margin:0;height:auto;border-radius:0;border:0;border-top:1px solid var(--ln);background:var(--bg);padding:6px 6px calc(8px + env(safe-area-inset-bottom,0px));justify-content:space-around;box-shadow:none}
@@ -2258,7 +2271,7 @@ function fitGlobe() { const g = $app.querySelector('.okx .globe, .wel .globe'), 
   g.style.width = ''; const over = sc.scrollHeight - sc.clientHeight; if (over > 0) { g.style.width = Math.max(110, Math.floor(g.getBoundingClientRect().width - over - 2)) + 'px'; return; }
   if (!g.classList.contains('code')) return;   // si sobra espacio, el logo y la animacion crecen en vez de dejar un hueco antes del boton
   let bot = 0; for (const el of sc.children) { if (getComputedStyle(el).position === 'absolute') continue; bot = Math.max(bot, el.getBoundingClientRect().bottom); }
-  const free = sc.getBoundingClientRect().bottom - parseFloat(getComputedStyle(sc).paddingBottom) - bot, w0 = g.getBoundingClientRect().width, maxW = Math.min(g.parentElement.clientWidth, 440);
+  const free = sc.getBoundingClientRect().bottom - parseFloat(getComputedStyle(sc).paddingBottom) - bot, w0 = g.getBoundingClientRect().width, maxW = Math.min(g.parentElement.clientWidth, 440, matchMedia('(max-width:1023px), (max-height:640px)').matches ? Math.round(innerHeight * (wel ? .34 : .38)) : 9999);
   if (free > 4 && w0 < maxW) g.style.width = Math.floor(Math.min(maxW, w0 + free - 2)) + 'px';
   if (wel) { let b2 = 0; for (const el of sc.children) { if (getComputedStyle(el).position === 'absolute') continue; b2 = Math.max(b2, el.getBoundingClientRect().bottom); }
     const rest = sc.getBoundingClientRect().bottom - parseFloat(getComputedStyle(sc).paddingBottom) - b2; if (rest > 2) wel.style.marginTop = Math.floor(rest) + 'px'; } }   // lo que sobre va arriba: la clave queda junto al boton
@@ -2278,6 +2291,10 @@ let BIP = null;
 window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); BIP = e; });
 window.addEventListener('appinstalled', () => { BIP = null; store.set('instHide', '1'); if (S.sheet === 'install') S.sheet = null; if ($app) { render(); toast('Sectora Wallet is installed'); } });
 if (STANDALONE()) document.documentElement.classList.add('standalone');
+/* app instalada en iPhone con barra de estado transparente: Safari deja la altura corta (sin la barra de estado) y sobra una franja abajo; se usa la altura real */
+function fixAppH() { if (!(/iPhone|iPod/.test(navigator.userAgent) && STANDALONE())) return; const port = innerHeight >= innerWidth, sh = port ? Math.max(screen.width, screen.height) : Math.min(screen.width, screen.height);
+  const h = Math.max(innerHeight, document.documentElement.clientHeight, sh); document.documentElement.style.setProperty('--app-h', h + 'px'); document.documentElement.classList.add('iosapp'); }
+fixAppH(); addEventListener('resize', fixAppH); addEventListener('orientationchange', () => setTimeout(fixAppH, 300));
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(() => {}));
 async function doInstall() { if (BIP) { const e = BIP; BIP = null; try { await e.prompt(); const c = await e.userChoice; if (c && c.outcome === 'accepted') { store.set('instHide', '1'); return render(); } if (c && c.outcome === 'dismissed') return render(); } catch (x) {} } S.sheet = 'install'; render(); }
 P.share = '<path d="M12 3v12"/><path d="M8 7l4-4 4 4"/><path d="M7 10H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-1"/>';
