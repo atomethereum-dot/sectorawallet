@@ -730,6 +730,13 @@ body{letter-spacing:-.006em}
 .screen:has(#susdIn) .qd div{padding:8px 0}
 .screen:has(#susdIn) .kp.sm button{height:40px}
 .swu em{font-style:normal;font-weight:500}.swu .up{color:var(--ok)}.swu .dn{color:var(--bad)}
+/* Face ID / huella */
+.bioh{display:grid;place-items:center;margin-top:18px}
+.bioh span{width:84px;height:84px;border-radius:24px;display:grid;place-items:center;background:var(--b)}
+.bioT{height:32px;padding:0 14px;border-radius:16px;font-size:13px;font-weight:500;color:#fff;background:var(--b)}
+.bioT.on{background:rgba(54,217,138,.12);color:var(--ok)}
+html[data-theme="light"] .bioT.on{background:rgba(15,157,99,.1)}
+#bGo + #uGo{margin-top:-2px}
 /* barra inferior en movil: cuatro secciones con su nombre */
 @media (max-width:1023px),(max-height:640px){
   .tabs{left:0;right:0;bottom:0;width:auto;margin:0;height:auto;border-radius:0;border:0;border-top:1px solid var(--ln);background:var(--bg);padding:6px 6px calc(8px + env(safe-area-inset-bottom,0px));justify-content:space-around;box-shadow:none}
@@ -1011,7 +1018,7 @@ V.unlock = () => SCREEN(`<div class="otop"><span class="brand">${LOGO(34)}<span 
   <h1 class="h1">Welcome back to<br><em>SectoraEVM Wallet.</em></h1><div class="addr"><span class="anm">${esc(S.name)}</span> · ${short(S.addr)}</div>
   <form id="unlockForm" style="width:100%"><div class="pwin"><input id="upw" type="password" autocomplete="current-password" placeholder="Password" aria-label="Password"><button type="button" class="ib" data-eye="upw" aria-label="Show password">${ic(P.eye, 19)}</button></div>
     <div class="err" id="uerr"></div><div class="prog" id="uprog" hidden><i></i></div><button type="submit" hidden></button></form></div>`,
-  `<button class="btn" id="uGo">Unlock</button><button class="link" data-go="import" data-mode="import">Forgot your password? Restore with your recovery phrase</button>${CO()}`, 'hasco') + CF();
+  `${BIO.get() ? `<button class="btn" id="bGo">${ic(P.face, 20, '#fff', 1.8)}Unlock with ${BIONAME}</button><button class="btn sec" id="uGo">Unlock with password</button>` : '<button class="btn" id="uGo">Unlock</button>'}<button class="link" data-go="import" data-mode="import">Forgot your password? Restore with your recovery phrase</button>${CO()}`, 'hasco') + CF();
 V.rules = () => { const ch = S.rulesOk; return SCREEN(`${NAV('', 1, 'welcome')}
   <h1 class="h1">Before you start</h1><p class="lead">Three rules that keep your funds safe. Tap each one to accept it.</p>
   <div class="rules">${[['Sectora never sees your phrase', 'It is created on this device and never sent to any server.'],
@@ -1115,12 +1122,48 @@ V.settings = () => SCREEN(`<h1 class="h1" style="margin-top:14px">Settings</h1>
   <div class="lbl gl2">Appearance</div><div class="grp card"> <div class="row"><span class="si">${ic(P.sun || '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>', 18, '#5c9bff')}</span><div><b>Theme</b><small>${THEME() === 'auto' ? 'Follows your device' : THEME() === 'light' ? 'Light' : 'Dark'}</small></div><span class="end pill3">${[['dark', 'Dark'], ['light', 'Light'], ['auto', 'Auto']].map(([k, n]) => `<button class="${THEME() === k ? 'on' : ''}" data-themeset="${k}">${n}</button>`).join('')}</span></div></div> <div class="lbl gl2">This device</div><div class="grp card">
     <button class="row" id="wipe"><span class="si">${ic(P.trash, 18, '#ff6b5c')}</span><div><b style="color:var(--bad)">${S.wipeArm ? 'Tap again to delete' : 'Delete wallet from this device'}</b><small>Only your recovery phrase can restore it</small></div></button></div>
   ${TABS('settings')}${SHEET()}`, '', 'has-tabs');
+/* ---------- desbloqueo con Face ID / huella: passkey del dispositivo (WebAuthn + PRF). La clave de la wallet se guarda cifrada con un secreto
+   que solo el autenticador del dispositivo entrega tras verificar la cara, la huella o el PIN; sin ese secreto el dato guardado no sirve ---------- */
+const BIONAME = (() => { const u = navigator.userAgent; return /iPhone|iPad|iPod/.test(u) ? 'Face ID' : /Macintosh/.test(u) ? 'Touch ID' : /Android/.test(u) ? 'fingerprint' : /Windows/.test(u) ? 'Windows Hello' : 'biometrics'; })();
+const BIOCAP = BIONAME === 'fingerprint' || BIONAME === 'biometrics' ? BIONAME[0].toUpperCase() + BIONAME.slice(1) : BIONAME;
+const b64e = b => { const u = new Uint8Array(b); let s = ''; for (const x of u) s += String.fromCharCode(x); return btoa(s); }, b64d = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+const BIO = {
+  get() { try { const b = JSON.parse(store.get('bio') || 'null'); return b && b.id && b.ct ? b : null; } catch (e) { return null; } },
+  async can() { try { if (!window.PublicKeyCredential || !window.isSecureContext || !crypto.subtle) return false;
+    if (PublicKeyCredential.getClientCapabilities) { const c = await PublicKeyCredential.getClientCapabilities(); if (c && c['extension:prf'] === false) return false; }
+    return !!(PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable && await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable()); } catch (e) { return false; } },
+  async key(prf) { const k = await crypto.subtle.importKey('raw', prf, 'HKDF', false, ['deriveKey']);
+    return crypto.subtle.deriveKey({ name: 'HKDF', hash: 'SHA-256', salt: new TextEncoder().encode('sectora-wallet-bio-v1'), info: new Uint8Array(0) }, k, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']); },
+  async prf(id, salt) { const a = await navigator.credentials.get({ publicKey: { challenge: crypto.getRandomValues(new Uint8Array(32)), rpId: location.hostname, allowCredentials: [{ type: 'public-key', id }], userVerification: 'required', timeout: 60000, extensions: { prf: { eval: { first: salt } } } } });
+    const r = a && a.getClientExtensionResults && a.getClientExtensionResults().prf; if (!r || !r.results || !r.results.first) throw new UErr('nobio'); return r.results.first; },
+  async enable(pw) { const salt = crypto.getRandomValues(new Uint8Array(32)), nm = 'Sectora Wallet · ' + (S.name || 'Account 1');
+    const c = await navigator.credentials.create({ publicKey: { rp: { name: 'Sectora Wallet', id: location.hostname }, user: { id: crypto.getRandomValues(new Uint8Array(16)), name: nm, displayName: nm },
+      challenge: crypto.getRandomValues(new Uint8Array(32)), pubKeyCredParams: [{ type: 'public-key', alg: -7 }, { type: 'public-key', alg: -257 }],
+      authenticatorSelection: { authenticatorAttachment: 'platform', residentKey: 'preferred', userVerification: 'required' }, timeout: 60000, extensions: { prf: { eval: { first: salt } } } } });
+    const x = c.getClientExtensionResults().prf; if (!x || x.enabled === false) throw new UErr('nobio');
+    const out = x.results && x.results.first ? x.results.first : await BIO.prf(c.rawId, salt), iv = crypto.getRandomValues(new Uint8Array(12));
+    const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, await BIO.key(out), new TextEncoder().encode(pw));
+    store.set('bio', JSON.stringify({ id: b64e(c.rawId), salt: b64e(salt), iv: b64e(iv), ct: b64e(ct), addr: S.addr })); },
+  async open() { const b = BIO.get(); if (!b) throw new UErr('nobio'); const out = await BIO.prf(b64d(b.id), b64d(b.salt));
+    return new TextDecoder().decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64d(b.iv) }, await BIO.key(out), b64d(b.ct))); },
+  off() { store.del('bio'); }
+};
+const bioErr = e => e && e.name === 'NotAllowedError' ? `${BIOCAP} was cancelled. Try again or use your password.` : e && e.name === 'InvalidStateError' ? `${BIOCAP} is already set up for this wallet on this device.`
+  : `This device or browser can't unlock with ${BIONAME} yet. On iPhone it needs iOS 18 or later; on Android, Chrome.`;
+V.bio = () => SCREEN(`${NAV(BIOCAP, 0, 'security')}
+  <div class="bioh"><span>${ic(P.face, 40, '#fff', 1.7)}</span></div>
+  <h1 class="h1" style="text-align:center">Unlock with<br><em>${BIONAME}.</em></h1>
+  <p class="lead" style="text-align:center">Your password is locked with a key that only ${BIONAME} on this device can release. It never leaves this device, and your password still works.</p>
+  <form id="bioForm" style="width:100%"><div class="pwin"><input id="bpw" type="password" autocomplete="current-password" placeholder="Wallet password" aria-label="Wallet password"><button type="button" class="ib" data-eye="bpw" aria-label="Show password">${ic(P.eye, 19)}</button></div>
+    <div class="err" id="berr"></div><div class="prog" id="bprog" hidden><i></i></div><button type="submit" hidden></button></form>`,
+  `<button class="btn" id="bOn">${ic(P.face, 20, '#fff', 1.8)}Turn on ${BIONAME}</button>`);
 V.security = () => { const sc = sec(); return SCREEN(`${NAV('Security', 0, 'home')}
   <div class="shero card"><div class="ring"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="42" fill="none" stroke="#1d2128" style="stroke:var(--ring,#1d2128)" stroke-width="8"/><circle cx="50" cy="50" r="42" fill="none" stroke="#1569ff" stroke-width="8" stroke-linecap="round" stroke-dasharray="${(264 * sc.score / sc.total).toFixed(1)} 264" transform="rotate(-90 50 50)"/></svg><b>${sc.score}/${sc.total}</b></div>
     <div><b class="big">${sc.score === sc.total ? 'Fully protected' : 'Almost there'}</b><small>Your wallet, ${esc(S.name)}, is secured on this device only.</small></div></div>
   ${SECLIST()}
   <div class="lbl gl2">Controls</div><div class="grp card">
     <div class="row"><span class="si">${ic(P.clock, 18, '#5c9bff')}</span><div><b>Auto-lock</b><small>After inactivity</small></div><span class="end pill3">${[1, 5, 15].map(m => `<button class="${S.lockMin === m ? 'on' : ''}" data-lockmin="${m}">${m}m</button>`).join('')}</span></div>
+    <div class="row"><span class="si">${ic(P.face, 18, '#5c9bff')}</span><div><b>${BIOCAP} unlock</b><small>${BIO.get() ? 'On · this device' : 'Off · use your password'}</small></div><span class="end"><button class="bioT ${BIO.get() ? 'on' : ''}" id="bioT">${BIO.get() ? (S.bioArm ? 'Tap to turn off' : 'On') : 'Turn on'}</button></span></div>
     <button class="row" data-go="reveal"><span class="si">${ic(P.key, 18, '#f0b54a')}</span><div><b>Recovery phrase</b><small>Requires your password</small></div><span class="end">${ic(P.chev, 15)}</span></button>
     <button class="row" id="lockNow"><span class="si">${ic(P.lock, 18, '#5c9bff')}</span><div><b>Lock now</b></div><span class="end">${ic(P.chev, 15)}</span></button></div>`); };
 
@@ -1829,17 +1872,34 @@ function bind() {
     pw1.addEventListener('input', upd); pw2.addEventListener('input', upd);
     on('#pwGo', 'click', async () => { const btn = q('#pwGo'), pr = q('#eprog'); btn.disabled = true; pr.hidden = false;
       try { const json = await S.draft.encrypt(pw1.value, p => { pr.firstChild.style.width = (p * 100).toFixed(0) + '%'; btn.textContent = `Encrypting… ${(p * 100).toFixed(0)}%`; });
-        store.set('vault', json); store.set('addr', S.draft.address); S.addr = S.draft.address;
+        store.set('vault', json); store.del('bio'); store.set('addr', S.draft.address); S.addr = S.draft.address;
         S.name = (q('#wname') && q('#wname').value.trim().slice(0, 24)) || 'Account 1'; store.set('name', S.name); S.since = Date.now(); store.set('since', S.since); S.backed = S.mode === 'import' ? 'imported' : 'confirmed'; store.set('backed', S.backed); adoptSol(S.draft); S.wallet = S.draft; S.draft = null; armLock(); go('ready');
       } catch (e) { btn.disabled = false; btn.textContent = 'Create wallet'; q('#pwerr').textContent = 'Could not encrypt the wallet on this device. Try again.'; } });
   }
   // desbloquear
-  const doUnlock = async e => { if (e) e.preventDefault(); const pw = q('#upw').value, pr = q('#uprog'), btn = q('#uGo'), er = q('#uerr');
+  const doUnlock = async (e, viaBio) => { if (e) e.preventDefault(); const pw = viaBio || q('#upw').value, pr = q('#uprog'), btn = viaBio ? q('#bGo') : q('#uGo'), er = q('#uerr'), lbl = btn.innerHTML;
     if (!pw) { er.textContent = 'Enter your password.'; const u = q('#upw'); u.focus(); u.scrollIntoView({ block: 'center', behavior: 'smooth' }); return; } btn.disabled = true; pr.hidden = false; er.textContent = '';
     try { S.wallet = await ethers.Wallet.fromEncryptedJson(store.get('vault'), pw, p => { pr.firstChild.style.width = (p * 100).toFixed(0) + '%'; btn.textContent = `Unlocking… ${(p * 100).toFixed(0)}%`; });
       S.addr = S.wallet.address; adoptSol(S.wallet); armLock(); zoomTo('home');
-    } catch (err) { btn.disabled = false; btn.textContent = 'Unlock'; pr.hidden = true; er.textContent = 'Wrong password. Try again.'; q('#upw').scrollIntoView({ block: 'center', behavior: 'smooth' }); } };
+    } catch (err) { btn.disabled = false; btn.innerHTML = lbl; pr.hidden = true;
+      if (viaBio) { BIO.off(); er.textContent = `Your password changed, so ${BIONAME} was turned off. Unlock with your password and turn it on again in Security.`; const b = q('#bGo'); if (b) b.remove(); const u = q('#uGo'); if (u) { u.className = 'btn'; u.textContent = 'Unlock'; } return; }
+      er.textContent = 'Wrong password. Try again.'; q('#upw').scrollIntoView({ block: 'center', behavior: 'smooth' }); } };
   on('#unlockForm', 'submit', doUnlock); on('#uGo', 'click', doUnlock);
+  on('#bGo', 'click', async () => { const b = q('#bGo'), er = q('#uerr'); if (b.disabled) return; b.disabled = true; er.textContent = '';
+    try { const pw = await BIO.open(); b.disabled = false; await doUnlock(null, pw); } catch (e) { b.disabled = false; er.textContent = bioErr(e); } });
+  // activar Face ID / huella
+  const bioGo = async e => { if (e) e.preventDefault(); const pw = q('#bpw').value, er = q('#berr'), pr = q('#bprog'), btn = q('#bOn'), lbl = btn.innerHTML; er.textContent = '';
+    if (!pw) { er.textContent = 'Enter your wallet password.'; q('#bpw').focus(); return; }
+    if (!(await BIO.can())) { er.textContent = bioErr(null); return; }
+    btn.disabled = true; pr.hidden = false;
+    try { await ethers.Wallet.fromEncryptedJson(store.get('vault'), pw, p => { pr.firstChild.style.width = (p * 100).toFixed(0) + '%'; btn.textContent = `Checking… ${(p * 100).toFixed(0)}%`; }); }
+    catch (x) { btn.disabled = false; btn.innerHTML = lbl; pr.hidden = true; er.textContent = 'Wrong password. Try again.'; return; }
+    btn.textContent = `Confirm with ${BIONAME}…`;
+    try { await BIO.enable(pw); S.dir = 'back'; go('security'); toast(`${BIOCAP} unlock is on`); }
+    catch (x) { btn.disabled = false; btn.innerHTML = lbl; pr.hidden = true; er.textContent = bioErr(x); } };
+  on('#bioForm', 'submit', bioGo); on('#bOn', 'click', bioGo);
+  on('#bioT', 'click', () => { if (!BIO.get()) { S.dir = 'fwd'; return go('bio'); } if (!S.bioArm) { S.bioArm = true; render(); clearTimeout(S.bioArmT); S.bioArmT = setTimeout(() => { if (S.bioArm) { S.bioArm = false; if (S.view === 'security') render(); } }, 4000); return; }
+    S.bioArm = false; BIO.off(); render(); toast(`${BIOCAP} unlock is off`); });
   // enviar
   const to = q('#to');
   if (to && false) { const chk = () => { S.to = to.value.trim(); const ok = ethers.isAddress(S.to);
@@ -1865,7 +1925,7 @@ function bind() {
   }
   // ajustes y frase
   qa('[data-lockmin]').forEach(b => b.addEventListener('click', () => { S.lockMin = +b.dataset.lockmin; store.set('lock', S.lockMin); armLock(); render(); }));
-  on('#wipe', 'click', () => { if (!S.wipeArm) { S.wipeArm = true; return render(); } ['vault', 'addr', 'txs', 'name', 'since', 'backed', 'sol', 'net'].forEach(store.del); S.wallet = null; S.addr = ''; S.wipeArm = false; go('welcome'); toast('Wallet deleted from this device'); });
+  on('#wipe', 'click', () => { if (!S.wipeArm) { S.wipeArm = true; return render(); } ['vault', 'addr', 'txs', 'name', 'since', 'backed', 'sol', 'net', 'bio'].forEach(store.del); S.wallet = null; S.addr = ''; S.wipeArm = false; go('welcome'); toast('Wallet deleted from this device'); });
   const doReveal = async e => { if (e) e.preventDefault(); const pw = q('#rpw').value, pr = q('#rprog'), er = q('#rerr'); pr.hidden = false; er.textContent = '';
     try { const w = await ethers.Wallet.fromEncryptedJson(store.get('vault'), pw, p => pr.firstChild.style.width = (p * 100).toFixed(0) + '%'); S.revealWords = w.mnemonic ? w.mnemonic.phrase.split(' ') : []; render(); }
     catch (err) { pr.hidden = true; er.textContent = 'Wrong password. Try again.'; } };
