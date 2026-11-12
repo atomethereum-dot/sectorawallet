@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://raw.githubusercontent.com https://coin-images.coingecko.com https://assets.coingecko.com; font-src 'self' data:; connect-src 'self' https://raw.githubusercontent.com https://api.coingecko.com https://api.dexscreener.com https://ethereum-rpc.publicnode.com https://eth.drpc.org https://bsc-rpc.publicnode.com https://bsc-dataseed.bnbchain.org https://solana-rpc.publicnode.com https://api.mainnet-beta.solana.com https://aggregator-api.kyberswap.com https://lite-api.jup.ag; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://raw.githubusercontent.com https://coin-images.coingecko.com https://assets.coingecko.com; font-src 'self' data:; connect-src 'self' https://raw.githubusercontent.com https://api.coingecko.com https://api.dexscreener.com https://api.geckoterminal.com https://ethereum-rpc.publicnode.com https://eth.drpc.org https://bsc-rpc.publicnode.com https://bsc-dataseed.bnbchain.org https://solana-rpc.publicnode.com https://api.mainnet-beta.solana.com https://aggregator-api.kyberswap.com https://lite-api.jup.ag; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="no-referrer">
 <meta name="google" content="notranslate">
 <meta name="format-detection" content="telephone=no,date=no,address=no,email=no">
@@ -689,6 +689,40 @@ body{letter-spacing:-.006em}
 .hero .hsub{margin-top:12px}
 .tlist .li .r small{font-variant-numeric:tabular-nums}
 .tlist .li .r small span.na{color:var(--mu)}
+/* filas de token que se pueden tocar y pantalla de detalle */
+.tlist button.li{width:100%;text-align:left;border-radius:14px;transition:background .15s}
+.tlist button.li:active{background:var(--tile)}
+@media (hover:hover){.tlist button.li:hover{background:var(--tile)}.tlist button.li{margin:0 -8px;padding:12px 8px;width:calc(100% + 16px)}}
+.tkh{display:flex;align-items:center;gap:12px;margin-top:6px}
+.tkh b{display:flex;align-items:center;gap:5px;font-size:17px;font-weight:500;letter-spacing:-.01em}
+.tkh small{display:block;color:var(--mu);font-size:13.5px;margin-top:2px}
+.tpx{margin-top:18px}
+.tpx .v{font-weight:600;font-size:38px;line-height:1.1;letter-spacing:-.035em;font-variant-numeric:tabular-nums}
+.tpx .v.na{color:var(--fa)}
+.tpx .c{display:flex;gap:6px;align-items:center;min-height:21px;margin-top:6px;font-size:14.5px;color:var(--mu);font-variant-numeric:tabular-nums}
+.tpx .c em{font-style:normal;font-weight:500}.tpx .c .up{color:var(--ok)}.tpx .c .dn{color:var(--bad)}
+.tch{position:relative;margin:16px -22px 0;height:200px}
+.tch svg{display:block;width:100%;height:200px;touch-action:pan-y;cursor:crosshair}
+.tst{position:absolute;inset:0;display:grid;place-items:center;padding:0 30px;text-align:center;color:var(--mu);font-size:13.5px}
+.rng{display:flex;justify-content:space-between;gap:4px;margin-top:12px}
+.rng button{flex:1;height:34px;border-radius:10px;font-size:13.5px;font-weight:500;color:var(--mu)}
+.rng button.on{background:var(--tile);color:var(--tx)}
+.tbl{margin-top:22px;padding:16px;border-radius:16px;background:var(--tile)}
+.tbl small{display:block;color:var(--mu);font-size:13.5px}
+.tbl div{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-top:6px}
+.tbl b{font-size:24px;font-weight:600;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.tbl b.na{color:var(--fa)}
+.tbl div > span{color:var(--mu);font-size:14.5px;font-variant-numeric:tabular-nums;text-align:right}
+.acts4.mm.three{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:12px}
+.tact .li{border-bottom:0;padding:12px 0}
+.tnone{margin:6px 0 0;color:var(--mu);font-size:14px}
+.tfull{display:inline-flex;align-items:center;gap:8px;margin-top:12px;color:var(--b2);font-size:14px;font-weight:500;text-decoration:none}
+.tinf{margin-top:4px;border-radius:16px;background:var(--tile);padding:2px 16px}
+.tinf div{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-top:1px solid var(--ln);font-size:14px;color:var(--mu)}
+.tinf div:first-child{border-top:0}
+.tinf b{font-weight:500;color:var(--tx)}
+.tinf .m{display:inline-flex;align-items:center;gap:6px;font:500 13.5px/1 var(--mono);color:var(--tx)}
+@media (min-width:1024px) and (min-height:641px){.tch{margin:16px 0 0}}
 /* barra inferior en movil: cuatro secciones con su nombre */
 @media (max-width:1023px),(max-height:640px){
   .tabs{left:0;right:0;bottom:0;width:auto;margin:0;height:auto;border-radius:0;border:0;border-top:1px solid var(--ln);background:var(--bg);padding:6px 6px calc(8px + env(safe-area-inset-bottom,0px));justify-content:space-around;box-shadow:none}
@@ -1154,7 +1188,8 @@ const CGID = { ETH: 'ethereum', BNB: 'binancecoin', SOL: 'solana', USDT: 'tether
 const PX = (() => { try { const o = JSON.parse(store.get('px') || '{}'); return o && typeof o === 'object' ? o : {}; } catch (e) { return {}; } })();
 const pxKey = (n, t) => !t.custom && CGID[t.s] ? 'id:' + CGID[t.s] : CGPF[n.id] && (n.kind === 'sol' ? t.mint : t.a) ? 'c:' + CGPF[n.id] + ':' + (n.kind === 'sol' ? t.mint : t.a.toLowerCase()) : null;
 const pxOf = (n, t) => { const k = pxKey(n, t), p = k && PX[k]; return p && isFinite(p.usd) && Date.now() - p.at < 6 * 3600e3 ? p : null; };
-const fmtUsd = v => !isFinite(v) ? '—' : v === 0 ? '$0.00' : v < 0.01 ? '<$0.01' : '$' + v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const fmtUsd = v => { if (!isFinite(v)) return '—'; if (v === 0) return '$0.00'; const a = Math.abs(v);   // >= $1: centavos; < $1: hasta 4 decimales (1 SECT = $0.1071)
+  return (v < 0 ? '-' : '') + '$' + (a >= 1 ? a.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : a >= 0.0001 ? a.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 }) : Number(a.toPrecision(3)).toString()); };
 const fmtPx = v => '$' + (v >= 1 ? v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : v >= 0.01 ? v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 }) : Number(v.toPrecision(3)).toString());
 const fmtCh = c => `<em class="${c >= 0 ? 'up' : 'dn'}">${c >= 0 ? '+' : '−'}${Math.abs(c).toFixed(2)}%</em>`;
 const TSUB = (n, t) => { const p = pxOf(n, t), unv = t.custom && !t.listed ? ' · <em class="unv">Unverified</em>' : '';
@@ -1166,7 +1201,7 @@ async function loadPrices(force) {
   PXBUSY = true;
   const get = async url => { const ac = new AbortController(), tm = setTimeout(() => ac.abort(), 8000);
     try { const r = await fetch(url, { signal: ac.signal, credentials: 'omit', referrerPolicy: 'no-referrer' }); if (!r.ok) throw new Error('http ' + r.status); return await r.json(); } finally { clearTimeout(tm); } };
-  const put = (k, o) => { const usd = Number(o && o.usd), ch = Number(o && o.usd_24h_change); if (isFinite(usd) && usd > 0) PX[k] = { usd, ch: o.usd_24h_change != null && isFinite(ch) ? ch : null, at: now }; };
+  const put = (k, o) => { const usd = Number(o && o.usd), ch = Number(o && o.usd_24h_change); if (isFinite(usd) && usd > 0) PX[k] = { usd, ch: o.usd_24h_change != null && isFinite(ch) ? ch : null, at: now, src: 'CoinGecko' }; };
   const ids = need.filter(k => k.startsWith('id:')).map(k => k.slice(3)), byPf = {};
   need.filter(k => k.startsWith('c:')).forEach(k => { const [, pf, a] = k.split(':'); (byPf[pf] = byPf[pf] || []).push(a); });
   try {
@@ -1180,13 +1215,13 @@ async function loadPrices(force) {
     await Promise.all(Object.keys(byCh).map(pf => get('https://api.dexscreener.com/tokens/v1/' + DSCH[pf] + '/' + byCh[pf].join(',')).then(arr => byCh[pf].forEach(a => {
       const best = (Array.isArray(arr) ? arr : []).filter(p => p && p.baseToken && (pf === 'solana' ? p.baseToken.address === a : String(p.baseToken.address).toLowerCase() === a)
         && Number(p.liquidity && p.liquidity.usd) >= 1000 && Number(p.priceUsd) > 0).sort((x, y) => y.liquidity.usd - x.liquidity.usd)[0];
-      if (best) { const ch = Number(best.priceChange && best.priceChange.h24); PX['c:' + pf + ':' + a] = { usd: Number(best.priceUsd), ch: best.priceChange && best.priceChange.h24 != null && isFinite(ch) ? ch : null, at: now }; } })).catch(() => {})));
+      if (best) { const ch = Number(best.priceChange && best.priceChange.h24); PX['c:' + pf + ':' + a] = { usd: Number(best.priceUsd), ch: best.priceChange && best.priceChange.h24 != null && isFinite(ch) ? ch : null, at: now, src: 'DexScreener', pool: best.pairAddress }; } })).catch(() => {})));
     const sk = 'c:ethereum:' + SECT.toLowerCase();
     if (need.includes(sk) && !(PX[sk] && PX[sk].at === now)) await get('https://raw.githubusercontent.com/atomethereum-dot/test2/claude/website-build-i9rofc/sect-price-30d.json').then(j => {
       const pts = (j && Array.isArray(j.prices) ? j.prices : []).filter(p => Array.isArray(p) && isFinite(p[0]) && isFinite(p[1]) && p[1] > 0); if (!pts.length) return;
       const last = pts[pts.length - 1]; if (now - last[0] > 3 * 3600e3) return;
       const ago = pts.reduce((a, p) => Math.abs(p[0] - (last[0] - 864e5)) < Math.abs(a[0] - (last[0] - 864e5)) ? p : a, pts[0]);
-      PX[sk] = { usd: last[1], ch: Math.abs(ago[0] - (last[0] - 864e5)) < 3 * 3600e3 ? (last[1] / ago[1] - 1) * 100 : null, at: now }; }).catch(() => {});
+      PX[sk] = { usd: last[1], ch: Math.abs(ago[0] - (last[0] - 864e5)) < 3 * 3600e3 ? (last[1] / ago[1] - 1) * 100 : null, at: now, src: 'CoinGecko' }; }).catch(() => {});
     store.set('px', JSON.stringify(PX));
   } finally { PXBUSY = false; }
   paintBalances();
@@ -1221,9 +1256,9 @@ function paintBalances() {
   $app.querySelectorAll('[data-usd]').forEach(e => { const t = toks(n).find(x => tid(x) === e.dataset.usd), p = t && pxOf(n, t), amt = Number(b[e.dataset.usd] || 0);
     e.textContent = st === 'ok' ? (p ? fmtUsd(amt * p.usd) : amt > 0 ? '—' : '$0.00') : st === 'loading' ? '···' : '—'; e.classList.toggle('na', st !== 'ok' || (!p && amt > 0)); });
   $app.querySelectorAll('[data-px]').forEach(e => { const t = toks(n).find(x => tid(x) === e.dataset.px); if (t) e.innerHTML = TSUB(n, t); });
-  const nb = $app.querySelector('#netBal'); if (nb) { const ok = st === 'ok' && (tot > 0 || !miss); nb.textContent = ok ? fmtUsd(tot).replace('<$0.01', '$0.00') : '—'; nb.classList.toggle('na', !ok); }
+  const nb = $app.querySelector('#netBal'); if (nb) { const ok = st === 'ok' && (tot > 0 || !miss); nb.textContent = ok ? fmtUsd(tot) : '—'; nb.classList.toggle('na', !ok); }
   const nc = $app.querySelector('#netChg'); if (nc) { const d = tot - prev, pc = prev > 0 ? (tot / prev - 1) * 100 : 0;
-    nc.innerHTML = st === 'ok' && tot > 0 ? `<em class="${d >= 0 ? 'up' : 'dn'}">${d >= 0 ? '+' : '−'}${fmtUsd(Math.abs(d)).replace('<$0.01', '$0.00')} (${d >= 0 ? '+' : '−'}${Math.abs(pc).toFixed(2)}%)</em><span>Today</span>${miss ? '<span>· some prices unavailable</span>' : ''}` : st === 'ok' && miss ? '<span>Prices unavailable right now</span>' : ''; }
+    nc.innerHTML = st === 'ok' && tot > 0 ? `<em class="${d >= 0 ? 'up' : 'dn'}">${d >= 0 ? '+' : '−'}${fmtUsd(Math.abs(d))} (${d >= 0 ? '+' : '−'}${Math.abs(pc).toFixed(2)}%)</em><span>Today</span>${miss ? '<span>· some prices unavailable</span>' : ''}` : st === 'ok' && miss ? '<span>Prices unavailable right now</span>' : ''; }
   const on = $app.querySelector('#offNote'); if (on && !PREVIEW && n.rpc.length) on.hidden = st !== 'off';
 }
 
@@ -1259,10 +1294,89 @@ V.home = () => { const sc = sec(), n = curNet(); return SCREEN(`<div class="top 
   <button class="mmc" data-go="security"><span class="mmi">${ic(P.shield, 22, '#fff', 1.8)}</span><span class="t"><b>${sc.score === sc.total ? 'Your wallet is protected' : 'Improve your protection'}</b><small>${sc.score} of ${sc.total} security checks passed</small><span class="segs">${sc.items.map(i => `<i class="${i.ok ? 'on' : ''}"></i>`).join('')}</span></span>${ic(P.chev, 18, 'currentColor', 1.8)}</button>
   <button class="mmc" data-go="assets"><span class="mmi alt">${ic(P.rwa, 22, 'currentColor', 1.7)}</span><span class="t"><b>Tokenize real-world assets</b><small>In development · launches with SectoraEVM</small></span>${ic(P.chev, 18, 'currentColor', 1.8)}</button>
   <div class="mmh"><span>Tokens</span><button class="addt" data-go="addtok">${ic('<path d="M12 5v14M5 12h14"/>', 16, 'currentColor', 1.9)}Add token</button></div>
-  <div class="tlist">${toks(n).map(t => `<div class="li"><span class="tkw">${TOKI(t, 44)}${NBADGE(n)}</span><div><b>${esc(t.n)}${!t.custom || t.listed ? VERI() : ''}</b><small data-px="${tid(t)}">${TSUB(n, t)}</small></div><div class="r"><b data-usd="${tid(t)}" class="na">—</b><small><span data-bal="${tid(t)}">—</span> ${esc(t.s)}</small></div></div>`).join('')}</div>
+  <div class="tlist">${toks(n).map(t => `<button class="li" data-tokv="${tid(t)}" aria-label="${esc(t.n)} details"><span class="tkw">${TOKI(t, 44)}${NBADGE(n)}</span><div><b>${esc(t.n)}${!t.custom || t.listed ? VERI() : ''}</b><small data-px="${tid(t)}">${TSUB(n, t)}</small></div><div class="r"><b data-usd="${tid(t)}" class="na">—</b><small><span data-bal="${tid(t)}">—</span> ${esc(t.s)}</small></div></button>`).join('')}</div>
   <div class="note" style="margin-top:14px" id="offNote" ${!PREVIEW && n.rpc.length ? 'hidden' : ''}>${ic(P.info, 16, '#f0b54a')}<span>${n.rpc.length ? (PREVIEW ? 'Balances load from the network. This private preview runs offline, so they show once the wallet is online.' : "Couldn't reach the network right now. Balances update when the connection is back.") : (PREVIEW ? 'Robinhood Chain support is ready; its network connection is configured at launch.' : 'Robinhood Chain connection opens soon. Balances and sends will show here.')}</span></div>
   ${TABS('home')}${SHEET()}`, '', 'has-tabs'); };
 
+/* ---------- detalle de un token: precio en vivo, grafico real, saldo y movimientos ---------- */
+const RNG = { '1D': [1, 'Today'], '1W': [7, 'Past week'], '1M': [30, 'Past month'], '3M': [90, 'Past 3 months'], '1Y': [365, 'Past year'] };
+const GTNET = { ethereum: 'eth', 'binance-smart-chain': 'bsc', solana: 'solana' };
+const GTRNG = { '1D': 'minute?aggregate=15&limit=96', '1W': 'hour?aggregate=1&limit=168', '1M': 'hour?aggregate=4&limit=180', '3M': 'day?aggregate=1&limit=90', '1Y': 'day?aggregate=1&limit=365' };
+const CHC = {};
+const WRAP = { eth: ['ethereum', '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'], rh: ['ethereum', '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'], bnb: ['binance-smart-chain', '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c'], sol: ['solana', 'So11111111111111111111111111111111111111112'] };   // ETH, BNB y SOL: el historial de su version envuelta en el DEX
+const getJ = async (url, ms = 9000) => { const ac = new AbortController(), tm = setTimeout(() => ac.abort(), ms);
+  try { const r = await fetch(url, { signal: ac.signal, credentials: 'omit', referrerPolicy: 'no-referrer' }); if (!r.ok) throw new Error('http ' + r.status); return await r.json(); } finally { clearTimeout(tm); } };
+const expBase = n => n.exp ? n.exp.replace(/tx\/$/, '') : '';
+V.token = () => { const n = curNet(), t = tokOf(n, S.tokv), p = pxOf(n, t), r = S.rng || '1M', ca = n.kind === 'sol' ? (t.native ? '' : t.mint) : t.a || '', me = addrOf(n), eb = expBase(n);
+  const L = txs().filter(x => (x.netId || 'eth') === n.id && (x.token === t.s || x.outToken === t.s));
+  const full = eb ? (ca && n.kind === 'evm' ? `${eb}token/${ca}?a=${me}` : `${eb}${n.kind === 'sol' ? 'account' : 'address'}/${me}`) : '';
+  return SCREEN(`${NAV(esc(t.n), 0, 'home')}
+  <div class="tkh"><span class="tkw">${TOKI(t, 44)}${NBADGE(n)}</span><div><b>${esc(t.n)}${!t.custom || t.listed ? VERI() : ''}</b><small>${esc(t.s)} · ${n.name}</small></div></div>
+  <div class="tpx"><div class="v ${p ? '' : 'na'}" id="tpxV">${p ? fmtPx(p.usd) : '—'}</div><div class="c" id="tpxC"></div></div>
+  <div class="tch" id="tch"><svg id="tchS" aria-label="Price chart" role="img"></svg><div class="tst" id="tchSt">Loading chart…</div></div>
+  <div class="rng">${Object.keys(RNG).map(k => `<button data-rng="${k}" class="${k === r ? 'on' : ''}">${k}</button>`).join('')}</div>
+  <div class="tbl"><small>Your balance</small><div><b data-usd="${tid(t)}" class="na">—</b><span><span data-bal="${tid(t)}">—</span> ${esc(t.s)}</span></div></div>
+  <div class="acts4 mm three"><button data-tact="send">${ic(P.send, 24, 'currentColor', 1.7)}<span>Send</span></button><button data-tact="receive">${ic(P.recv, 24, 'currentColor', 1.7)}<span>Receive</span></button><button data-tact="swap">${ic(P.swap, 24, 'currentColor', 1.7)}<span>Swap</span></button></div>
+  <div class="mmh"><span>Your activity</span></div>
+  ${L.length ? `<div class="tact">${L.map(txRow).join('')}</div>` : `<p class="tnone">No transactions with ${esc(t.s)} from this wallet yet.</p>`}
+  ${full ? `<a class="tfull" href="${full}" target="_blank" rel="noopener noreferrer">${ic(P.ext, 16, 'currentColor', 1.8)}Full history on ${new URL(eb).hostname}</a>` : ''}
+  <div class="mmh"><span>About</span></div>
+  <div class="tinf"><div><span>Network</span><b>${n.name}</b></div>${ca ? `<div><span>Contract</span><button class="m" data-copy="${ca}">${short(ca)} ${ic(P.copy, 14, 'currentColor', 1.8)}</button></div>` : `<div><span>Type</span><b>Native coin</b></div>`}<div><span>Price source</span><b id="tsrc">${p && p.src ? p.src : 'CoinGecko'}</b></div></div>
+  ${SHEET()}`); };
+async function loadChart() {
+  const n = curNet(), t = tokOf(n, S.tokv), r = S.rng || '1M', k = pxKey(n, t), ck = k + '|' + r, days = RNG[r][0], now = Date.now(); if (!k) return drawChart(null);
+  let pts = CHC[ck] && now - CHC[ck].at < 300e3 ? CHC[ck].pts : null;
+  if (!pts) {
+    const [kind, pf, a] = k.split(':');
+    try { const j = await getJ(kind === 'id' ? `https://api.coingecko.com/api/v3/coins/${pf}/market_chart?vs_currency=usd&days=${days}` : `https://api.coingecko.com/api/v3/coins/${pf}/contract/${a}/market_chart?vs_currency=usd&days=${days}`);
+      pts = (j.prices || []).filter(q => Array.isArray(q) && isFinite(q[0]) && isFinite(q[1]) && q[1] > 0); } catch (e) { pts = null; }
+    const [gpf, ga] = kind === 'c' ? [pf, a] : t.native ? WRAP[n.id] || [] : CGPF[n.id] && (t.a || t.mint) ? [CGPF[n.id], n.kind === 'sol' ? t.mint : t.a.toLowerCase()] : [];
+    if ((!pts || pts.length < 2) && GTNET[gpf]) try {
+      let pool = kind === 'c' && PX[k] && PX[k].pool;
+      if (!pool) { const arr = await getJ('https://api.dexscreener.com/tokens/v1/' + ({ ethereum: 'ethereum', 'binance-smart-chain': 'bsc', solana: 'solana' })[gpf] + '/' + ga);
+        const best = (Array.isArray(arr) ? arr : []).filter(q => q && q.baseToken && !String(q.pairAddress).includes('-') && (gpf === 'solana' ? q.baseToken.address === ga : String(q.baseToken.address).toLowerCase() === ga) && Number(q.liquidity && q.liquidity.usd) >= 1000).sort((x, y) => y.liquidity.usd - x.liquidity.usd)[0];
+        pool = best && best.pairAddress; }
+      if (pool) { const j = await getJ(`https://api.geckoterminal.com/api/v2/networks/${GTNET[gpf]}/pools/${pool}/ohlcv/${GTRNG[r]}&currency=usd&token=${ga}`);
+        pts = ((j.data && j.data.attributes && j.data.attributes.ohlcv_list) || []).map(c => [c[0] * 1000, Number(c[4])]).filter(q => q[1] > 0).sort((x, y) => x[0] - y[0]); }
+    } catch (e) {}
+    if ((!pts || pts.length < 2) && k === 'c:ethereum:' + SECT.toLowerCase() && days <= 30) try {
+      const j = await getJ('https://raw.githubusercontent.com/atomethereum-dot/test2/claude/website-build-i9rofc/sect-price-30d.json');
+      pts = (j.prices || []).filter(q => Array.isArray(q) && q[1] > 0 && q[0] >= now - days * 864e5); } catch (e) {}
+    if (pts && pts.length >= 2) CHC[ck] = { at: now, pts };
+  }
+  if (S.view !== 'token' || S.tokv !== tid(t) || (S.rng || '1M') !== r || curNet() !== n) return;
+  drawChart(pts && pts.length >= 2 ? pts : null);
+}
+function drawChart(pts) {
+  const box = $app.querySelector('#tch'), sv = $app.querySelector('#tchS'), st = $app.querySelector('#tchSt'), V0 = $app.querySelector('#tpxV'), C0 = $app.querySelector('#tpxC'); if (!box) return;
+  const n = curNet(), t = tokOf(n, S.tokv), p = pxOf(n, t), r = S.rng || '1M';
+  if (!pts) { sv.innerHTML = ''; st.hidden = false; st.textContent = 'Price history is not available right now. Try again in a minute.'; C0.innerHTML = p && p.ch !== null && r === '1D' ? `${fmtCh(p.ch)}<span>Today</span>` : ''; return; }
+  st.hidden = true;
+  const W = Math.max(240, box.clientWidth), H = 200, pd = 10, v = pts.map(q => q[1]), mn = Math.min(...v), mx = Math.max(...v), rg = mx - mn || mx * .01 || 1, t0 = pts[0][0], t1 = pts[pts.length - 1][0];
+  const X = x => (x - t0) / ((t1 - t0) || 1) * W, Y = y => pd + (H - 2 * pd) * (1 - (y - mn) / rg);
+  const last = p ? p.usd : v[v.length - 1], diff = last - v[0], pct = v[0] ? (last / v[0] - 1) * 100 : 0, col = diff >= 0 ? 'var(--ok)' : 'var(--bad)';
+  const d = pts.map((q, i) => (i ? 'L' : 'M') + X(q[0]).toFixed(1) + ' ' + Y(q[1]).toFixed(1)).join(' ');
+  sv.setAttribute('viewBox', `0 0 ${W} ${H}`); sv.setAttribute('width', W); sv.setAttribute('height', H);
+  sv.innerHTML = `<defs><linearGradient id="tcg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:${col};stop-opacity:.22"/><stop offset="1" style="stop-color:${col};stop-opacity:0"/></linearGradient></defs>
+    <path d="${d} L${W} ${H} L0 ${H} Z" fill="url(#tcg)"/><path d="${d}" fill="none" style="stroke:${col}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <line id="tcl" x1="0" x2="0" y1="0" y2="${H}" style="stroke:var(--mu)" stroke-dasharray="3 4" opacity="0"/><circle id="tcd" r="5" style="fill:${col};stroke:var(--bg)" stroke-width="2" opacity="0"/>`;
+  const base = () => { V0.textContent = fmtPx(last); V0.classList.remove('na'); C0.innerHTML = `<em class="${diff >= 0 ? 'up' : 'dn'}">${diff >= 0 ? '+' : '−'}${fmtPx(Math.abs(diff))} (${diff >= 0 ? '+' : '−'}${Math.abs(pct).toFixed(2)}%)</em><span>${RNG[r][1]}</span>`;
+    sv.querySelector('#tcl').setAttribute('opacity', 0); sv.querySelector('#tcd').setAttribute('opacity', 0); };
+  const show = e => { const b = sv.getBoundingClientRect(), x = Math.min(Math.max(e.clientX - b.left, 0), b.width) * W / b.width, tt = t0 + x / W * (t1 - t0); let i = 0, bd = Infinity;
+    for (let k = 0; k < pts.length; k++) { const dd = Math.abs(pts[k][0] - tt); if (dd < bd) { bd = dd; i = k; } }
+    const px = X(pts[i][0]), py = Y(pts[i][1]), l = sv.querySelector('#tcl'), c = sv.querySelector('#tcd'); l.setAttribute('x1', px); l.setAttribute('x2', px); l.setAttribute('opacity', 1); c.setAttribute('cx', px); c.setAttribute('cy', py); c.setAttribute('opacity', 1);
+    V0.textContent = fmtPx(pts[i][1]); C0.innerHTML = `<span>${new Date(pts[i][0]).toLocaleString('en-US', RNG[r][0] <= 7 ? { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' } : { month: 'short', day: 'numeric', year: 'numeric' })}</span>`; };
+  sv.onpointerdown = show; sv.onpointermove = e => { if (e.pointerType === 'mouse' || e.buttons || e.pressure) show(e); }; sv.onpointerleave = base; sv.onpointerup = e => { if (e.pointerType !== 'mouse') base(); }; sv.onpointercancel = base;
+  if (matchMedia('(hover: hover)').matches) sv.onpointermove = show;
+  base();
+}
+function bindTV() {
+  $app.querySelectorAll('[data-tokv]').forEach(b => b.addEventListener('click', () => { S.tokv = b.dataset.tokv; S.dir = 'fwd'; go('token'); }));
+  if (S.view !== 'token') return;
+  $app.querySelectorAll('[data-rng]').forEach(b => b.addEventListener('click', () => { S.rng = b.dataset.rng; $app.querySelectorAll('[data-rng]').forEach(x => x.classList.toggle('on', x === b)); const st = $app.querySelector('#tchSt'); if (st && !CHC[pxKey(curNet(), tokOf(curNet(), S.tokv)) + '|' + S.rng]) { st.hidden = false; st.textContent = 'Loading chart…'; } loadChart(); }));
+  $app.querySelectorAll('[data-tact]').forEach(b => b.addEventListener('click', () => { const a = b.dataset.tact; S.dir = 'fwd'; if (a === 'send') { S.tok = S.tokv; S.amt = ''; S.to = ''; } if (a === 'swap') S.sf = S.tokv; go(a); }));
+  paintBalances(); loadBalances(); loadPrices().then(() => { const p = pxOf(curNet(), tokOf(curNet(), S.tokv)), s = $app.querySelector('#tsrc'); if (s && p && p.src) s.textContent = p.src; }); loadChart();
+}
 V.receive = () => { const n = curNet(), a = addrOf(n); return SCREEN(`${NAV('Receive', 0, 'home')}
   <div class="nbar" style="justify-content:center">${NETPILL()}</div>
   <div class="qcard"><div class="r1"><span class="wm">${LOGOW()}SECTORA</span><span class="net">${NDOT(n)}${n.name}</span></div>
@@ -1649,7 +1763,7 @@ function bindTok() {
 function render() {
   if (S.view === 'boot') { S.addr = store.get('addr') || ''; S.lockMin = +(store.get('lock') || 5); S.name = store.get('name') || 'Account 1'; S.sol = store.get('sol') || ''; S.net = store.get('net') || 'eth'; S.since = +(store.get('since') || 0); S.backed = store.get('backed') || ''; S.view = store.get('vault') ? 'unlock' : 'welcome'; }
   if (!window.ethers) { $app.innerHTML = SCREEN(`<div class="wel" style="margin-top:120px">${LOGO(72)}<h1 class="h1">Loading…</h1><p class="lead">Loading the cryptography library. If this stays, check your connection and reload.</p></div>`); return; }
-  $app.innerHTML = V[S.view](); bind(); bindMulti(); bindTok(); bindCT(); bindTheme(); bindAv(); GLOBE.mount(); CODEBG.mount(); fitGlobe(); refit(); watchFit();
+  $app.innerHTML = V[S.view](); bind(); bindMulti(); bindTok(); bindCT(); bindTheme(); bindAv(); bindTV(); GLOBE.mount(); CODEBG.mount(); fitGlobe(); refit(); watchFit();
   if (!S.introDone && (S.view === 'welcome' || S.view === 'unlock')) runIntro();
 }
 function bind() {
