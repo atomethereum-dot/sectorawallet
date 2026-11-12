@@ -487,11 +487,9 @@ button.lg:hover{transform:translate(-50%,-50%) scale(1.04)}
 .co b{font-size:13px;font-weight:500;color:var(--tx);letter-spacing:-.005em}
 .co p{margin:0;display:grid;gap:3px;justify-items:center}
 .co{margin-top:2px;padding-top:9px;gap:1px;font-size:11.5px;line-height:1.4}.co b{font-size:12px}.co p{display:block}.co .cty::before{content:" · ";color:var(--fa)}
-/* portada con el logo hecho de codigo: el fondo ocupa toda la pantalla y los textos dejan sitio a la animacion */
+/* portada con el aro de codigo: el fondo ocupa toda la pantalla y los textos dejan sitio a la animacion */
 .screen:has(.cbg){isolation:isolate}
 .cbg{position:absolute;left:0;top:0;width:100%;height:100%;display:block;z-index:-1;pointer-events:none}
-.globe.code .lg{opacity:0;box-shadow:none}
-.globe.code .lg:focus-visible{opacity:1}
 .okx .globe.code,.wel .globe.code{width:min(100%,360px)}
 .okx .car{margin-top:12px}
 .okx .cs h1{font-size:30px;margin-top:9px}
@@ -675,47 +673,46 @@ function cardPat() { if (CARDPAT) return CARDPAT; const s = 700, c = document.cr
   return (CARDPAT = c.toDataURL('image/png')); }
 
 /* globo vivo: gira, los nodos laten y por los arcos viaja un pulso */
-/* ---------- portada: el logo de Sectora hecho de codigo diminuto ---------- */
+/* ---------- portada: aro de codigo diminuto que se forma alrededor del logo ---------- */
 const CODEBG = (() => {
   const GL = '0123456789abcdef', reduce = matchMedia('(prefers-reduced-motion: reduce)').matches, t0 = performance.now();
   const hs = n => { const s = Math.sin(n * 127.1 + 311.7) * 43758.5453; return s - Math.floor(s); };
   const ss = (a, b, v) => { const t = Math.min(1, Math.max(0, (v - a) / (b - a))); return t * t * (3 - 2 * t); };
-  const ez = v => v < .5 ? 4 * v * v * v : 1 - Math.pow(2 - 2 * v, 3) / 2, cl = v => v < 0 ? 0 : v > 1 ? 1 : v;
   let raf = 0, cv = null, x = null, S = null;
+  // ruido suave para el vagar de los caracteres
+  const P = new Uint8Array(512); (() => { const p = [...Array(256).keys()]; let s = 1337; for (let i = 255; i > 0; i--) { s = (s * 16807) % 2147483647; const j = s % (i + 1); [p[i], p[j]] = [p[j], p[i]]; } for (let i = 0; i < 512; i++) P[i] = p[i & 255]; })();
+  const fd = t => t * t * t * (t * (t * 6 - 15) + 10), lp = (t, a, b) => a + t * (b - a), gr = (h, x, y, z) => { const u = h < 8 ? x : y, v = h < 4 ? y : (h === 12 || h === 14 ? x : z); return ((h & 1) ? -u : u) + ((h & 2) ? -v : v); };
+  function nz(x, y, z) { const X = Math.floor(x) & 255, Y = Math.floor(y) & 255, Z = Math.floor(z) & 255; x -= Math.floor(x); y -= Math.floor(y); z -= Math.floor(z);
+    const u = fd(x), v = fd(y), w = fd(z), A = P[X] + Y, AA = P[A] + Z, AB = P[A + 1] + Z, B = P[X + 1] + Y, BA = P[B] + Z, BB = P[B + 1] + Z;
+    return lp(w, lp(v, lp(u, gr(P[AA] & 15, x, y, z), gr(P[BA] & 15, x - 1, y, z)), lp(u, gr(P[AB] & 15, x, y - 1, z), gr(P[BB] & 15, x - 1, y - 1, z))), lp(v, lp(u, gr(P[AA + 1] & 15, x, y, z - 1), gr(P[BA + 1] & 15, x - 1, y, z - 1)), lp(u, gr(P[AB + 1] & 15, x, y - 1, z - 1), gr(P[BB + 1] & 15, x - 1, y - 1, z - 1)))); }
   function atlas(px, cols) { const cw = Math.ceil(px * .72) + 2, ch = Math.ceil(px * 1.25) + 2, c = document.createElement('canvas'); c.width = cw * GL.length; c.height = ch * cols.length;
     const g = c.getContext('2d'); g.font = `500 ${px}px 'IBM Plex Mono', ui-monospace, Menlo, monospace`; g.textAlign = 'center'; g.textBaseline = 'middle';
     cols.forEach((col, j) => { g.fillStyle = col; for (let i = 0; i < GL.length; i++) g.fillText(GL[i], i * cw + cw / 2, j * ch + ch / 2); }); return { c, cw, ch }; }
-  function cell(B, q, r, clr) { const { c, cw, ch } = B.at, px = Math.round((q + .5) * B.gp * B.sc - cw / 2), py = Math.round((r + .5) * B.gp * B.sc - ch / 2);
-    if (clr) B.x.clearRect(px, py, cw, ch); if (Math.random() < .3) return; const blip = clr && Math.random() < .02;
-    B.x.globalAlpha = blip ? .55 : B.ba * (.55 + Math.random() * .9); B.x.drawImage(c, ((Math.random() * 16) | 0) * cw, blip ? ch : 0, cw, ch, px, py, cw, ch); }
-  function field(W, H, sc, lt) { const gp = W > H ? 12.5 : 10.5, B = { gp, sc, ba: lt ? .1 : .12, at: atlas(gp * .6 * sc, [lt ? '#0b0e14' : '#ffffff', '#1569ff']), cols: Math.ceil(W / gp), rows: Math.ceil(H / gp) };
-    B.c = document.createElement('canvas'); B.c.width = Math.max(1, Math.round(W * sc)); B.c.height = Math.max(1, Math.round(H * sc)); B.x = B.c.getContext('2d');
-    for (let r = 0; r < B.rows; r++) for (let q = 0; q < B.cols; q++) cell(B, q, r, false); return B; }
-  function logo(F, L, W, H, sc, lt) { const n = Math.max(18, Math.min(34, Math.round(L / (W > H ? 8.4 : 7)))), cp = L / n, cells = [];
-    for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) { const u = (i + .5) / n, v = (j + .5) / n, cr = .09, qx = Math.max(0, Math.abs(u - .5) - (.5 - cr)), qy = Math.max(0, Math.abs(v - .5) - (.5 - cr));
-      if (Math.hypot(qx, qy) > cr) continue; const d = Math.hypot(u - .5, v - .5), ring = d > .245 && d < .355; if (lt && ring) continue; const k = cells.length;
-      cells.push({ ring, hx: F.x - L / 2 + u * L, hy: F.y - L / 2 + v * L, r1: hs(k + .11), r2: hs(k + .37), r3: hs(k + .73), sx: hs(k + .19) * W, sy: hs(k + .53) * H, g: (hs(k + .91) * 16) | 0 }); }
-    return { cells, at: atlas(cp * sc * .92, [lt ? '#0b0e14' : '#ffffff', '#1569ff', '#ffffff', lt ? '#1569ff' : '#a9c8ff']) }; }
+  function setup(W, H, sc, lt) {
+    const s = Math.max(9, Math.min(20, Math.sqrt(W * H) / 46)), ink = lt ? '11,14,20' : '255,255,255';
+    const B = document.createElement('canvas'); B.width = Math.max(1, Math.round(W * sc)); B.height = Math.max(1, Math.round(H * sc)); const b = B.getContext('2d');
+    b.fillStyle = `rgba(${ink},${lt ? .1 : .12})`; b.beginPath(); const r = s * .08 * sc;
+    for (let y = s / 2; y < H; y += s) for (let xx = s / 2; xx < W; xx += s) { const px = xx * sc, py = y * sc; if (r < 1.2) b.rect(px - r, py - r, r * 2, r * 2); else { b.moveTo(px + r, py); b.arc(px, py, r, 0, 7); } }
+    b.fill();
+    const n = Math.round(W * H / (s * s * 1.6)), ps = Array.from({ length: n }, (_, i) => ({ hx: hs(i + .1) * W, hy: hs(i + .2) * H, a: hs(i + .6) * Math.PI * 2, rj: (hs(i + .3) - .5) * .28, blue: hs(i + .6 + 7) < .3, d: hs(i + .8) * .15, g: (hs(i + .9) * 16) | 0 }));
+    return { W, H, sc, lt, s, B, ps, at: atlas((W > H ? 8 : 7) * sc, [lt ? '#0b0e14' : '#ffffff', '#1569ff']) };
+  }
   function frame() {
     if (!cv || !cv.isConnected) { cv = null; return; }
     const W = cv.clientWidth, H = cv.clientHeight, g = $app.querySelector('.globe.code'); if (!W || !H || !g) { raf = requestAnimationFrame(frame); return; }
     const lt = document.documentElement.dataset.theme === 'light', sc = Math.min(devicePixelRatio || 1, W > 900 ? 1.5 : 2);
-    if (!S || S.W !== W || S.H !== H || S.lt !== lt || S.sc !== sc) S = { W, H, lt, sc, B: field(W, H, sc, lt), M: null, key: '' };
-    if (cv.width !== S.B.c.width || cv.height !== S.B.c.height || !x) { cv.width = S.B.c.width; cv.height = S.B.c.height; x = cv.getContext('2d'); }
-    const cr = cv.getBoundingClientRect(), gr = g.getBoundingClientRect(), k = cr.width / W || 1, F = { x: (gr.left + gr.width / 2 - cr.left) / k, y: (gr.top + gr.height / 2 - cr.top) / k }, L = gr.width / k * .58;
-    const key = Math.round(F.x) + ',' + Math.round(F.y) + ',' + Math.round(L); if (key !== S.key) { S.key = key; S.M = logo(F, L, W, H, sc, lt); }
-    const t = reduce ? 6 : (performance.now() - t0) / 1000, B = S.B, M = S.M;
-    x.setTransform(1, 0, 0, 1, 0, 0); x.globalAlpha = 1; x.clearRect(0, 0, cv.width, cv.height);
-    if (!reduce) { const K = Math.ceil(B.cols * B.rows * .005); for (let i = 0; i < K; i++) cell(B, (Math.random() * B.cols) | 0, (Math.random() * B.rows) | 0, true); }
-    x.drawImage(B.c, 0, 0);
-    const p = t % 14, A = p < 3.2 ? ss(0, 3.2, p) : p < 11.2 ? 1 : p < 12.8 ? 1 - ss(11.2, 12.8, p) : 0;
-    if (A > .01) { const gg = x.createRadialGradient(F.x * sc, F.y * sc, 0, F.x * sc, F.y * sc, L * 1.05 * sc); gg.addColorStop(0, `rgba(21,105,255,${(lt ? .13 : .26) * A})`); gg.addColorStop(1, 'rgba(21,105,255,0)'); x.fillStyle = gg; x.fillRect((F.x - L * 1.1) * sc, (F.y - L * 1.1) * sc, L * 2.2 * sc, L * 2.2 * sc);
-      x.fillStyle = `rgba(21,105,255,${(lt ? .07 : .16) * A})`; x.beginPath(); if (x.roundRect) x.roundRect((F.x - L / 2) * sc, (F.y - L / 2) * sc, L * sc, L * sc, L * .09 * sc); else x.rect((F.x - L / 2) * sc, (F.y - L / 2) * sc, L * sc, L * sc); x.fill(); }
-    const { c, cw, ch } = M.at;
-    for (const q of M.cells) { const e = ez(cl(A * 1.45 - q.r1 * .45)), sx = q.sx + Math.sin(t * .35 + q.r2 * 9) * W * .025, sy = q.sy + Math.cos(t * .3 + q.r3 * 9) * H * .018;
-      const px = sx + (q.hx - sx) * e, py = sy + (q.hy - sy) * e, on = e > .55, col = on ? (q.ring ? 2 : 1) : (q.ring ? 0 : 3), a = on ? .38 + .62 * e : .3 + .3 * e;
-      if (!reduce && Math.random() < .006 + (1 - e) * .22) q.g = (Math.random() * 16) | 0;
-      x.globalAlpha = Math.min(1, a); x.drawImage(c, q.g * cw, col * ch, cw, ch, Math.round(px * sc - cw / 2), Math.round(py * sc - ch / 2), cw, ch); }
+    if (!S || S.W !== W || S.H !== H || S.lt !== lt || S.sc !== sc) S = setup(W, H, sc, lt);
+    if (cv.width !== S.B.width || cv.height !== S.B.height || !x) { cv.width = S.B.width; cv.height = S.B.height; x = cv.getContext('2d'); }
+    const cr = cv.getBoundingClientRect(), r = g.getBoundingClientRect(), k = cr.width / W || 1, Fx = (r.left + r.width / 2 - cr.left) / k, Fy = (r.top + r.height / 2 - cr.top) / k, Rr = r.width / k * .42;
+    const t = reduce ? 4 : (performance.now() - t0) / 1000, p = t % 9, e = p < 2.6 ? ss(0, 2.6, p) : p < 5 ? 1 : p < 7.4 ? 1 - ss(5, 7.4, p) : 0;
+    x.setTransform(1, 0, 0, 1, 0, 0); x.globalAlpha = 1; x.clearRect(0, 0, cv.width, cv.height); x.drawImage(S.B, 0, 0);
+    const { c, cw, ch } = S.at, s = S.s;
+    for (const q of S.ps) {
+      const wx = q.hx + nz(q.hx * .01, q.hy * .01, t * .2) * s * 3, wy = q.hy + nz(q.hy * .01, q.hx * .01, t * .2 + 9) * s * 3, rr = Rr * (1 + q.rj);
+      const ee = ss(0, 1, e * 1.15 - q.d), px = wx + (Fx + Math.cos(q.a) * rr - wx) * ee, py = wy + (Fy + Math.sin(q.a) * rr - wy) * ee;
+      if (!reduce && Math.random() < .015 + (1 - ee) * .12) q.g = (Math.random() * 16) | 0;
+      x.globalAlpha = .35 + .55 * ee; x.drawImage(c, q.g * cw, (q.blue && ee > .4 ? 1 : 0) * ch, cw, ch, Math.round(px * sc - cw / 2), Math.round(py * sc - ch / 2), cw, ch);
+    }
     x.globalAlpha = 1;
     if (!reduce) raf = requestAnimationFrame(frame);
   }
