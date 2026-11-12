@@ -808,6 +808,7 @@ html[lang="ja"] .acts4.mm button{font-size:12px;letter-spacing:-.03em}
 html[lang="ar"],html[lang="hi"],html[lang="zh"],html[lang="ja"],html[lang="ko"]{--mono:'Geist Mono',system-ui,-apple-system,'Segoe UI',sans-serif}
 .app > .sbg{z-index:40}.app > .bsheet{z-index:41}
 @media (min-width:1024px) and (min-height:641px){.app > .sbg{position:fixed}.app > .bsheet{position:fixed;inset:0;margin:auto;width:440px;height:max-content;max-height:84vh;overflow:auto;border-radius:26px;border:1px solid var(--ln);padding-bottom:22px}}
+.err.okm{color:var(--ok)}
 /* barra inferior en movil: cuatro secciones con su nombre */
 @media (max-width:1023px),(max-height:640px){
   .tabs{left:0;right:0;bottom:0;width:auto;margin:0;height:auto;border-radius:0;border:0;border-top:1px solid var(--ln);background:var(--bg);padding:6px 6px calc(8px + env(safe-area-inset-bottom,0px));justify-content:space-around;box-shadow:none}
@@ -1308,14 +1309,16 @@ const BIO = {
     return crypto.subtle.deriveKey({ name: 'HKDF', hash: 'SHA-256', salt: new TextEncoder().encode('sectora-wallet-bio-v1'), info: new Uint8Array(0) }, k, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']); },
   async prf(id, salt) { const a = await navigator.credentials.get({ publicKey: { challenge: crypto.getRandomValues(new Uint8Array(32)), rpId: location.hostname, allowCredentials: [{ type: 'public-key', id }], userVerification: 'required', timeout: 60000, extensions: { prf: { eval: { first: salt } } } } });
     const r = a && a.getClientExtensionResults && a.getClientExtensionResults().prf; if (!r || !r.results || !r.results.first) throw new UErr('nobio'); return r.results.first; },
-  async enable(pw) { const salt = crypto.getRandomValues(new Uint8Array(32)), nm = 'Sectora Wallet · ' + (S.name || 'Account 1');
+  async create(pw) { const salt = crypto.getRandomValues(new Uint8Array(32)), nm = 'Sectora Wallet · ' + (S.name || 'Account 1');   // sin esperas antes: Safari exige el toque reciente
     const c = await navigator.credentials.create({ publicKey: { rp: { name: 'Sectora Wallet', id: location.hostname }, user: { id: crypto.getRandomValues(new Uint8Array(16)), name: nm, displayName: nm },
       challenge: crypto.getRandomValues(new Uint8Array(32)), pubKeyCredParams: [{ type: 'public-key', alg: -7 }, { type: 'public-key', alg: -257 }],
       authenticatorSelection: { authenticatorAttachment: 'platform', residentKey: 'preferred', userVerification: 'required' }, timeout: 60000, extensions: { prf: { eval: { first: salt } } } } });
     const x = c.getClientExtensionResults().prf; if (!x || x.enabled === false) throw new UErr('nobio');
-    const out = x.results && x.results.first ? x.results.first : await BIO.prf(c.rawId, salt), iv = crypto.getRandomValues(new Uint8Array(12));
-    const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, await BIO.key(out), new TextEncoder().encode(pw));
-    store.set('bio', JSON.stringify({ id: b64e(c.rawId), salt: b64e(salt), iv: b64e(iv), ct: b64e(ct), addr: S.addr })); },
+    if (x.results && x.results.first) { await BIO.save(pw, c.rawId, salt, x.results.first); return null; }
+    return { id: c.rawId, salt }; },
+  async finish(pw, t) { const out = await BIO.prf(t.id, t.salt); await BIO.save(pw, t.id, t.salt, out); },
+  async save(pw, id, salt, out) { const iv = crypto.getRandomValues(new Uint8Array(12)), ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, await BIO.key(out), new TextEncoder().encode(pw));
+    store.set('bio', JSON.stringify({ id: b64e(id), salt: b64e(salt), iv: b64e(iv), ct: b64e(ct), addr: S.addr })); },
   async open() { const b = BIO.get(); if (!b) throw new UErr('nobio'); const out = await BIO.prf(b64d(b.id), b64d(b.salt));
     return new TextDecoder().decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64d(b.iv) }, await BIO.key(out), b64d(b.ct))); },
   off() { store.del('bio'); }
@@ -1327,8 +1330,8 @@ V.bio = () => SCREEN(`${NAV(BIOCAP, 0, 'security')}
   <h1 class="h1" style="text-align:center">Unlock with<br><em>${BIONAME}.</em></h1>
   <p class="lead" style="text-align:center">Your password is locked with a key that only ${BIONAME} on this device can release. It never leaves this device, and your password still works.</p>
   <form id="bioForm" style="width:100%"><div class="pwin"><input id="bpw" type="password" autocomplete="current-password" placeholder="Wallet password" aria-label="Wallet password"><button type="button" class="ib" data-eye="bpw" aria-label="Show password">${ic(P.eye, 19)}</button></div>
-    <div class="err" id="berr"></div><div class="prog" id="bprog" hidden><i></i></div><button type="submit" hidden></button></form>`,
-  `<button class="btn" id="bOn">${ic(P.face, 20, '#fff', 1.8)}Turn on ${BIONAME}</button>`);
+    <div class="err ${S.bioStep ? 'okm' : ''}" id="berr">${S.bioStep === 'ready' ? `Password checked. Now confirm with ${BIONAME}.` : S.bioStep === 'get' ? `One more step: confirm with ${BIONAME} once more.` : ''}</div><div class="prog" id="bprog" hidden><i></i></div><button type="submit" hidden></button></form>`,
+  `<button class="btn" id="bOn">${ic(P.face, 20, '#fff', 1.8)}${S.bioStep === 'ready' ? `Confirm with ${BIONAME}` : S.bioStep === 'get' ? `Confirm with ${BIONAME}` : `Turn on ${BIONAME}`}</button>`);
 V.security = () => { const sc = sec(); return SCREEN(`${NAV('Security', 0, 'home')}
   <div class="shero card"><div class="ring"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="42" fill="none" stroke="#1d2128" style="stroke:var(--ring,#1d2128)" stroke-width="8"/><circle cx="50" cy="50" r="42" fill="none" stroke="#1569ff" stroke-width="8" stroke-linecap="round" stroke-dasharray="${(264 * sc.score / sc.total).toFixed(1)} 264" transform="rotate(-90 50 50)"/></svg><b>${sc.score}/${sc.total}</b></div>
     <div><b class="big">${sc.score === sc.total ? 'Fully protected' : 'Almost there'}</b><small>Your wallet, ${esc(S.name)}, is secured on this device only.</small></div></div>
@@ -2088,17 +2091,22 @@ function bind() {
   on('#bGo', 'click', async () => { const b = q('#bGo'), er = q('#uerr'); if (b.disabled) return; b.disabled = true; er.textContent = '';
     try { const pw = await BIO.open(); b.disabled = false; await doUnlock(null, pw); } catch (e) { b.disabled = false; er.textContent = bioErr(e); } });
   // activar Face ID / huella
-  const bioGo = async e => { if (e) e.preventDefault(); const pw = q('#bpw').value, er = q('#berr'), pr = q('#bprog'), btn = q('#bOn'), lbl = btn.innerHTML; er.textContent = '';
+  const bioDone = () => { S.bioStep = null; S.bioPw = null; S.bioTmp = null; S.dir = 'back'; go('security'); toast(`${BIOCAP} unlock is on`); };
+  const bioFail = (x, btn, lbl) => { const er = q('#berr'); if (btn) { btn.disabled = false; btn.innerHTML = lbl; } if (er) { er.classList.remove('okm'); er.textContent = bioErr(x); } };
+  const bioGo = e => { if (e) e.preventDefault(); const er = q('#berr'), pr = q('#bprog'), btn = q('#bOn'), lbl = btn.innerHTML; if (btn.disabled) return;
+    if (S.bioStep === 'ready') { btn.disabled = true; BIO.create(S.bioPw).then(t => { if (!t) return bioDone(); S.bioTmp = t; S.bioStep = 'get'; render(); }).catch(x => bioFail(x, btn, lbl)); return; }
+    if (S.bioStep === 'get') { btn.disabled = true; BIO.finish(S.bioPw, S.bioTmp).then(bioDone).catch(x => bioFail(x, btn, lbl)); return; }
+    const pw = q('#bpw').value; er.textContent = ''; er.classList.remove('okm');
     if (!pw) { er.textContent = 'Enter your wallet password.'; q('#bpw').focus(); return; }
-    if (!(await BIO.can())) { er.textContent = bioErr(null); return; }
+    if (S.bioCan === false) { er.textContent = bioErr(null); return; }
     btn.disabled = true; pr.hidden = false;
-    try { await ethers.Wallet.fromEncryptedJson(store.get('vault'), pw, p => { pr.firstChild.style.width = (p * 100).toFixed(0) + '%'; btn.textContent = `Checking… ${(p * 100).toFixed(0)}%`; }); }
-    catch (x) { btn.disabled = false; btn.innerHTML = lbl; pr.hidden = true; er.textContent = 'Wrong password. Try again.'; return; }
-    btn.textContent = `Confirm with ${BIONAME}…`;
-    try { await BIO.enable(pw); S.dir = 'back'; go('security'); toast(`${BIOCAP} unlock is on`); }
-    catch (x) { btn.disabled = false; btn.innerHTML = lbl; pr.hidden = true; er.textContent = bioErr(x); } };
+    ethers.Wallet.fromEncryptedJson(store.get('vault'), pw, p => { pr.firstChild.style.width = (p * 100).toFixed(0) + '%'; btn.textContent = `Checking… ${(p * 100).toFixed(0)}%`; })
+      .then(() => { S.bioPw = pw; S.bioStep = 'ready'; render(); })
+      .catch(() => { btn.disabled = false; btn.innerHTML = lbl; pr.hidden = true; er.textContent = 'Wrong password. Try again.'; }); };
+  if (S.view === 'bio') BIO.can().then(ok => { S.bioCan = ok; if (!ok && S.view === 'bio') { const er = q('#berr'); if (er) { er.classList.remove('okm'); er.textContent = bioErr(null); } } });
   on('#bioForm', 'submit', bioGo); on('#bOn', 'click', bioGo);
-  on('#bioT', 'click', () => { if (!BIO.get()) { S.dir = 'fwd'; return go('bio'); } if (!S.bioArm) { S.bioArm = true; render(); clearTimeout(S.bioArmT); S.bioArmT = setTimeout(() => { if (S.bioArm) { S.bioArm = false; if (S.view === 'security') render(); } }, 4000); return; }
+  if (S.view !== 'bio') { S.bioStep = null; S.bioPw = null; S.bioTmp = null; }
+  on('#bioT', 'click', () => { if (!BIO.get()) { S.dir = 'fwd'; S.bioStep = null; return go('bio'); } if (!S.bioArm) { S.bioArm = true; render(); clearTimeout(S.bioArmT); S.bioArmT = setTimeout(() => { if (S.bioArm) { S.bioArm = false; if (S.view === 'security') render(); } }, 4000); return; }
     S.bioArm = false; BIO.off(); render(); toast(`${BIOCAP} unlock is off`); });
   // enviar
   const to = q('#to');
