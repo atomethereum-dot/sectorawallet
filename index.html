@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://raw.githubusercontent.com https://coin-images.coingecko.com https://assets.coingecko.com; font-src 'self' data:; connect-src 'self' https://raw.githubusercontent.com https://api.coingecko.com https://api.dexscreener.com https://api.geckoterminal.com https://ethereum-rpc.publicnode.com https://eth.drpc.org https://bsc-rpc.publicnode.com https://bsc-dataseed.bnbchain.org https://solana-rpc.publicnode.com https://api.mainnet-beta.solana.com https://aggregator-api.kyberswap.com https://lite-api.jup.ag; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://raw.githubusercontent.com https://coin-images.coingecko.com https://assets.coingecko.com; font-src 'self' data:; connect-src 'self' https://raw.githubusercontent.com https://api.coingecko.com https://api.dexscreener.com https://api.geckoterminal.com https://eth.blockscout.com https://ethereum-rpc.publicnode.com https://eth.drpc.org https://bsc-rpc.publicnode.com https://bsc-dataseed.bnbchain.org https://solana-rpc.publicnode.com https://api.mainnet-beta.solana.com https://aggregator-api.kyberswap.com https://lite-api.jup.ag; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="no-referrer">
 <meta name="google" content="notranslate">
 <meta name="format-detection" content="telephone=no,date=no,address=no,email=no">
@@ -737,6 +737,19 @@ body{letter-spacing:-.006em}
 .bioT.on{background:rgba(54,217,138,.12);color:var(--ok)}
 html[data-theme="light"] .bioT.on{background:rgba(15,157,99,.1)}
 #bGo + #uGo{margin-top:-2px}
+/* historial */
+.hlist{margin-top:6px}
+.hday{margin:18px 0 4px;font-size:13px;font-weight:500;color:var(--mu)}
+.hrow{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 0;color:var(--tx);text-decoration:none;border-radius:12px}
+.hic{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--tile);color:var(--tx)}
+.hic.k-in{color:var(--ok)}.hic.k-fail{color:var(--bad)}
+.ht{min-width:0}.ht b{display:block;font-size:15.5px;font-weight:500;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ht small{display:block;margin-top:2px;color:var(--mu);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ht small em{font-style:normal;font-weight:500}
+.hr{text-align:right;font-variant-numeric:tabular-nums}.hr b{display:block;font-size:15px;font-weight:500;white-space:nowrap}.hr b.up{color:var(--ok)}
+.hr small{display:block;margin-top:2px;color:var(--mu);font-size:13px;white-space:nowrap}
+.hnone{margin:14px 0 0;color:var(--mu);font-size:14px}
+@media (hover:hover){.hrow:hover{background:var(--tile)}.hrow{margin:0 -8px;padding:10px 8px}}
 /* barra inferior en movil: cuatro secciones con su nombre */
 @media (max-width:1023px),(max-height:640px){
   .tabs{left:0;right:0;bottom:0;width:auto;margin:0;height:auto;border-radius:0;border:0;border-top:1px solid var(--ln);background:var(--bg);padding:6px 6px calc(8px + env(safe-area-inset-bottom,0px));justify-content:space-around;box-shadow:none}
@@ -1076,10 +1089,82 @@ V.home = () => { const sc = sec(); return SCREEN(`<div class="top"><div class="m
     <div class="li"><span class="av">${ETH(21)}</span><div><b>Ether</b><small>ETH · network fees</small></div><div class="r"><b class="na">—</b><small>ETH</small></div></div></div>
   <div class="note" style="margin-top:10px">${ic(P.info, 16, '#f0b54a')}<span>Balances sync with the network release. Keys, QR and signing already work on this device.</span></div>
   ${TABS('home')}`, '', 'has-tabs'); };
-V.activity = () => { const L = txs(); return SCREEN(`<h1 class="h1" style="margin-top:14px">Activity</h1>
-  ${L.length ? `<div class="card" style="margin-top:18px;padding:0 14px">${L.map(txRow).join('')}</div>` : `<div style="text-align:center;margin-top:70px;color:var(--mu)">${ic(P.act, 34, '#545c6e')}<p class="lead">Transactions you sign appear here.</p></div>`}
-  <div class="note" style="margin-top:16px">${ic(P.info, 17, '#5c9bff')}<span>${PREVIEW ? 'In this private preview, transactions are signed on your device but not sent to the network.' : 'Transactions are signed on this device and sent to the network. Tap a transaction id to open it in the explorer.'}</span></div>
-  ${TABS('activity')}`, '', 'has-tabs'); };
+/* ---------- historial en cadena: enviado, recibido y swaps. Ethereum: Blockscout (explorador publico). Solana: el propio nodo.
+   BNB Chain y Robinhood Chain: lo firmado en esta wallet y enlace al explorador. Solo tokens de la lista de la wallet y nunca transferencias de 0 (spam y envenenamiento de direcciones) ---------- */
+const HIST = {};
+const hKey = n => n.id + ':' + (addrOf(n) || '').toLowerCase();
+const HFULL = n => n.id === 'eth' || n.kind === 'sol';
+async function histEvm(n, me) {
+  const base = 'https://eth.blockscout.com/api/v2/addresses/' + me, lo = me.toLowerCase(), nat = n.tokens[0];
+  const [tx, tt, it] = await Promise.all([getJ(base + '/transactions'), getJ(base + '/token-transfers?type=ERC-20'), getJ(base + '/internal-transactions').catch(() => ({ items: [] }))]);
+  const known = new Map(toks(n).filter(t => t.a).map(t => [t.a.toLowerCase(), t])), by = new Map();
+  const add = (hash, time, ok, leg) => { let e = by.get(hash); if (!e) by.set(hash, e = { hash, time, ok: true, legs: [] }); if (ok === false) e.ok = false; if (leg) e.legs.push(leg); };
+  const side = (f, t) => f === lo && t === lo ? 'self' : f === lo ? 'out' : 'in';
+  for (const x of tx.items || []) { const f = ((x.from && x.from.hash) || '').toLowerCase(), t = ((x.to && x.to.hash) || '').toLowerCase(), v = BigInt(x.value || '0'), ok = x.status === 'ok', tm = Date.parse(x.timestamp);
+    if (v > 0n) add(x.hash, tm, ok, { s: nat.s, d: nat.d, v, dir: side(f, t), peer: f === lo ? t : f }); else if (f === lo && !ok) add(x.hash, tm, false, null); }
+  for (const x of tt.items || []) { const tk = known.get(((x.token && (x.token.address_hash || x.token.address)) || '').toLowerCase()); if (!tk) continue;
+    const v = BigInt((x.total && x.total.value) || '0'); if (v === 0n) continue; const f = x.from.hash.toLowerCase(), t = x.to.hash.toLowerCase();
+    add(x.transaction_hash, Date.parse(x.timestamp), true, { s: tk.s, d: tk.d, v, dir: side(f, t), peer: f === lo ? t : f }); }
+  for (const x of it.items || []) { const v = BigInt(x.value || '0'), t = ((x.to && x.to.hash) || '').toLowerCase(); if (v > 0n && t === lo && x.success !== false) add(x.transaction_hash, Date.parse(x.timestamp), true, { s: nat.s, d: nat.d, v, dir: 'in', peer: ((x.from && x.from.hash) || '').toLowerCase() }); }
+  return [...by.values()];
+}
+async function histSol(n, me) {
+  const sigs = (await rpc(n, 'getSignaturesForAddress', [me, { limit: 15 }])) || [], known = new Map(toks(n).filter(t => t.mint && !t.native).map(t => [t.mint, t])), out = [];
+  const one = async sg => { let tx; try { tx = await rpc(n, 'getTransaction', [sg.signature, { encoding: 'jsonParsed', maxSupportedTransactionVersion: 0 }]); } catch (e) { return; } if (!tx || !tx.meta) return;
+    const m = tx.meta, keys = tx.transaction.message.accountKeys.map(k => k.pubkey || k), i = keys.indexOf(me), legs = []; let peer = '';
+    for (const ins of tx.transaction.message.instructions || []) { const p = ins.parsed; if (p && p.type === 'transfer' && p.info && p.info.lamports) { if (p.info.source === me) peer = p.info.destination; else if (p.info.destination === me) peer = p.info.source; } }
+    if (i >= 0) { let dl = BigInt(m.postBalances[i]) - BigInt(m.preBalances[i]); if (i === 0) dl += BigInt(m.fee); if (dl !== 0n && (dl > 5000000n || dl < -5000000n || peer)) legs.push({ s: 'SOL', d: 9, v: dl < 0n ? -dl : dl, dir: dl < 0n ? 'out' : 'in', peer }); }
+    const tb = a => { const r = {}; for (const b of a || []) if (b.owner === me) r[b.mint] = (r[b.mint] || 0n) + BigInt(b.uiTokenAmount.amount); return r; }, pre = tb(m.preTokenBalances), post = tb(m.postTokenBalances);
+    for (const mint of new Set([...Object.keys(pre), ...Object.keys(post)])) { const tk = known.get(mint); if (!tk) continue; const dl = (post[mint] || 0n) - (pre[mint] || 0n); if (dl !== 0n) legs.push({ s: tk.s, d: tk.d, v: dl < 0n ? -dl : dl, dir: dl < 0n ? 'out' : 'in', peer: '' }); }
+    if (legs.length || (m.err && i === 0)) out.push({ hash: sg.signature, time: (sg.blockTime || tx.blockTime || 0) * 1000, ok: !m.err, legs }); };
+  for (let k = 0; k < sigs.length; k += 5) await Promise.all(sigs.slice(k, k + 5).map(one));
+  return out;
+}
+async function loadHist(force) {
+  const n = curNet(), me = addrOf(n), key = hKey(n); if (!me || !HFULL(n)) return paintHist();
+  const h = HIST[key]; if (!force && h && (h.st === 'loading' || Date.now() - h.at < 60000)) return paintHist();
+  HIST[key] = { items: h ? h.items : (() => { try { return JSON.parse(store.get('hist.' + key) || 'null'); } catch (e) { return null; } })(), st: 'loading', at: Date.now() }; paintHist();
+  try { const raw = n.kind === 'sol' ? await histSol(n, me) : await histEvm(n, me);
+    const items = raw.filter(e => e.legs.length || !e.ok).map(e => ({ hash: e.hash, time: e.time, ok: e.ok, legs: e.legs.map(l => ({ s: l.s, amt: ethers.formatUnits(l.v, l.d), dir: l.dir, peer: l.peer || '' })) })).sort((a, b) => b.time - a.time).slice(0, 50);
+    HIST[key] = { items, st: 'ok', at: Date.now() }; try { store.set('hist.' + key, JSON.stringify(items)); } catch (e) {}
+  } catch (e) { HIST[key] = { items: HIST[key].items, st: 'off', at: Date.now() }; }
+  paintHist();
+}
+function histItems(n, sym) {
+  const h = HIST[hKey(n)], on = (h && h.items) || [], seen = new Set(on.map(e => e.hash.toLowerCase()));
+  const loc = txs().filter(t => (t.netId || 'eth') === n.id && t.hash && !seen.has(t.hash.toLowerCase())).map(t => ({ hash: t.hash, time: t.time, ok: t.st !== 'fail', local: t,
+    legs: t.kind === 'swap' ? [{ s: t.token, amt: t.amount, dir: 'out', peer: '' }, { s: t.outToken, amt: '', dir: 'in', peer: '' }] : [{ s: t.token, amt: t.amount, dir: 'out', peer: (t.to || '').toLowerCase() }] }));
+  const dust = e => !e.local && e.legs.length > 0 && e.legs.every(l => { if (l.dir !== 'in') return false; const tk = toks(n).find(t => t.s === l.s), p = tk && pxOf(n, tk), a = Number(l.amt);   // recibos de menos de $0.01: polvo y envenenamiento de direcciones
+    return p ? a * p.usd < 0.01 : a < 1e-9; });
+  return [...loc, ...on].filter(e => !dust(e) && (!sym || e.legs.some(l => l.s === sym))).sort((a, b) => b.time - a.time);
+}
+const HICON = k => ({ in: P.recv, out: P.send, swap: P.swap, self: P.swap, fail: P.info })[k];
+function hRow(n, e) {
+  const o = e.legs.filter(l => l.dir === 'out'), i = e.legs.filter(l => l.dir === 'in'), kind = !e.ok && !e.legs.length ? 'fail' : o.length && i.length ? 'swap' : i.length ? 'in' : o.length ? 'out' : 'self';
+  const main = kind === 'swap' ? i[0] : (i[0] || o[0] || e.legs[0]), peer = main && main.peer, tm = new Date(e.time).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  const title = kind === 'fail' ? 'Failed transaction' : kind === 'swap' ? `${esc(o[0].s)} → ${esc(i[0].s)}` : `${kind === 'in' ? 'Received' : kind === 'out' ? 'Sent' : 'Moved'} ${esc(main.s)}`;
+  const st = e.local ? stOf(e.local) : !e.ok ? TXST.fail : null;
+  const sub = `${st ? `<em style="color:${st[1]}">${st[0]}</em> · ` : ''}${kind === 'swap' ? 'Swap · ' + tm : !peer ? tm : `${kind === 'in' ? 'From' : 'To'} ${short(peer)} · ${tm}`}`;
+  const tk = main && toks(n).find(t => t.s === main.s), p = tk && pxOf(n, tk), amt = main && main.amt ? Number(main.amt) : null;
+  const right = kind === 'fail' ? '' : `<b class="${kind === 'in' || kind === 'swap' ? 'up' : ''}">${amt === null ? '' : (kind === 'in' || kind === 'swap' ? '+' : '−') + fmtAmt(main.amt)} ${esc(main.s)}</b><small>${kind === 'swap' && o[0].amt ? '−' + fmtAmt(o[0].amt) + ' ' + esc(o[0].s) : p && amt !== null ? fmtUsd(amt * p.usd) : ''}</small>`;
+  const href = n.exp ? n.exp + e.hash : '';
+  return `<${href ? `a href="${href}" target="_blank" rel="noopener noreferrer"` : 'div'} class="hrow"><span class="hic k-${kind}">${ic(HICON(kind), 18, 'currentColor', 1.9)}</span><div class="ht"><b>${title}</b><small>${sub}</small></div><div class="hr">${right}</div></${href ? 'a' : 'div'}>`;
+}
+function HLIST(sym) {
+  const n = curNet(), h = HIST[hKey(n)], L = histItems(n, sym), eb = expBase(n), me = addrOf(n);
+  if (!L.length) return h && h.st === 'loading' ? `<p class="hnone">Loading activity…</p>` : `<p class="hnone">${h && h.st === 'off' ? "Couldn't load the activity right now. Try again in a minute." : sym ? `No ${esc(sym)} transactions yet.` : 'No transactions yet. What you send and receive shows here.'}</p>`;
+  let out = '', day = ''; const today = new Date().toDateString(), yest = new Date(Date.now() - 864e5).toDateString();
+  for (const e of L.slice(0, sym ? 15 : 50)) { const d = new Date(e.time).toDateString(); if (d !== day) { day = d; out += `<div class="hday">${d === today ? 'Today' : d === yest ? 'Yesterday' : new Date(e.time).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</div>`; } out += hRow(n, e); }
+  return out;
+}
+function paintHist() { const el = $app && $app.querySelector('#hlist'); if (el) el.innerHTML = HLIST(el.dataset.tok || '');
+  const s = $app && $app.querySelector('#hsync'), h = HIST[hKey(curNet())]; if (s) s.innerHTML = h && h.st === 'loading' ? '<span class="dot off"></span>Updating…' : h && h.st === 'ok' ? '<span class="dot"></span>Up to date' : ''; }
+V.activity = () => { const n = curNet(), eb = expBase(n), me = addrOf(n); return SCREEN(`<h1 class="h1" style="margin-top:14px">Activity</h1>
+  <div class="hsub" style="margin-top:14px">${NETPILL()}<span class="sync" id="hsync"></span></div>
+  <div id="hlist" class="hlist">${HLIST()}</div>
+  ${!HFULL(n) ? `<div class="note" style="margin-top:16px">${ic(P.info, 17, '#5c9bff')}<span>${n.name}: this list shows what you send and swap from this wallet. ${eb ? 'Transfers you receive show in the full history on the explorer.' : 'Received transfers will show here when this network opens.'}</span></div>` : ''}
+  ${eb ? `<a class="tfull" href="${eb}${n.kind === 'sol' ? 'account' : 'address'}/${me}" target="_blank" rel="noopener noreferrer">${ic(P.ext, 16, 'currentColor', 1.8)}Full history on ${new URL(eb).hostname}</a>` : ''}
+  ${TABS('activity')}${SHEET()}`, '', 'has-tabs'); };
 
 V.receive = () => SCREEN(`${NAV('Receive', 0, 'home')}
   <div class="qcard"><div class="r1"><span class="wm">${LOGOW()}SECTORA</span><span class="net"><i></i>EVM</span></div>
@@ -1231,15 +1316,16 @@ async function rpc(n, method, params) {
   throw last || new Error('rpc');
 }
 const fmtAmt = (v, d = 6) => { if (v === null || v === undefined) return '—'; const n = Number(v); if (!isFinite(n)) return '—'; if (n === 0) return '0';
-  return n >= 1000 ? n.toLocaleString('en-US', { maximumFractionDigits: 2 }) : n >= 1 ? n.toLocaleString('en-US', { maximumFractionDigits: 4 }) : n.toPrecision(Math.min(d, 4)); };
+  return n >= 1000 ? n.toLocaleString('en-US', { maximumFractionDigits: 2 }) : n >= 1 ? n.toLocaleString('en-US', { maximumFractionDigits: 4 }) : n < 0.000001 ? '<0.000001' : Number(n.toPrecision(Math.min(d, 4))).toLocaleString('en-US', { maximumFractionDigits: 8 }); };
 /* ---------- valor en dolares: precio en vivo de CoinGecko; si un token no esta en CoinGecko, su precio en el DEX con mas liquidez (DexScreener, minimo $1,000 de liquidez); para SECT, ademas, el historico de CoinGecko que publica sectoraorg.com ---------- */
 const CGPF = { eth: 'ethereum', bnb: 'binance-smart-chain', sol: 'solana' };
 const CGID = { ETH: 'ethereum', BNB: 'binancecoin', SOL: 'solana', USDT: 'tether', USDC: 'usd-coin' };
 const PX = (() => { try { const o = JSON.parse(store.get('px') || '{}'); return o && typeof o === 'object' ? o : {}; } catch (e) { return {}; } })();
 const pxKey = (n, t) => !t.custom && CGID[t.s] ? 'id:' + CGID[t.s] : CGPF[n.id] && (n.kind === 'sol' ? t.mint : t.a) ? 'c:' + CGPF[n.id] + ':' + (n.kind === 'sol' ? t.mint : t.a.toLowerCase()) : null;
 const pxOf = (n, t) => { const k = pxKey(n, t), p = k && PX[k]; return p && isFinite(p.usd) && Date.now() - p.at < 6 * 3600e3 ? p : null; };
-const fmtUsd = v => { if (!isFinite(v)) return '—'; if (v === 0) return '$0.00'; const a = Math.abs(v);   // >= $1: centavos; < $1: hasta 4 decimales (1 SECT = $0.1071)
-  return (v < 0 ? '-' : '') + '$' + (a >= 1 ? a.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : a >= 0.0001 ? a.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 }) : Number(a.toPrecision(3)).toString()); };
+const fmtUsd = v => { if (!isFinite(v)) return '—'; if (v === 0) return '$0.00'; const a = Math.abs(v), sg = v < 0 ? '-' : '';   // >= $1: centavos; < $1: hasta 4 decimales (1 SECT = $0.1071)
+  if (a < 0.000001) return '<' + sg + '$0.000001';
+  return sg + '$' + (a >= 1 ? a.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : a >= 0.0001 ? a.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 }) : Number(a.toPrecision(3)).toLocaleString('en-US', { maximumFractionDigits: 8 })); };
 const fmtPx = v => '$' + (v >= 1 ? v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : v >= 0.01 ? v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 }) : Number(v.toPrecision(3)).toString());
 const fmtCh = c => `<em class="${c >= 0 ? 'up' : 'dn'}">${c >= 0 ? '+' : '−'}${Math.abs(c).toFixed(2)}%</em>`;
 const TSUB = (n, t) => { const p = pxOf(n, t), unv = t.custom && !t.listed ? ' · <em class="unv">Unverified</em>' : '';
@@ -1359,7 +1445,6 @@ const getJ = async (url, ms = 9000) => { const ac = new AbortController(), tm = 
   try { const r = await fetch(url, { signal: ac.signal, credentials: 'omit', referrerPolicy: 'no-referrer' }); if (!r.ok) throw new Error('http ' + r.status); return await r.json(); } finally { clearTimeout(tm); } };
 const expBase = n => n.exp ? n.exp.replace(/tx\/$/, '') : '';
 V.token = () => { const n = curNet(), t = tokOf(n, S.tokv), p = pxOf(n, t), r = S.rng || '1M', ca = n.kind === 'sol' ? (t.native ? '' : t.mint) : t.a || '', me = addrOf(n), eb = expBase(n);
-  const L = txs().filter(x => (x.netId || 'eth') === n.id && (x.token === t.s || x.outToken === t.s));
   const full = eb ? (ca && n.kind === 'evm' ? `${eb}token/${ca}?a=${me}` : `${eb}${n.kind === 'sol' ? 'account' : 'address'}/${me}`) : '';
   return SCREEN(`${NAV(esc(t.n), 0, 'home')}
   <div class="tkh"><span class="tkw">${TOKI(t, 44)}${NBADGE(n)}</span><div><b>${esc(t.n)}${!t.custom || t.listed ? VERI() : ''}</b><small>${esc(t.s)} · ${n.name}</small></div></div>
@@ -1369,7 +1454,7 @@ V.token = () => { const n = curNet(), t = tokOf(n, S.tokv), p = pxOf(n, t), r = 
   <div class="tbl"><small>Your balance</small><div><b data-usd="${tid(t)}" class="na">—</b><span><span data-bal="${tid(t)}">—</span> ${esc(t.s)}</span></div></div>
   <div class="acts4 mm three"><button data-tact="send">${ic(P.send, 24, 'currentColor', 1.7)}<span>Send</span></button><button data-tact="receive">${ic(P.recv, 24, 'currentColor', 1.7)}<span>Receive</span></button><button data-tact="swap">${ic(P.swap, 24, 'currentColor', 1.7)}<span>Swap</span></button></div>
   <div class="mmh"><span>Your activity</span></div>
-  ${L.length ? `<div class="tact">${L.map(txRow).join('')}</div>` : `<p class="tnone">No transactions with ${esc(t.s)} from this wallet yet.</p>`}
+  <div id="hlist" class="hlist" data-tok="${esc(t.s)}">${HLIST(t.s)}</div>
   ${full ? `<a class="tfull" href="${full}" target="_blank" rel="noopener noreferrer">${ic(P.ext, 16, 'currentColor', 1.8)}Full history on ${new URL(eb).hostname}</a>` : ''}
   <div class="mmh"><span>About</span></div>
   <div class="tinf"><div><span>Network</span><b>${n.name}</b></div>${ca ? `<div><span>Contract</span><button class="m" data-copy="${ca}">${short(ca)} ${ic(P.copy, 14, 'currentColor', 1.8)}</button></div>` : `<div><span>Type</span><b>Native coin</b></div>`}<div><span>Price source</span><b id="tsrc">${p && p.src ? p.src : 'CoinGecko'}</b></div></div>
@@ -1426,7 +1511,7 @@ function bindTV() {
   if (S.view !== 'token') return;
   $app.querySelectorAll('[data-rng]').forEach(b => b.addEventListener('click', () => { S.rng = b.dataset.rng; $app.querySelectorAll('[data-rng]').forEach(x => x.classList.toggle('on', x === b)); const st = $app.querySelector('#tchSt'); if (st && !CHC[pxKey(curNet(), tokOf(curNet(), S.tokv)) + '|' + S.rng]) { st.hidden = false; st.textContent = 'Loading chart…'; } loadChart(); }));
   $app.querySelectorAll('[data-tact]').forEach(b => b.addEventListener('click', () => { const a = b.dataset.tact; S.dir = 'fwd'; if (a === 'send') { S.tok = S.tokv; S.amt = ''; S.to = ''; } if (a === 'swap') S.sf = S.tokv; go(a); }));
-  paintBalances(); loadBalances(); loadPrices().then(() => { const p = pxOf(curNet(), tokOf(curNet(), S.tokv)), s = $app.querySelector('#tsrc'); if (s && p && p.src) s.textContent = p.src; }); loadChart();
+  paintBalances(); loadBalances(); loadPrices().then(() => { const p = pxOf(curNet(), tokOf(curNet(), S.tokv)), s = $app.querySelector('#tsrc'); if (s && p && p.src) s.textContent = p.src; paintHist(); }); loadChart(); loadHist();
 }
 V.receive = () => { const n = curNet(), a = addrOf(n); return SCREEN(`${NAV('Receive', 0, 'home')}
   <div class="nbar" style="justify-content:center">${NETPILL()}</div>
@@ -1724,6 +1809,7 @@ function bindMulti() {
   if (!PREVIEW && ['send', 'swap'].includes(S.view)) loadBalances();
   if (['swap', 'swapReview'].includes(S.view)) loadPrices();
   if (['sent', 'activity'].includes(S.view)) trackPending();
+  if (S.view === 'activity') { loadHist(); loadPrices().then(paintHist); }
 }
 
 /* ================= activos tokenizados: en desarrollo, se lanza con SectoraEVM ================= */
