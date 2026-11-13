@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://raw.githubusercontent.com https://coin-images.coingecko.com https://assets.coingecko.com; font-src 'self' data:; connect-src 'self' https://raw.githubusercontent.com https://api.coingecko.com https://api.dexscreener.com https://api.geckoterminal.com https://eth.blockscout.com https://ethereum-rpc.publicnode.com https://eth.drpc.org https://bsc-rpc.publicnode.com https://bsc-dataseed.bnbchain.org https://solana-rpc.publicnode.com https://api.mainnet-beta.solana.com https://aggregator-api.kyberswap.com https://lite-api.jup.ag wss://relay.walletconnect.org wss://relay.walletconnect.com https://verify.walletconnect.org https://verify.walletconnect.com https://rpc.walletconnect.org; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://raw.githubusercontent.com https://coin-images.coingecko.com https://assets.coingecko.com; font-src 'self' data:; connect-src 'self' https://raw.githubusercontent.com https://api.coingecko.com https://api.dexscreener.com https://api.geckoterminal.com https://eth.blockscout.com https://ethereum-rpc.publicnode.com https://eth.drpc.org https://bsc-rpc.publicnode.com https://bsc-dataseed.bnbchain.org https://solana-rpc.publicnode.com https://api.mainnet-beta.solana.com https://aggregator-api.kyberswap.com https://lite-api.jup.ag https://li.quest wss://relay.walletconnect.org wss://relay.walletconnect.com https://verify.walletconnect.org https://verify.walletconnect.com https://rpc.walletconnect.org; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="no-referrer">
 <meta name="google" content="notranslate">
 <meta name="format-detection" content="telephone=no,date=no,address=no,email=no">
@@ -404,22 +404,22 @@ button.lg:hover{transform:translate(-50%,-50%) scale(1.04)}
 .pct button.busy{opacity:.45}
 /* pantallas bajas (moviles pequenos y portatiles): Enviar y Swap se compactan por niveles en vez de cortarse */
 @media (max-height:900px){
-  .screen:is(:has(.sendpad),:has(#susdIn)) .ft{padding-bottom:calc(16px + env(safe-area-inset-bottom,0px))}
-  .screen:is(:has(.sendpad),:has(#susdIn)) .sc{padding-bottom:10px}
+  .screen:is(:has(.sendpad),:has(#susdIn),:has(#busdIn)) .ft{padding-bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+  .screen:is(:has(.sendpad),:has(#susdIn),:has(#busdIn)) .sc{padding-bottom:10px}
   .sc:has(> .sendpad) .amt .v{--amtfs:72px}
-  .screen:has(#susdIn) .sw,.screen:has(#susdIn) .qd{margin-top:8px}
+  .screen:is(:has(#susdIn),:has(#busdIn)) .sw,.screen:is(:has(#susdIn),:has(#busdIn)) .qd{margin-top:8px}
   .sc:has(> .sendpad) .tokp{margin-top:12px}
   .sc:has(> .sendpad) .amt .av2{margin-top:8px}
-  .screen:has(#susdIn) .qd div{padding:7px 0}
-  .screen:has(#susdIn) .sc>.slip{padding-top:4px}
-  .screen:has(#susdIn) .flipb{width:38px;height:38px;margin:-12px auto}
+  .screen:is(:has(#susdIn),:has(#busdIn)) .qd div{padding:7px 0}
+  .screen:is(:has(#susdIn),:has(#busdIn)) .sc>.slip{padding-top:4px}
+  .screen:is(:has(#susdIn),:has(#busdIn)) .flipb{width:38px;height:38px;margin:-12px auto}
 }
 @media (max-height:780px){
-  .screen:is(:has(.sendpad),:has(#susdIn)){padding-top:calc(12px + env(safe-area-inset-top,0px))}
-  .screen:is(:has(.sendpad),:has(#susdIn)) .nav{height:46px}
-  .screen:is(:has(.sendpad),:has(#susdIn)) .nbar{margin-top:6px}
-  .screen:is(:has(.sendpad),:has(#susdIn)) .npill{height:32px}
-  .screen:is(:has(.sendpad),:has(#susdIn)) .ft .btn{height:52px}
+  .screen:is(:has(.sendpad),:has(#susdIn),:has(#busdIn)){padding-top:calc(12px + env(safe-area-inset-top,0px))}
+  .screen:is(:has(.sendpad),:has(#susdIn),:has(#busdIn)) .nav{height:46px}
+  .screen:is(:has(.sendpad),:has(#susdIn),:has(#busdIn)) .nbar{margin-top:6px}
+  .screen:is(:has(.sendpad),:has(#susdIn),:has(#busdIn)) .npill{height:32px}
+  .screen:is(:has(.sendpad),:has(#susdIn),:has(#busdIn)) .ft .btn{height:52px}
   .sc:has(> .sendpad) .amt .v{--amtfs:58px}
   .sc:has(> .sendpad) .tokp{margin-top:10px;padding:5px 11px 5px 5px}
   .sc:has(> .sendpad) .to{min-height:60px}
@@ -427,49 +427,49 @@ button.lg:hover{transform:translate(-50%,-50%) scale(1.04)}
   .sendpad{padding-top:8px}
   .sendpad .kp{margin-top:8px;min-height:166px;grid-template-rows:repeat(4,minmax(40px,1fr))}
   .pct button{height:34px}
-  .screen:has(#susdIn) .sw{padding:8px 14px}
-  .screen:has(#susdIn) .swv{font-size:30px}
-  .screen:has(#susdIn) .tokb{padding:4px 9px 4px 4px}
-  .screen:has(#susdIn) .qd div{padding:6px 0}
+  .screen:is(:has(#susdIn),:has(#busdIn)) .sw{padding:8px 14px}
+  .screen:is(:has(#susdIn),:has(#busdIn)) .swv{font-size:30px}
+  .screen:is(:has(#susdIn),:has(#busdIn)) .tokb{padding:4px 9px 4px 4px}
+  .screen:is(:has(#susdIn),:has(#busdIn)) .qd div{padding:6px 0}
 }
 @media (max-height:690px){
-  .screen:is(:has(.sendpad),:has(#susdIn)) .ft{padding-top:8px}
-  .screen:is(:has(.sendpad),:has(#susdIn)) .ft .btn{height:48px}
+  .screen:is(:has(.sendpad),:has(#susdIn),:has(#busdIn)) .ft{padding-top:8px}
+  .screen:is(:has(.sendpad),:has(#susdIn),:has(#busdIn)) .ft .btn{height:48px}
   .sc:has(> .sendpad) .amt .v{--amtfs:48px}
-  .screen:is(:has(.sendpad),:has(#susdIn)) .nav{height:42px}
-  .screen:has(#susdIn) .sw{padding:7px 14px}
-  .screen:has(#susdIn) .swr{margin-top:2px}
-  .screen:has(#susdIn) .swu{font-size:12.5px;line-height:1.2}
-  .screen:has(#susdIn) .flipb{width:34px;height:34px;margin:-10px auto}
+  .screen:is(:has(.sendpad),:has(#susdIn),:has(#busdIn)) .nav{height:42px}
+  .screen:is(:has(#susdIn),:has(#busdIn)) .sw{padding:7px 14px}
+  .screen:is(:has(#susdIn),:has(#busdIn)) .swr{margin-top:2px}
+  .screen:is(:has(#susdIn),:has(#busdIn)) .swu{font-size:12.5px;line-height:1.2}
+  .screen:is(:has(#susdIn),:has(#busdIn)) .flipb{width:34px;height:34px;margin:-10px auto}
   .sc:has(> .sendpad) .recent{margin-top:6px}
   .sendpad .kp{min-height:154px;grid-template-rows:repeat(4,minmax(37px,1fr))}
   .sendpad .kp button{font-size:30px}
   .pct button{height:32px}
-  .screen:has(#susdIn) .qd div:first-child{display:none}
-  .screen:has(#susdIn) .qd div:nth-child(2){border-top:0}
-  .screen:has(#susdIn) .swv{font-size:28px}
-  .screen:has(#susdIn) .sc>.kp.sm{min-height:126px;grid-template-rows:repeat(4,minmax(30px,1fr))}
-  .screen:has(#susdIn) .sc>.slip{padding-top:0}
+  .screen:is(:has(#susdIn),:has(#busdIn)) .qd div:first-child{display:none}
+  .screen:is(:has(#susdIn),:has(#busdIn)) .qd div:nth-child(2){border-top:0}
+  .screen:is(:has(#susdIn),:has(#busdIn)) .swv{font-size:28px}
+  .screen:is(:has(#susdIn),:has(#busdIn)) .sc>.kp.sm{min-height:126px;grid-template-rows:repeat(4,minmax(30px,1fr))}
+  .screen:is(:has(#susdIn),:has(#busdIn)) .sc>.slip{padding-top:0}
 }
 @media (max-height:650px){
-  .screen:is(:has(.sendpad),:has(#susdIn)){padding-top:calc(8px + env(safe-area-inset-top,0px))}
-  .screen:is(:has(.sendpad),:has(#susdIn)) .nbar{margin-top:4px}
-  .screen:is(:has(.sendpad),:has(#susdIn)) .sc{padding-bottom:6px}
-  .screen:is(:has(.sendpad),:has(#susdIn)) .ft{padding-top:6px}
-  .screen:is(:has(.sendpad),:has(#susdIn)) .ft .btn{height:46px}
-  .screen:has(#susdIn) .sw{padding:6px 14px}
-  .screen:has(#susdIn) .swu{font-size:12px;line-height:1.15}
-  .screen:has(#susdIn) .sc>.kp.sm{min-height:122px;grid-template-rows:repeat(4,minmax(29px,1fr))}
-  .screen:is(:has(.sendpad),:has(#susdIn)) .nav{height:40px}
-  .screen:has(#susdIn) .slip .pill3 button{padding:5px 9px}
-  .screen:has(#susdIn) .flipb{width:32px;height:32px;margin:-9px auto}
+  .screen:is(:has(.sendpad),:has(#susdIn),:has(#busdIn)){padding-top:calc(8px + env(safe-area-inset-top,0px))}
+  .screen:is(:has(.sendpad),:has(#susdIn),:has(#busdIn)) .nbar{margin-top:4px}
+  .screen:is(:has(.sendpad),:has(#susdIn),:has(#busdIn)) .sc{padding-bottom:6px}
+  .screen:is(:has(.sendpad),:has(#susdIn),:has(#busdIn)) .ft{padding-top:6px}
+  .screen:is(:has(.sendpad),:has(#susdIn),:has(#busdIn)) .ft .btn{height:46px}
+  .screen:is(:has(#susdIn),:has(#busdIn)) .sw{padding:6px 14px}
+  .screen:is(:has(#susdIn),:has(#busdIn)) .swu{font-size:12px;line-height:1.15}
+  .screen:is(:has(#susdIn),:has(#busdIn)) .sc>.kp.sm{min-height:122px;grid-template-rows:repeat(4,minmax(29px,1fr))}
+  .screen:is(:has(.sendpad),:has(#susdIn),:has(#busdIn)) .nav{height:40px}
+  .screen:is(:has(#susdIn),:has(#busdIn)) .slip .pill3 button{padding:5px 9px}
+  .screen:is(:has(#susdIn),:has(#busdIn)) .flipb{width:32px;height:32px;margin:-9px auto}
 }
 @media (max-height:600px){
   .screen.okx .ft .legal{display:none}
 }
 @media (max-height:600px){
-  .screen:is(:has(.sendpad),:has(#susdIn)){padding-top:calc(8px + env(safe-area-inset-top,0px))}
-  .screen:is(:has(.sendpad),:has(#susdIn)) .nbar{display:none}
+  .screen:is(:has(.sendpad),:has(#susdIn),:has(#busdIn)){padding-top:calc(8px + env(safe-area-inset-top,0px))}
+  .screen:is(:has(.sendpad),:has(#susdIn),:has(#busdIn)) .nbar{display:none}
   .sc:has(> .sendpad) .amt .v{--amtfs:42px}
   .sc:has(> .sendpad) .to{min-height:54px;margin-top:6px}
   .sc:has(> .sendpad) .tokp{margin-top:8px}
@@ -477,9 +477,9 @@ button.lg:hover{transform:translate(-50%,-50%) scale(1.04)}
   .sendpad .kp{min-height:142px;grid-template-rows:repeat(4,minmax(34px,1fr))}
   .sendpad .kp button{font-size:27px}
   .pct button{height:30px}
-  .screen:has(#susdIn) .swu{display:none}
-  .screen:has(#susdIn) .qd div:nth-child(3),.screen:has(#susdIn) .qd div:nth-child(4){display:none}
-  .screen:has(#susdIn) .sc>.kp.sm{min-height:122px;grid-template-rows:repeat(4,minmax(29px,1fr))}
+  .screen:is(:has(#susdIn),:has(#busdIn)) .swu{display:none}
+  .screen:is(:has(#susdIn),:has(#busdIn)) .qd div:nth-child(3),.screen:is(:has(#susdIn),:has(#busdIn)) .qd div:nth-child(4){display:none}
+  .screen:is(:has(#susdIn),:has(#busdIn)) .sc>.kp.sm{min-height:122px;grid-template-rows:repeat(4,minmax(29px,1fr))}
 }
 /* moviles pequenos: nada se sale ni queda tapado */
 .wcadd{grid-template-columns:minmax(0,1fr)}.wcin input{min-width:0;width:100%}
@@ -511,7 +511,7 @@ button.lg:hover{transform:translate(-50%,-50%) scale(1.04)}
 .sc:has(> .kp.sm)>*{flex-shrink:0}
 .sc:has(> .kp.sm)>.slip{margin-top:auto;padding-top:8px}
 .sc>.kp.sm{flex:1 1 auto;min-height:142px;max-height:236px;grid-template-rows:repeat(4,minmax(34px,1fr))}
-.screen .sc>.kp.sm button,.screen:has(#susdIn) .sc>.kp.sm button{height:auto;min-height:0;padding:0;line-height:1}
+.screen .sc>.kp.sm button,.screen:is(:has(#susdIn),:has(#busdIn)) .sc>.kp.sm button{height:auto;min-height:0;padding:0;line-height:1}
 /* revisar */
 .rvh{margin-top:22px;display:grid;justify-items:center;text-align:center}
 .rvh small{font-size:13px;color:var(--mu)}
@@ -871,10 +871,10 @@ body{letter-spacing:-.006em}
 @media (min-width:1024px) and (min-height:641px){.tch{margin:16px 0 0}}
 /* dolares en el swap */
 .swu{margin-top:2px;font-size:13.5px;line-height:1.3;color:var(--mu);font-variant-numeric:tabular-nums}
-.screen:has(#susdIn) .sw{padding:10px 15px}
-.screen:has(#susdIn) .swr{margin-top:4px}
-.screen:has(#susdIn) .qd div{padding:8px 0}
-.screen:has(#susdIn) .kp.sm button{height:40px}
+.screen:is(:has(#susdIn),:has(#busdIn)) .sw{padding:10px 15px}
+.screen:is(:has(#susdIn),:has(#busdIn)) .swr{margin-top:4px}
+.screen:is(:has(#susdIn),:has(#busdIn)) .qd div{padding:8px 0}
+.screen:is(:has(#susdIn),:has(#busdIn)) .kp.sm button{height:40px}
 .swu em{font-style:normal;font-weight:500}.swu .up{color:var(--ok)}.swu .dn{color:var(--bad)}
 /* Face ID / huella */
 .bioh{display:grid;place-items:center;margin-top:18px}
@@ -1052,6 +1052,59 @@ html.iosapp .stage,html.iosapp .device,html.iosapp .app{height:var(--app-h)}
   html[data-theme="light"] .tabs button.on{background:none;color:var(--tx)}
   .has-tabs .sc{padding-bottom:96px}
 }
+/* bridge entre redes */
+.acts4.mm{grid-template-columns:repeat(5,minmax(0,1fr))}
+@media (max-width:420px){.acts4.mm{gap:6px}.acts4.mm button{font-size:12.5px;padding:0 2px}}
+@media (max-width:350px){.acts4.mm{gap:5px}.acts4.mm button{font-size:11px;letter-spacing:-.02em;padding:0}.ib3 .ib{width:32px}.acct{gap:8px}.acct .acsel b{font-size:16px;max-width:150px}}
+.bdn{display:inline-flex;align-items:center;gap:6px;font-weight:500;color:var(--tx)}
+.bnote{margin-top:10px;padding:14px 16px;font-size:13.5px;line-height:1.45;color:var(--mu)}
+.bnote p{margin:0}.bnote .btn{height:44px;margin-top:12px;font-size:14.5px}
+.sc:has(> .kp.sm)>.pct{margin-top:auto;padding-top:8px}
+.sc:has(> .kp.sm)>.pct button{height:34px}
+.bgrp{display:flex;align-items:center;gap:8px;margin:14px 0 2px;font:500 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--fa)}
+/* revisar y enviado: tambien se compactan en pantallas bajas en vez de cortarse */
+.screen .sg{width:min(100%,290px,max(110px,calc(100dvh - 627px)))}
+@media (max-height:900px){
+  .screen:has(.swsum) .swsum{margin-top:10px;padding:12px 16px}
+  .screen:has(.swsum) .swsum b{font-size:23px;margin:2px 0}
+  .screen:has(.swsum) .swmid{margin:4px 0 -2px}
+  .screen:is(:has(.swsum),:has(.rvh)) .checks{margin-top:10px}
+  .screen:is(:has(.swsum),:has(.rvh)) .chh{padding:10px 0 6px}
+  .screen:is(:has(.swsum),:has(.rvh)) .ck{padding:5px 0}
+  .screen:is(:has(.swsum),:has(.rvh),:has(.sg)) .kv{margin-top:10px}
+  .screen:is(:has(.swsum),:has(.rvh),:has(.sg)) .kv div{padding:11px 0}
+  .screen:has(.sg) .h1{margin-top:14px!important}
+  .screen:has(.sg) .kv.card{margin-top:14px!important}
+}
+@media (max-height:700px){
+  .screen:is(:has(.swsum),:has(.rvh),:has(.sg)){padding-top:calc(10px + env(safe-area-inset-top,0px))}
+  .screen:is(:has(.swsum),:has(.rvh),:has(.sg)) .ft{padding-bottom:calc(14px + env(safe-area-inset-bottom,0px))}
+  .screen:is(:has(.swsum),:has(.rvh),:has(.sg)) .nav{height:44px}
+  .screen:has(.swsum) .swmid{display:none}
+  .screen:has(.swsum) .swsum{padding:10px 14px}
+  .screen:has(.swsum) .swsum b{font-size:21px}
+  .screen:is(:has(.swsum),:has(.rvh)) .ck{padding:4px 0;font-size:13px}
+  .screen:is(:has(.swsum),:has(.rvh),:has(.sg)) .kv div{padding:9px 0}
+  .screen:has(.sg) .h1{font-size:30px}
+}
+@media (max-height:650px){
+  .screen:has(.swsum) .swsum b + small{display:none}
+  .screen:is(:has(.swsum),:has(.rvh)) .chh{padding:8px 0 4px}
+  .screen:is(:has(.swsum),:has(.rvh)) .ck{padding:3px 0;font-size:12.5px}
+  .screen:has(.sg) .lead{margin-top:6px}
+}
+@media (max-height:600px){
+  .screen .sg{display:none}
+  .screen:is(:has(.swsum),:has(.rvh),:has(.sg)) .ft .btn{height:48px}
+  .screen:is(:has(.swsum),:has(.rvh),:has(.sg)) .nav{height:40px}
+  .screen:has(.swsum) .checks .chh{display:none}
+  .screen:has(.swsum) .swsum{margin-top:8px;padding:8px 12px}
+  .screen:has(.swsum) .swsum b{font-size:19px}
+  .screen:is(:has(.swsum),:has(.rvh)) .ck{padding:2px 0;font-size:12px}
+  .screen:is(:has(.swsum),:has(.rvh),:has(.sg)) .kv div{padding:7px 0}
+  .screen:is(:has(.swsum),:has(.rvh)) .slide{height:58px}
+  .screen:is(:has(.swsum),:has(.rvh)) .slide .kn{width:48px;height:48px}
+}
 </style>
 
 <div class="stage"><div class="device"><div class="app" id="app"></div></div></div>
@@ -1124,6 +1177,7 @@ async function setLang(l) { LANG = l; store.set('lang', l); await loadLang(l); S
 const ICV = { '#f6f7fb': 'var(--tx)', '#8b93a6': 'var(--mu)', '#545c6e': 'var(--fa)', '#5c9bff': 'var(--b2)', '#f0b54a': 'var(--warn)', '#ff6b5c': 'var(--bad)', '#000': 'var(--onw,#000)' };
 const ic = (d, s = 20, c = 'currentColor', w = 1.9) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="${c}"${ICV[c] ? ` style="stroke:${ICV[c]}"` : ''} stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
 const P = {
+  bridge: '<path d="M3 18h18M5 18v-6a7 7 0 0114 0v6M9 18v-4M15 18v-4"/>',
   back: '<path d="M15 5l-7 7 7 7"/>', chk: '<path d="M5 12.5l4.5 4.5L19 7.5"/>', send: '<path d="M7 17L17 7M9 7h8v8"/>', recv: '<path d="M17 7L7 17M15 17H7V9"/>',
   home: '<path d="M3 11l9-7 9 7v9h-6v-6H9v6H3z"/>', act: '<path d="M4 6h16M4 12h10M4 18h7"/>', lock: '<rect x="5" y="11" width="14" height="10" rx="2.5"/><path d="M8 11V7a4 4 0 018 0v4"/>',
   gear: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/>',
@@ -1499,9 +1553,9 @@ async function loadHist(force) {
 }
 function histItems(n, sym) {
   const h = HIST[hKey(n)], me0 = (addrOf(n) || '').toLowerCase(), own = n.id === 'bnb' ? new Set(txs().filter(t => (t.netId || 'eth') === n.id && t.hash && (t.from ? t.from.toLowerCase() === me0 : ACCI() === 0)).map(t => t.hash.toLowerCase())) : null;
-  const on = ((h && h.items) || []).filter(e => !own || !own.has(e.hash.toLowerCase())), seen = new Set(on.map(e => e.hash.toLowerCase()));
+  const lbr = new Set(txs().filter(t => t.kind === 'bridge' && t.hash).map(t => t.hash.toLowerCase())), on = ((h && h.items) || []).filter(e => (!own || !own.has(e.hash.toLowerCase())) && !lbr.has(String(e.hash).toLowerCase())), seen = new Set(on.map(e => e.hash.toLowerCase()));
   const me = (addrOf(n) || '').toLowerCase(), loc = txs().filter(t => (t.netId || 'eth') === n.id && t.hash && !seen.has(t.hash.toLowerCase()) && (t.from ? t.from.toLowerCase() === me : ACCI() === 0)).map(t => ({ hash: t.hash, time: t.time, ok: t.st !== 'fail', local: t, cancel: t.kind === 'cancel', rev: t.kind === 'revoke', app: t.kind === 'dapp' ? (t.app || 'App') : null,
-    legs: t.kind === 'cancel' || t.kind === 'revoke' || (t.kind === 'dapp' && !(Number(t.amount) > 0)) ? [] : t.kind === 'swap' ? [{ s: t.token, amt: t.amount, dir: 'out', peer: '' }, { s: t.outToken, amt: '', dir: 'in', peer: '' }] : [{ s: t.token, amt: t.amount, dir: 'out', peer: (t.to || '').toLowerCase() }] }));
+    legs: t.kind === 'cancel' || t.kind === 'revoke' || (t.kind === 'dapp' && !(Number(t.amount) > 0)) ? [] : t.kind === 'bridge' ? [{ s: t.token, amt: t.amount, dir: 'out', peer: '' }] : t.kind === 'swap' ? [{ s: t.token, amt: t.amount, dir: 'out', peer: '' }, { s: t.outToken, amt: '', dir: 'in', peer: '' }] : [{ s: t.token, amt: t.amount, dir: 'out', peer: (t.to || '').toLowerCase() }] }));
   const dust = e => !e.local && e.legs.length > 0 && e.legs.every(l => { if (l.dir !== 'in') return false; const tk = toks(n).find(t => t.s === l.s), p = tk && pxOf(n, tk), a = Number(l.amt);   // recibos de menos de $0.01: polvo y envenenamiento de direcciones
     return p ? a * p.usd < 0.01 : a < 1e-9; });
   const ok = e => e && HASHOK(e.hash) && Array.isArray(e.legs) && Number.isFinite(+e.time);
@@ -1509,6 +1563,7 @@ function histItems(n, sym) {
 }
 const HICON = k => ({ in: P.recv, out: P.send, swap: P.swap, self: P.swap, fail: P.info, cancel: '<path d="M6 6l12 12M18 6L6 18"/>' })[k];
 function hRow(n, e) {
+  if (e.local && e.local.kind === 'bridge') return bRow(n, e);
   const o = e.legs.filter(l => l.dir === 'out'), i = e.legs.filter(l => l.dir === 'in'), kind = !e.ok && !e.legs.length ? 'fail' : o.length && i.length ? 'swap' : i.length ? 'in' : o.length ? 'out' : 'self';
   const main = kind === 'swap' ? i[0] : (i[0] || o[0] || e.legs[0]), peer = main && main.peer, tm = new Date(e.time).toLocaleTimeString(LOC(), { hour: 'numeric', minute: '2-digit' });
   const title = e.rev ? `Permission removed${e.local && e.local.token ? ' · ' + esc(e.local.token) : ''}` : e.app ? `<span class="notr">${esc(e.app)}</span>` : e.cancel ? 'Transfer cancelled' : kind === 'fail' ? 'Failed transaction' : kind === 'swap' ? `${esc(o[0].s)} → ${esc(i[0].s)}` : `${kind === 'in' ? 'Received' : kind === 'out' ? 'Sent' : 'Moved'} ${esc(main.s)}`;
@@ -1827,6 +1882,12 @@ const SHEET = () => {
       <div class="es-row">${LOGO(38)}<span><b>SectoraEVM</b><small>Sectora's own blockchain for real-world assets. It appears here at launch.</small></span></div>
       <ul class="es-ml"><li>Public mainnet of the Sectora L3 RWA blockchain</li><li>Hash Nodes move from testnet to mainnet</li><li>Same address as your Ethereum account</li></ul></div>
     <p class="snote">Ethereum, BNB Chain and Robinhood Chain share one address. Solana uses its own.</p></div>`;
+  if (S.sheet === 'bfrom' || S.sheet === 'bto') { const c = bridgePair();
+    if (S.sheet === 'bfrom') return `<div class="sbg" data-close="1"></div><div class="bsheet" role="dialog" aria-label="Choose token"><div class="grab"></div><h3>Choose token · ${c.n.name}</h3>
+      ${[...BTOKS(c.n), ...c.n.tokens.filter(t => t.s === 'SECT')].map(t => `<button class="nrow ${tid(t) === tid(c.from) ? 'on' : ''}" data-bpick="f:${tid(t)}">${TOKI(t, 36)}<span><b>${esc(t.s)}${VERI(14)}</b><small>${esc(t.n)}</small></span><span class="bv" data-bal="${tid(t)}">—</span></button>`).join('')}</div>`;
+    return `<div class="sbg" data-close="1"></div><div class="bsheet" role="dialog" aria-label="Bridge to"><div class="grab"></div><h3>Bridge to</h3>
+      ${BNETS().filter(k => k !== c.n.id).map(k => { const dn = NETS[k]; return `<div class="bgrp notr">${NDOT(dn)}${dn.name}</div>` + BTOKS(dn).map(t => `<button class="nrow ${k === c.dn.id && tid(t) === tid(c.to) ? 'on' : ''}" data-bpick="t:${k}:${tid(t)}">${TOKI(t, 36)}<span><b>${esc(t.s)}${VERI(14)}</b><small>${esc(t.n)}</small></span></button>`).join(''); }).join('')}
+      <p class="snote">It always arrives at your own address on that network.</p></div>`; }
   const n = curNet(), which = S.sheet; // 'from' | 'to' | 'send'
   return `<div class="sbg" data-close="1"></div><div class="bsheet" role="dialog" aria-label="Choose token"><div class="grab"></div><h3>Choose token · ${n.name}</h3>
     ${(which === 'send' ? toks(n) : toks(n).filter(t => !t.custom || t.listed)).map(t => `<button class="nrow" data-pick="${which}:${tid(t)}">${TOKI(t, 36)}<span><b>${esc(t.s)}${!t.custom || t.listed ? VERI(14) : ''}</b><small>${esc(t.n)}${t.custom && !t.listed ? ' · <em class="unv">Unverified</em>' : ''}</small></span><span class="bv" data-bal="${tid(t)}">—</span></button>`).join('')}</div>`;
@@ -1845,7 +1906,7 @@ V.home = () => { const sc = sec(), n = curNet(); return SCREEN(`<div class="top 
     <div class="ib3"><button class="ib" data-hscan="1" aria-label="Scan QR code" title="Scan QR code">${ic(P.qr, 22, 'currentColor', 1.7)}</button><button class="ib" data-copy="${addrOf(n)}" aria-label="Copy address" title="Copy address">${ic(P.copy, 22, 'currentColor', 1.7)}</button><button class="ib" data-go="activity" aria-label="Activity" title="Activity">${ic(P.clock, 22, 'currentColor', 1.7)}</button><button class="ib" id="lockNow" aria-label="Lock" title="Lock">${ic(P.lock, 22, 'currentColor', 1.7)}</button></div></div>
   <div class="hero"><div class="hcap">Total · all networks</div><div class="hbal na" id="netBal">—</div><div class="hchg" id="netChg"></div>
     <div class="hsub">${NETPILL()}<span class="sync" id="syncChip"><span class="dot off"></span>Offline</span></div></div>
-  <div class="acts4 mm"><button data-go="send">${ic(P.send, 24, 'currentColor', 1.7)}<span>Send</span></button><button data-go="receive">${ic(P.recv, 24, 'currentColor', 1.7)}<span>Receive</span></button><button data-go="swap">${ic(P.swap, 24, 'currentColor', 1.7)}<span>Swap</span></button><button data-go="security">${ic(P.shield, 24, 'currentColor', 1.7)}<span>Security</span></button></div>
+  <div class="acts4 mm"><button data-go="send">${ic(P.send, 24, 'currentColor', 1.7)}<span>Send</span></button><button data-go="receive">${ic(P.recv, 24, 'currentColor', 1.7)}<span>Receive</span></button><button data-go="swap">${ic(P.swap, 24, 'currentColor', 1.7)}<span>Swap</span></button><button data-go="bridge">${ic(P.bridge, 24, 'currentColor', 1.7)}<span>Bridge</span></button><button data-go="security">${ic(P.shield, 24, 'currentColor', 1.7)}<span>Security</span></button></div>
   ${!STANDALONE() && !store.get('instHide') ? `<div class="mmc inst"><button class="instgo" data-install="1"><span class="mmi">${ic(P.import, 22, '#fff', 1.8)}</span><span class="t"><b>Install the app</b><small>Add Sectora to your home screen. It opens full screen, like an app.</small></span></button><button class="instx" data-insthide="1" aria-label="Hide">${ic('<path d="M6 6l12 12M18 6L6 18"/>', 16, 'currentColor', 2)}</button></div>` : ''}
   <button class="mmc" data-go="security"><span class="mmi">${ic(P.shield, 22, '#fff', 1.8)}</span><span class="t"><b>${sc.score === sc.total ? 'Your wallet is protected' : 'Improve your protection'}</b><small>${sc.score} of ${sc.total} security checks passed</small><span class="segs">${sc.items.map(i => `<i class="${i.ok ? 'on' : ''}"></i>`).join('')}</span></span>${ic(P.chev, 18, 'currentColor', 1.8)}</button>
   <button class="mmc" data-go="assets"><span class="mmi alt">${ic(P.rwa, 22, 'currentColor', 1.7)}</span><span class="t"><b>Tokenize real-world assets</b><small>In development · launches with SectoraEVM</small></span>${ic(P.chev, 18, 'currentColor', 1.8)}</button>
@@ -2289,12 +2350,12 @@ const amtFs = a => `--n:${Math.max(1, String(a || '0').length)}`;
 // corta (nunca redondea hacia arriba) a los decimales que admite el teclado
 const fmtFloor = (v, d) => { const s = ethers.formatUnits(v, d); if (!s.includes('.')) return s; const [i, f] = s.split('.'), k = Math.max(0, Math.min(8, d, 12 - i.length)), g = f.slice(0, k).replace(/0+$/, ''); return g ? i + '.' + g : i; };
 // 25 / 50 / 75 / 100 % del saldo real; en la moneda nativa se deja lo necesario para la comision
-async function pctAmount(n, t, p) { const me = addrOf(n);
+async function pctAmount(n, t, p, gas = 30000n, solKeep = 0n) { const me = addrOf(n);
   if (n.kind === 'evm') {
     if (!t.native) return fmtFloor(await erc20Bal(n, t.a) * p / 100n, t.d);
-    const bal = BigInt(await rpc(n, 'eth_getBalance', [me, 'latest'])), b = await evmTxBase(n, 'fast'), cap = bal - 30000n * b.maxFeePerGas * 3n / 2n;
+    const bal = BigInt(await rpc(n, 'eth_getBalance', [me, 'latest'])), b = await evmTxBase(n, 'fast'), cap = bal - gas * b.maxFeePerGas * 3n / 2n;
     if (cap <= 0n) return null; const v = bal * p / 100n; return fmtFloor(v > cap ? cap : v, t.d); }
-  const bal = BigInt((await rpc(n, 'getBalance', [me])).value), cap = bal - SOLFEE; if (cap <= 0n) return null;
+  const bal = BigInt((await rpc(n, 'getBalance', [me])).value), cap = bal - SOLFEE - solKeep; if (cap <= 0n) return null;
   let v = bal * p / 100n; if (v > cap) v = cap; const left = bal - v - SOLFEE; if (left > 0n && left < RENT) { v = bal - SOLFEE - RENT; if (v <= 0n) v = cap; }
   return fmtFloor(v, 9); }
 
@@ -2317,7 +2378,7 @@ V.review = () => { const n = curNet(), t = tokOf(n, S.tok), ck = checks(); retur
 
 const TXST = { pend: ['Pending', 'var(--warn)'], ok: ['Confirmed', 'var(--b2)'], fail: ['Failed', 'var(--bad)'], old: ['Not confirmed', 'var(--warn)'] };
 const stOf = t => t.st === 'pend' && Date.now() - t.time > 15 * 60e3 ? TXST.old : TXST[t.st] || TXST.pend;
-V.sent = () => { const t = txs()[0] || {}, n = NETS[t.netId] || NETS.eth, st = stOf(t); return SCREEN(`<div class="sg" style="margin-top:20px"><canvas class="gl" aria-hidden="true"></canvas><span class="bdg">${ic(P.chk, 34, '#fff', 2.8)}</span></div>
+V.sent = () => { const t = txs()[0] || {}, n = NETS[t.netId] || NETS.eth, st = stOf(t); if (t.kind === 'bridge') return bridgeSent(t, n); return SCREEN(`<div class="sg" style="margin-top:20px"><canvas class="gl" aria-hidden="true"></canvas><span class="bdg">${ic(P.chk, 34, '#fff', 2.8)}</span></div>
   <div style="text-align:center"><h1 class="h1" style="margin-top:22px">${PREVIEW ? (t.kind === 'swap' ? 'Swap signed' : 'Signed') : (t.kind === 'swap' ? 'Swap sent' : 'Sent')}</h1><p class="lead">${t.kind === 'swap' ? `${esc(t.amount)} ${t.token} → ${esc(t.out)} ${t.outToken}` : `${esc(t.amount)} ${t.token} to <span class="${contactOf(t.to) ? 'notr' : 'mono'}" style="color:var(--tx)">${contactOf(t.to) ? esc(contactOf(t.to).n) : short(t.to)}</span>`}</p></div>
   <div class="kv card" style="margin-top:22px"><div>Status<b id="txst" style="color:${PREVIEW ? 'var(--warn)' : st[1]}">${PREVIEW ? 'Signed · not broadcast' : st[0]}</b></div><div>Network<b>${esc(t.net)}</b></div>${t.steps ? `<div>Steps<b>${esc(t.steps)}</b></div>` : ''}<div>Transaction<b class="m">${!PREVIEW && n.exp && t.hash ? `<a href="${n.exp + t.hash}" target="_blank" rel="noopener noreferrer">${short(t.hash)} ↗</a>` : short(t.hash)}</b></div></div>
   ${!PREVIEW && t.st === 'pend' && n.kind === 'evm' && t.nonce != null && t.maxFee ? `<div class="hact big"><button data-bump="speed" data-h="${t.hash}">Speed up</button>${t.kind === 'cancel' ? '' : `<button data-bump="cancel" data-h="${t.hash}">Cancel</button>`}</div>` : ''}`,
@@ -2363,7 +2424,7 @@ async function fetchQuote(seq) {
     if (seq !== qSeq) return; S.quote = q; paintQuote('ok');
   } catch (e) { if (seq !== qSeq) return; S.quote = { ok: false }; paintQuote('off'); }
 }
-async function fetchT(url, opt = {}) { const ac = new AbortController(), t = setTimeout(() => ac.abort(), 7000); try { const r = await fetch(url, { ...opt, signal: ac.signal }); if (!r.ok) throw new Error('http ' + r.status); return r; } finally { clearTimeout(t); } }
+async function fetchT(url, opt = {}, ms = 7000) { const ac = new AbortController(), t = setTimeout(() => ac.abort(), ms); try { const r = await fetch(url, { ...opt, signal: ac.signal }); if (!r.ok) throw new Error('http ' + r.status); return r; } finally { clearTimeout(t); } }
 function paintSwapUsd() {
   const i = $app.querySelector('#susdIn'), o = $app.querySelector('#susdOut'); if (!i && !o) return;
   const { n, from, to } = swapPair(), pf = pxOf(n, from), pt = pxOf(n, to), a = Number(S.samt || 0), q = S.quote && S.quote.ok ? S.quote : null;
@@ -2396,6 +2457,143 @@ V.swapReview = () => { const { n, from, to } = swapPair(), q = S.quote; return S
     ${n.kind === 'evm' && !from.native ? `<div class="ck wn">${ic(P.info, 15, '#f0b54a', 2.2)}<span>Includes approval for ${from.s} · exact amount only</span></div>` : ''}
     <div class="ck ok">${ic(P.chk, 15, '#5c9bff', 2.8)}<span>Signed on this device · your key never leaves it</span></div></div>`,
   `<div class="slide" id="slide" role="slider" aria-label="Slide to swap" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0"><span class="tx">Slide to swap</span><span class="ch">${ic(P.chev, 16, '#545c6e', 2.4)}${ic(P.chev, 16, '#8b93a6', 2.4)}</span><span class="kn" id="knob">${ic(P.face, 26, '#fff', 2)}</span></div>`); };
+
+/* ---------- Bridge entre redes (LI.FI). Solo rutas que llevan tu direccion dentro de lo que firmas: Mayan y Across ---------- */
+const LIFI = 'https://li.quest/v1', LIFI_DIAMOND = '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE', NONEVM = '0x11f111f111f111f111f111f111f111f111f111f1';
+const LIFI_INTEG = '', LIFI_FEE = 0.0025;   // comision de Sectora (0,25 %): se activa al poner aqui el integrador registrado en el portal de LI.FI
+const BCHAIN = { eth: 1, bnb: 56, sol: 1151111081099710 }, BRIDGES = 'mayan,across', ZERO = '0x0000000000000000000000000000000000000000';
+const BD_ABI = 'tuple(bytes32 transactionId,string bridge,string integrator,address referrer,address sendingAssetId,address receiver,uint256 minAmount,uint256 destinationChainId,bool hasSourceSwaps,bool hasDestinationCall)';
+const BNETS = () => ['eth', 'bnb', 'sol'].filter(k => NETS[k] && (PREVIEW || NETS[k].rpc.length) && (k !== 'sol' || S.sol));
+const BTOKS = n => n.tokens.filter(t => t.native || t.s === 'USDT' || t.s === 'USDC');
+const lifiTok = (n, t) => t.native ? (n.kind === 'sol' ? '11111111111111111111111111111111' : ZERO) : (n.kind === 'sol' ? t.mint : t.a);
+const lc = x => String(x || '').toLowerCase();
+function bridgePair() { const n = curNet(), ok = BNETS().includes(n.id), from = tokOf(n, S.bf || n.tokens[0].s);
+  const dk = S.bdn && S.bdn !== n.id && BNETS().includes(S.bdn) ? S.bdn : (BNETS().find(k => k !== n.id) || 'eth'), dn = NETS[dk], to = BTOKS(dn).find(t => tid(t) === S.bto) || BTOKS(dn)[0];
+  return { n, from, dn, to, ok, can: ok && BTOKS(n).some(t => tid(t) === tid(from)) }; }
+const bKey = c => `${c.n.id}:${tid(c.from)}>${c.dn.id}:${tid(c.to)}:${S.bamt || ''}`;
+const fmtSecs = s => !s ? '—' : s < 90 ? `~${Math.max(1, Math.round(s))} s` : `~${Math.round(s / 60)} min`;
+async function lifiQuote(c, amt) {   // solo se muestra una ruta que ya pasa la verificacion; si la mas rapida no la pasa, se pide otra
+  let br = BRIDGES;
+  for (let k = 0; k < 2; k++) {   // como mucho una ruta alternativa: LI.FI limita las consultas por conexion
+    const u = `${LIFI}/quote?fromChain=${BCHAIN[c.n.id]}&toChain=${BCHAIN[c.dn.id]}&fromToken=${lifiTok(c.n, c.from)}&toToken=${lifiTok(c.dn, c.to)}&fromAmount=${amt}&fromAddress=${addrOf(c.n)}&toAddress=${addrOf(c.dn)}&slippage=0.005&order=FASTEST&allowBridges=${br}${LIFI_INTEG ? `&integrator=${encodeURIComponent(LIFI_INTEG)}&fee=${LIFI_FEE}` : ''}`;
+    let d = null; try { d = await (await fetchT(u, { credentials: 'omit', referrerPolicy: 'no-referrer' }, 20000)).json(); } catch (e) { break; }
+    if (!d || !d.estimate || !d.transactionRequest || !d.action) break;
+    try { bridgeCheck(d, c, amt); return d; } catch (e) { br = /^across/i.test(String(d.tool)) ? 'mayan' : 'across'; } }
+  throw new Error('no-route'); }
+let bqTimer = 0, bqSeq = 0;
+function requestBQuote() { clearTimeout(bqTimer); const seq = ++bqSeq; S.bq = null; paintBQuote('loading'); bqTimer = setTimeout(() => fetchBQuote(seq), 700); }
+async function fetchBQuote(seq) { const c = bridgePair(), amt = toUnits(S.bamt, c.from.d); if (!c.can || amt <= 0n) return paintBQuote('idle');
+  try { const d = await lifiQuote(c, amt); if (seq !== bqSeq) return; const e = d.estimate, td = Number(d.action.toToken && d.action.toToken.decimals) || c.to.d, sum = a => (a || []).reduce((t, x) => t + (Number(x.amountUSD) || 0), 0);
+    S.bq = { ok: true, raw: d, key: bKey(c), amt: String(amt), out: ethers.formatUnits(e.toAmount, td), min: ethers.formatUnits(e.toAmountMin, td), minRaw: String(e.toAmountMin), secs: Number(e.executionDuration) || 0, feeUsd: sum(e.feeCosts), gasUsd: sum(e.gasCosts) };
+    paintBQuote('ok'); }
+  catch (e) { if (seq !== bqSeq) return; S.bq = { ok: false }; paintBQuote('off'); } }
+function paintBUsd() { const i = $app.querySelector('#busdIn'), o = $app.querySelector('#busdOut'); if (!i && !o) return; const c = bridgePair(), q = S.bq, pi = pxOf(c.n, c.from), po = pxOf(c.dn, c.to), a = Number(S.bamt || 0);
+  if (i) i.textContent = a > 0 ? (pi ? '≈ ' + fmtUsd(a * pi.usd) : 'Dollar price unavailable') : '$0.00';
+  if (o) o.textContent = q && q.ok ? (po ? '≈ ' + fmtUsd(Number(q.out) * po.usd) : 'Dollar price unavailable') : '$0.00'; }
+function paintBQuote(state) { const out = $app.querySelector('#bout'), st = $app.querySelector('#bstate'), qd = $app.querySelector('#bqd'), go = $app.querySelector('#brGo'); if (!out) return; const q = S.bq;
+  if (state === 'ok' && q && q.ok) { out.textContent = fmtAmt(q.out); out.classList.remove('empty'); st.textContent = fmtSecs(q.secs); go.disabled = false;
+    if (qd) { qd.innerHTML = `<div>Minimum received<b>${fmtAmt(q.min)} ${esc(bridgePair().to.s)}</b></div><div>Fees<b>≈ ${fmtUsd(q.feeUsd + q.gasUsd)}</b></div>`; qd.hidden = false; } }
+  else { out.textContent = '0'; out.classList.add('empty'); go.disabled = true; st.textContent = state === 'loading' ? 'Best route…' : state === 'off' ? 'No route right now' : 'Enter an amount';
+    if (qd) { qd.hidden = state !== 'off'; if (state === 'off') qd.innerHTML = `<p class="qoff">${ic(P.info, 16, '#f0b54a')}<span>Couldn't find a bridge route for this amount right now. Try another amount or token in a moment.</span></p>`; } }
+  paintBUsd(); }
+V.bridge = () => { const c = bridgePair(), { n, from, dn, to } = c, a = S.bamt || '';
+  return SCREEN(`${NAV('Bridge', 0, 'home')}
+  <div class="nbar" style="justify-content:center;margin-top:2px">${NETPILL()}</div>
+  ${!c.ok ? `<div class="center" style="text-align:center;margin-top:60px">${ic(P.bridge, 40, '#545c6e')}<h1 class="h1" style="margin-top:16px"><span class="notr">${n.name}</span><br><em>Bridge opens soon</em></h1><p class="lead">Bridge between Ethereum, BNB Chain and Solana. Switch the network above to start.</p></div>`
+  : `<div class="sw card"><div class="swl"><span>You send</span><span>Balance <b data-bal="${tid(from)}">—</b></span></div>
+    <div class="swr"><div class="swv ${a ? '' : 'empty'}" id="bamtv">${esc(a || '0')}</div><button class="tokb" data-sheet="bfrom">${TOKI(from, 28)}${esc(from.s)}${ic(P.down, 14, '#8b93a6', 2.4)}</button></div><div class="swu" id="busdIn">$0.00</div></div>
+  <button class="flipb" id="bflip" aria-label="Switch networks">${ic(P.flip, 18, '#fff', 2.2)}</button>
+  <div class="sw card"><div class="swl"><span><span>You receive</span> · <b class="bdn notr">${NDOT(dn)}${dn.name}</b></span><span id="bstate">Enter an amount</span></div>
+    <div class="swr"><div class="swv empty" id="bout">0</div><button class="tokb" data-sheet="bto">${TOKI(to, 28)}${esc(to.s)}${ic(P.down, 14, '#8b93a6', 2.4)}</button></div><div class="swu" id="busdOut">$0.00</div></div>
+  ${c.can ? '<div class="qd card" id="bqd" hidden></div>' : `<div class="bnote card">${from.s === 'SECT' ? `<p>SECT lives on Ethereum. Swap it to ETH first, then bridge the ETH to another network.</p><button class="btn sec" data-bswap="1">${ic(P.swap, 18, '#5c9bff', 2)}Go to Swap</button>` : `<p>This token can't be bridged yet. Bridge ETH, BNB, SOL, USDT or USDC.</p>`}</div>`}
+  <div class="pct">${[25, 50, 75, 100].map(p => `<button data-bpct="${p}" aria-label="Bridge ${p}%">${p}%</button>`).join('')}</div>
+  <div class="kp sm">${['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', 'del'].map(k => `<button data-bk="${k}" aria-label="${k === 'del' ? 'Delete' : k}">${k === 'del' ? ic(P.del, 24) : k}</button>`).join('')}</div>`}${SHEET()}`,
+  c.ok ? `<button class="btn" id="brGo" disabled>Review bridge</button>` : `<button class="btn sec" data-go="home">Back to home</button>`); };
+V.bridgeReview = () => { const c = bridgePair(), q = S.bq; if (!q || !q.ok || q.key !== bKey(c)) { S.view = 'bridge'; return V.bridge(); }
+  const { n, from, dn, to } = c, pi = pxOf(n, from), po = pxOf(dn, to), ok = ic(P.chk, 15, '#5c9bff', 2.8);
+  return SCREEN(`${NAV('Review bridge', 0, 'bridge')}
+  <div class="swsum card"><div><small><span>You send</span> · <span class="notr">${n.name}</span></small><b>${esc(S.bamt)} ${esc(from.s)}</b>${pi ? `<small>≈ ${fmtUsd(Number(S.bamt) * pi.usd)}</small>` : ''}</div>${TOKI(from, 40)}</div>
+  <div class="swmid">${ic(P.bridge, 18, '#5c9bff', 2)}</div>
+  <div class="swsum card"><div><small><span>You receive at least</span> · <span class="notr">${dn.name}</span></small><b>${fmtAmt(q.min)} ${esc(to.s)}</b><small>Expected ${fmtAmt(q.out)} ${esc(to.s)}${po ? ` · ≈ ${fmtUsd(Number(q.out) * po.usd)}` : ''} · ${fmtSecs(q.secs)}</small></div>${TOKI(to, 40)}</div>
+  <div class="checks card"><div class="chh">${ic(P.shield, 18, '#5c9bff', 2)}<b>Security checks</b><span class="notr">${n.name} → ${dn.name}</span></div>
+    <div class="ck ok">${ok}<span><span>Arrives at your own address</span> <span class="mono notr">${short(addrOf(dn))}</span></span></div>
+    <div class="ck ok">${ok}<span>Verified bridge contract · checked before signing</span></div>
+    ${n.kind === 'evm' && !from.native ? `<div class="ck wn">${ic(P.info, 15, '#f0b54a', 2.2)}<span>Includes approval for ${from.s} · exact amount only</span></div>` : ''}
+    <div class="ck ok">${ok}<span>Signed on this device · your key never leaves it</span></div></div>
+  <div class="kv card"><div>Fees<b>≈ ${fmtUsd(q.feeUsd)}</b></div><div>Network fee<b>≈ ${fmtUsd(q.gasUsd)}</b></div></div>`,
+  `<div class="slide" id="slide" role="slider" aria-label="Slide to bridge" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0"><span class="tx">Slide to bridge</span><span class="ch">${ic(P.chev, 16, '#545c6e', 2.4)}${ic(P.chev, 16, '#8b93a6', 2.4)}</span><span class="kn" id="knob">${ic(P.face, 26, '#fff', 2)}</span></div>`); };
+// seguridad: antes de firmar se comprueba que la ruta va a tu propia direccion, a la red elegida y por la cantidad exacta
+function bridgeCheck(d, c, amt) { const bad = () => { throw new UErr('Unexpected bridge transaction. Stopped for your safety.'); }, a = d.action || {}, tr = d.transactionRequest || {};
+  const same = (x, y, k) => k === 'sol' ? String(x) === String(y) : lc(x) === lc(y);
+  if (String(a.fromAmount) !== String(amt) || Number(a.fromChainId) !== BCHAIN[c.n.id] || Number(a.toChainId) !== BCHAIN[c.dn.id]) bad();
+  if (!same(a.fromAddress, addrOf(c.n), c.n.kind) || !same(a.toAddress, addrOf(c.dn), c.dn.kind)) bad();
+  if (!a.fromToken || !a.toToken || !same(a.fromToken.address, lifiTok(c.n, c.from), c.n.kind) || !same(a.toToken.address, lifiTok(c.dn, c.to), c.dn.kind)) bad();
+  if (!/^(mayan|across)/i.test(String(d.tool || ''))) bad();
+  if (c.n.kind === 'sol') return;   // la transaccion de Solana se revisa al firmar: firmante unico, simulacion y destino dentro
+  if (lc(tr.to) !== lc(LIFI_DIAMOND) || Number(tr.chainId) !== c.n.chainId) bad();
+  if (BigInt(tr.value || 0) !== (c.from.native ? amt : 0n)) bad();
+  if (!c.from.native && lc(d.estimate && d.estimate.approvalAddress) !== lc(LIFI_DIAMOND)) bad();
+  const data = lc(tr.data); if (!/^0x[0-9a-f]{8,}$/.test(data)) bad();
+  let b; try { [b] = ethers.AbiCoder.defaultAbiCoder().decode([BD_ABI], '0x' + data.slice(10)); } catch (e) { bad(); }
+  if (b.hasDestinationCall || !/^(mayan|across)/i.test(String(b.bridge)) || BigInt(b.destinationChainId) !== BigInt(BCHAIN[c.dn.id])) bad();
+  if (LIFI_INTEG && b.integrator !== LIFI_INTEG) bad();
+  if (c.dn.kind === 'evm') { if (lc(b.receiver) !== lc(S.addr) || data.split(lc(S.addr).slice(2)).length - 1 < 2) bad(); }
+  else if (lc(b.receiver) !== NONEVM || !data.includes(ethers.hexlify(b32(S.sol)).slice(2).toLowerCase())) bad(); }
+async function signBridge(step = () => {}) { if (PREVIEW) throw new UErr('Bridges open with the network release.');
+  const c = bridgePair(), { n, from, dn, to } = c, q = S.bq, amt = toUnits(S.bamt, from.d); let hash, steps = 1, d;
+  if (!c.can || !q || !q.ok || amt <= 0n || String(amt) !== q.amt) throw new UErr('The price moved. Review the new price and try again.');
+  const fresh = async () => { const r = await lifiQuote(c, amt); bridgeCheck(r, c, amt); if (BigInt(r.estimate.toAmountMin) * 1000n < BigInt(q.minRaw) * 995n) throw new UErr('The price moved. Review the new price and try again.'); return r; };
+  if (n.kind === 'sol') {
+    const bal = BigInt((await rpc(n, 'getBalance', [S.sol])).value); if (bal < (from.native ? amt : 0n) + 2n * RENT + 20000n) throw new UErr('Not enough SOL for the amount and the network fee.');
+    step('Preparing…'); d = await fresh();
+    const tx = ethers.getBytes(ethers.decodeBase64(d.transactionRequest.data)); let off = 0, cnt = 0, sh = 0; for (;;) { const b = tx[off++]; cnt |= (b & 0x7f) << sh; if (!(b & 0x80)) break; sh += 7; }
+    const msg = tx.slice(off + cnt * 64); let m = msg[0] & 0x80 ? 1 : 0; const nreq = msg[m]; m += 3; let kc = 0; sh = 0; for (;;) { const b = msg[m++]; kc |= (b & 0x7f) << sh; if (!(b & 0x80)) break; sh += 7; }
+    if (cnt !== 1 || nreq !== 1 || kc < 1 || ethers.hexlify(msg.slice(m, m + 32)) !== ethers.hexlify(b32(S.sol))) throw new UErr('Unexpected bridge transaction. Stopped for your safety.');
+    if (dn.kind === 'evm' && !ethers.hexlify(tx).toLowerCase().includes(lc(S.addr).slice(2))) throw new UErr('Unexpected bridge transaction. Stopped for your safety.');
+    await solGuard(n, tx, from, amt, 'bridge');
+    const sig = SWSOL.sign(msg, S.solSk); tx.set(sig, off); hash = ethers.encodeBase58(sig);
+    step('Bridging…'); await solSend(n, tx);
+  } else {
+    let base = await evmTxBase(n);
+    if (!from.native) {   // aprobacion exacta (no ilimitada) al contrato de LI.FI, solo si hace falta
+      if (await erc20Bal(n, from.a) < amt) throw new UErr(`Not enough ${from.s} for this amount.`);
+      const cur = await allowance(n, from.a, LIFI_DIAMOND);
+      if (cur < amt) { const approve = async v => { const tx = { to: from.a, value: 0n, data: new ethers.Interface(['function approve(address,uint256)']).encodeFunctionData('approve', [LIFI_DIAMOND, v]) };
+          const gasLimit = await estGas(n, tx, 80000n); await needNative(n, 0n, gasLimit, base);
+          const ra = await S.wallet.signTransaction({ ...tx, gasLimit, ...(({ baseFee, ...f }) => f)(base) }); steps++;
+          step(`Approving ${from.s}…`); await sendRaw(n, ra);
+          if (await waitEvm(n, ethers.keccak256(ra)) !== true) throw new UErr('The approval did not confirm yet. Try the bridge again in a minute.');
+          const next = base.nonce + 1; base = await evmTxBase(n); if (base.nonce < next) base.nonce = next; };
+        if (cur > 0n) await approve(0n);   // tokens como USDT exigen volver a 0 antes de aprobar otra cantidad
+        await approve(amt); } }
+    step('Preparing…'); d = await fresh();
+    const tr = d.transactionRequest, tx = { to: tr.to, data: tr.data, value: BigInt(tr.value || 0) };
+    const gasLimit = await estGas(n, tx, BigInt(tr.gasLimit || 500000)); await needNative(n, tx.value, gasLimit, base);
+    const raw = await S.wallet.signTransaction({ ...tx, gasLimit, ...(({ baseFee, ...f }) => f)(base) });
+    hash = ethers.keccak256(raw); step('Bridging…'); await sendRaw(n, raw);
+  }
+  const e = d.estimate, td = Number(d.action.toToken && d.action.toToken.decimals) || to.d;
+  return { hash, kind: 'bridge', amount: S.bamt, token: from.s, out: fmtAmt(ethers.formatUnits(e.toAmount, td)), outToken: to.s, net: n.name, netId: n.id, toNet: dn.name, toNetId: dn.id, secs: Number(e.executionDuration) || q.secs, bst: 'moving', steps: steps >= 2 ? 'Approve + bridge' : 'Bridge', time: Date.now(), st: 'pend' }; }
+// seguimiento de la llegada en la otra red
+const BST = { moving: ['On its way', 'var(--warn)'], done: ['Arrived', 'var(--b2)'], partial: ['Arrived', 'var(--b2)'], refunded: ['Refunded', 'var(--warn)'], failed: ['Failed', 'var(--bad)'] };
+const bridgeSt = t => t.st === 'fail' ? BST.failed : BST[t.bst] || BST.moving;
+let brTracking = false;
+async function trackBridges() { if (PREVIEW || brTracking) return; brTracking = true;
+  try { for (let i = 0; i < 360; i++) { const L = txs().filter(t => t.kind === 'bridge' && t.hash && (t.bst || 'moving') === 'moving' && t.st !== 'fail' && Date.now() - t.time < 24 * 3600e3); if (!L.length) break;
+      for (const t of L.slice(0, 5)) { let j = null; try { j = await (await fetchT(`${LIFI}/status?txHash=${encodeURIComponent(t.hash)}&fromChain=${BCHAIN[t.netId]}&toChain=${BCHAIN[t.toNetId]}`, { credentials: 'omit', referrerPolicy: 'no-referrer' }, 12000)).json(); } catch (e) {}
+        const s0 = j && j.status, sub = j && j.substatus, nb = s0 === 'DONE' ? (sub === 'REFUNDED' ? 'refunded' : sub === 'PARTIAL' ? 'partial' : 'done') : s0 === 'FAILED' ? 'failed' : null; if (!nb) continue;
+        const A = txs(), x = A.find(y => y.hash === t.hash); if (!x) continue; x.bst = nb;
+        const r = j.receiving; if (r && r.token && /^\d+$/.test(String(r.amount || ''))) { try { x.got = ethers.formatUnits(r.amount, Number(r.token.decimals) || 18); } catch (e) {} }
+        store.set('txs', JSON.stringify(A)); if (S.balAt) { S.balAt[t.toNetId] = 0; S.balAt[t.netId] = 0; }
+        if (S.view === 'activity') render(); else if (S.view === 'sent' && (txs()[0] || {}).hash === t.hash) { const el = $app.querySelector('#txst'), b2 = BST[nb]; if (el) { el.textContent = b2[0]; el.style.color = b2[1]; } } }
+      await new Promise(r => setTimeout(r, 8000)); } } finally { brTracking = false; } }
+function bRow(n, e) { const t = e.local, st = bridgeSt(t), dn = NETS[t.toNetId] || {}, tm = new Date(e.time).toLocaleTimeString(LOC(), { hour: 'numeric', minute: '2-digit' }), href = n.exp ? n.exp + e.hash : '';
+  return `<${href ? `a href="${href}" target="_blank" rel="noopener noreferrer"` : 'div'} class="hrow"><span class="hic k-swap">${ic(P.bridge, 18, 'currentColor', 1.9)}</span><div class="ht"><b><span>Bridge</span> <span class="notr">${esc(t.token)} → ${esc(t.outToken)}</span></b><small><em style="color:${st[1]}">${st[0]}</em> · <span class="notr">${esc(dn.name || '')}</span> · ${tm}</small></div><div class="hr"><b>−${fmtAmt(t.amount)} ${esc(t.token)}</b><small>+${t.got ? fmtAmt(t.got) : esc(t.out)} ${esc(t.outToken)}</small></div></${href ? 'a' : 'div'}>`; }
+function bridgeSent(t, n) { const dn = NETS[t.toNetId] || NETS.eth, st = bridgeSt(t);
+  return SCREEN(`<div class="sg" style="margin-top:20px"><canvas class="gl" aria-hidden="true"></canvas><span class="bdg">${ic(P.chk, 34, '#fff', 2.8)}</span></div>
+  <div style="text-align:center"><h1 class="h1" style="margin-top:22px">Bridge sent</h1><p class="lead notr">${esc(t.amount)} ${esc(t.token)} → ~${esc(t.out)} ${esc(t.outToken)}</p></div>
+  <div class="kv card" style="margin-top:22px"><div>Status<b id="txst" style="color:${st[1]}">${st[0]}</b></div><div>Route<b class="notr">${esc(t.net)} → ${esc(dn.name)}</b></div><div>Arrives in<b>${fmtSecs(t.secs)}</b></div><div>Transaction<b class="m">${n.exp && t.hash ? `<a href="${n.exp + t.hash}" target="_blank" rel="noopener noreferrer">${short(t.hash)} ↗</a>` : short(t.hash)}</b></div></div>`,
+  `<button class="btn sec" data-go="activity">${ic(P.act, 18, '#5c9bff')}View in Activity</button><button class="btn" data-go="home">Done</button>`); }
 
 /* ---------- firmas ---------- */
 const cu16 = n => { const o = []; for (;;) { let b = n & 0x7f; n >>= 7; if (!n) { o.push(b); return o; } o.push(b | 0x80); } };
@@ -2479,12 +2677,12 @@ function kyberCheck(data, from, to, amt, minOut) {   // si la API devolviera otr
   try { d = KYI().decodeFunctionData('swap', data)[0].desc; } catch (e) { bad(); }
   if (d.dstReceiver.toLowerCase() !== S.addr.toLowerCase() || d.srcToken.toLowerCase() !== tk(from) || d.dstToken.toLowerCase() !== tk(to) || d.amount !== amt || d.minReturnAmount * 1000n < minOut * 999n || d.feeAmounts.some(f => f > 0n)) bad(); }
 /* canjes en Solana: antes de firmar se simula la transaccion y solo puede salir lo que pediste (mas la comision) */
-async function solGuard(n, txb, from, amt) { const bad = () => { throw new UErr('Unexpected swap transaction. Stopped for your safety.'); }, me = ethers.hexlify(b32(S.sol));
+async function solGuard(n, txb, from, amt, w = 'swap') { const B = w === 'bridge', bad = () => { throw new UErr(B ? 'Unexpected bridge transaction. Stopped for your safety.' : 'Unexpected swap transaction. Stopped for your safety.'); }, me = ethers.hexlify(b32(S.sol)), NOCHK = B ? "Couldn't check the bridge right now. Try again in a minute." : "Couldn't check the swap right now. Try again in a minute.";
   const TP = ['TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA', 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb'];
-  let bal, tl, sim; try { [bal, ...tl] = await Promise.all([rpc(n, 'getBalance', [S.sol]), ...TP.map(p => rpc(n, 'getTokenAccountsByOwner', [S.sol, { programId: p }, { encoding: 'jsonParsed' }]))]); } catch (e) { throw new UErr("Couldn't check the swap right now. Try again in a minute."); }
+  let bal, tl, sim; try { [bal, ...tl] = await Promise.all([rpc(n, 'getBalance', [S.sol]), ...TP.map(p => rpc(n, 'getTokenAccountsByOwner', [S.sol, { programId: p }, { encoding: 'jsonParsed' }]))]); } catch (e) { throw new UErr(NOCHK); }
   const pre = tl.flatMap(r => (r && r.value) || []).slice(0, 90).map(x => { const i = x.account.data.parsed.info; return { a: x.pubkey, mint: i.mint, v: BigInt(i.tokenAmount.amount) }; });
-  try { sim = await rpc(n, 'simulateTransaction', [ethers.encodeBase64(txb), { encoding: 'base64', sigVerify: false, replaceRecentBlockhash: true, commitment: 'confirmed', accounts: { encoding: 'base64', addresses: [S.sol, ...pre.map(p => p.a)] } }]); } catch (e) { throw new UErr("Couldn't check the swap right now. Try again in a minute."); }
-  const v = sim && sim.value; if (!v) bad(); if (v.err) throw new UErr('This swap would fail on the network right now. Get a new price and try again.');
+  try { sim = await rpc(n, 'simulateTransaction', [ethers.encodeBase64(txb), { encoding: 'base64', sigVerify: false, replaceRecentBlockhash: true, commitment: 'confirmed', accounts: { encoding: 'base64', addresses: [S.sol, ...pre.map(p => p.a)] } }]); } catch (e) { throw new UErr(NOCHK); }
+  const v = sim && sim.value; if (!v) bad(); if (v.err) throw new UErr(B ? 'This bridge would fail on the network right now. Get a new price and try again.' : 'This swap would fail on the network right now. Get a new price and try again.');
   const acc = v.accounts || []; if (acc.length !== pre.length + 1) bad();
   const lamPre = BigInt(bal.value), lamPost = acc[0] ? BigInt(acc[0].lamports) : 0n; if (lamPre - lamPost > (from.native ? amt : 0n) + 50000000n) bad();   // margen: 0.05 SOL para comisiones y cuentas nuevas
   pre.forEach((p, i) => { const a = acc[i + 1]; if (!a) { if (p.v > 0n) bad(); return; }
@@ -2568,7 +2766,7 @@ let tracking = false;
 async function trackPending() { if (PREVIEW || tracking) return; tracking = true;
   try { for (let i = 0; i < 120; i++) { const pend = txs().filter(t => t.st === 'pend' && Date.now() - t.time < 15 * 60e3).slice(0, 6); if (!pend.length) break;
       for (const t of pend) { let st = null; try { st = await txState(t); } catch (e) {} if (st && st !== 'pend') { const L = txs(), x = L.find(y => y.hash === t.hash); if (x) { x.st = st; if (t._h && t._h !== x.hash) { x.hash = t._h; if (x.kind === 'cancel') x.kind = 'send'; } store.set('txs', JSON.stringify(L)); }
-          if (S.view === 'activity') render(); else if (S.view === 'sent' && [t.hash, t._h].includes((txs()[0] || {}).hash)) { const e = $app.querySelector('#txst'); if (e) { const s2 = TXST[st]; e.textContent = s2[0]; e.style.color = s2[1]; } const ha = $app.querySelector('.hact'); if (ha) ha.remove(); } } }
+          if (S.view === 'activity') render(); else if (S.view === 'sent' && t.kind !== 'bridge' && [t.hash, t._h].includes((txs()[0] || {}).hash)) { const e = $app.querySelector('#txst'); if (e) { const s2 = TXST[st]; e.textContent = s2[0]; e.style.color = s2[1]; } const ha = $app.querySelector('.hact'); if (ha) ha.remove(); } } }
       await new Promise(r => setTimeout(r, 4000)); } } finally { tracking = false; } }
 function keepTx(rec) { const L = txs(); rec.from = rec.from || addrOf(NETS[rec.netId || 'eth'] || curNet()); L.unshift(rec); store.set('txs', JSON.stringify(L.slice(0, 40))); trackPending(); }
 
@@ -2610,7 +2808,8 @@ function bindMulti() {
   qa('[data-net]').forEach(b => b.addEventListener('click', () => { const k = b.dataset.net; if (S.netBusy) return; if (k === S.net) { S.sheet = null; return render(); }
     // se ve el cambio: la red elegida pasa a verde con pulso y "Connected"; luego se cierra la hoja
     S.netBusy = true; qa('.nrow[data-net]').forEach(r => { const on = r === b; r.classList.toggle('on', on); const d = r.querySelector('.ndot'); if (d) d.className = 'ndot ' + (on ? 'live' : 'off'); const c = r.querySelector('.ncon'); if (c) { c.classList.toggle('on', on); c.textContent = on ? 'Connected' : 'Connect'; } });
-    setTimeout(() => { S.netBusy = false; S.net = k; store.set('net', S.net); S.sheet = null; S.tok = null; S.sf = null; S.st = null; S.to = ''; S.amt = ''; S.samt = ''; S.quote = null; render(); toast('Connected to ' + NETS[k].name); }, 700); }));
+    setTimeout(() => { S.netBusy = false; S.net = k; store.set('net', S.net); S.sheet = null; S.tok = null; S.sf = null; S.st = null; S.bf = null; S.bamt = ''; S.bq = null; S.to = ''; S.amt = ''; S.samt = ''; S.quote = null; render(); toast('Connected to ' + NETS[k].name); }, 700); }));
+  qa('[data-bpick]').forEach(b => b.addEventListener('click', () => { const [w, a, t] = b.dataset.bpick.split(':'); if (w === 'f') S.bf = a; else { S.bdn = a; S.bto = t; } S.sheet = null; S.bq = null; render(); }));
   qa('[data-pick]').forEach(b => b.addEventListener('click', () => { const [w, s] = b.dataset.pick.split(':'); if (w === 'send') S.tok = s; else if (w === 'from') { if (s === tid(swapPair().to)) S.st = tid(swapPair().from); S.sf = s; } else { if (s === tid(swapPair().from)) S.sf = tid(swapPair().to); S.st = s; } S.sheet = null; render(); if (S.view === 'swap' && S.samt) requestQuote(); }));
   // enviar: validacion por tipo de red
   const to = q('#to');
@@ -2639,23 +2838,44 @@ function bindMulti() {
     q('#swapGo').addEventListener('click', () => { if (S.quote && S.quote.ok) go('swapReview'); });
     if (S.quote && S.quote.ok) paintQuote('ok'); else if (S.samt && +S.samt > 0) requestQuote(); else paintQuote('idle');
   }
+  // bridge
+  if (S.view === 'bridge' && q('#bamtv')) { const c = bridgePair();
+    q('#bflip').addEventListener('click', () => { const nk = c.dn.id, back = BTOKS(c.n).find(t => t.s === c.from.s), there = BTOKS(c.dn).find(t => t.s === c.to.s);
+      S.bdn = c.n.id; S.bto = back ? tid(back) : null; S.bf = there ? tid(there) : null; S.net = nk; store.set('net', nk); S.bamt = ''; S.bq = null; render(); });
+    qa('[data-bk]').forEach(b => b.addEventListener('click', () => { const k = b.dataset.bk, d = c.from.d; let a = S.bamt || '';
+      if (k === 'del') a = a.slice(0, -1); else if (k === '.') { if (!a.includes('.')) a = (a || '0') + '.'; } else if (a.replace('.', '').length < 12) { const dd = a.split('.')[1]; if (!(dd && dd.length >= Math.min(8, d))) a = (a === '0' ? '' : a) + k; }
+      S.bamt = a; const v = q('#bamtv'); v.textContent = a || '0'; v.classList.toggle('empty', !a); if (c.can && +a > 0) requestBQuote(); else { clearTimeout(bqTimer); bqSeq++; S.bq = null; paintBQuote('idle'); } }));
+    qa('[data-bpct]').forEach(b => b.addEventListener('click', async () => { if (!c.can || b.classList.contains('busy')) return; const all = qa('[data-bpct]'); all.forEach(x => x.classList.add('busy'));
+      try { const a = await pctAmount(c.n, c.from, BigInt(b.dataset.bpct), 400000n, 10000000n); if (S.view !== 'bridge') return;
+        if (a === null) return toast(`Not enough ${c.n.native} for the amount and the network fee.`, 1);
+        S.bamt = a === '0' ? '' : a; const v = q('#bamtv'); if (v) { v.textContent = S.bamt || '0'; v.classList.toggle('empty', !S.bamt); } if (+S.bamt > 0) requestBQuote(); else paintBQuote('idle'); }
+      catch (e) { if (S.view === 'bridge') toast(e instanceof UErr ? e.message : "Couldn't reach the network. Try again.", 1); }
+      finally { all.forEach(x => x.classList.remove('busy')); } }));
+    const bs = q('[data-bswap]'); if (bs) bs.addEventListener('click', () => { S.sf = tid(c.from); S.st = c.n.tokens[0].s; S.samt = ''; S.quote = null; go('swap'); });
+    q('#brGo').addEventListener('click', () => { const c2 = bridgePair(); if (S.bq && S.bq.ok && S.bq.key === bKey(c2)) go('bridgeReview'); });
+    if (c.can && S.bq && S.bq.ok && S.bq.key === bKey(c)) paintBQuote('ok'); else if (c.can && +S.bamt > 0) requestBQuote(); else paintBQuote('idle');
+  }
+  if (['home', 'activity', 'sent'].includes(S.view)) trackBridges();
+  // botones de Inicio: si una palabra no cabe (idiomas con palabras largas o movil pequeno), la letra se reduce lo justo
+  if (S.view === 'home') { const fit = () => $app.querySelectorAll('.acts4.mm span').forEach(e => { e.style.fontSize = ''; let f = parseFloat(getComputedStyle(e).fontSize); while (e.scrollWidth > e.clientWidth + 1 && f > 9) { f -= .5; e.style.fontSize = f + 'px'; } }); requestAnimationFrame(fit); setTimeout(fit, 350); }
   // deslizar en swap
   const sl = q('#slide'), kn = q('#knob');
-  if (sl && S.view === 'swapReview') { let x0 = null, dx = 0; const max = () => sl.clientWidth - 66;
+  if (sl && (S.view === 'swapReview' || S.view === 'bridgeReview')) { let x0 = null, dx = 0; const max = () => sl.clientWidth - 66;
     const setX = v => { dx = Math.max(0, Math.min(max(), v)); kn.style.transform = `translateX(${dx}px)`; };
     let busy = false; const lab = sl.querySelector('.tx');
     const fin = async () => { if (busy) return; if (dx >= max() - 4) { busy = true; sl.classList.add('done'); lab.textContent = PREVIEW ? 'Signing…' : 'Preparing…';
-        try { keepTx(await signSwap(m => lab.textContent = m)); setTimeout(() => go('sent'), 300); } catch (e) { busy = false; console.warn('[wallet] swap', e); go('swap'); toast(errMsg(e, PREVIEW ? 'Could not sign the swap. Try again.' : 'The swap could not be sent. Try again.'), 1); } }
+        const br = S.view === 'bridgeReview';
+        try { keepTx(await (br ? signBridge : signSwap)(m => lab.textContent = m)); if (br) trackBridges(); setTimeout(() => go('sent'), 300); } catch (e) { busy = false; console.warn('[wallet] ' + (br ? 'bridge' : 'swap'), e); go(br ? 'bridge' : 'swap'); toast(errMsg(e, br ? 'The bridge could not be sent. Try again.' : PREVIEW ? 'Could not sign the swap. Try again.' : 'The swap could not be sent. Try again.'), 1); } }
       else { kn.style.transition = 'transform .2s'; setX(0); setTimeout(() => kn.style.transition = '', 220); } };
     kn.addEventListener('pointerdown', e => { x0 = e.clientX - dx; kn.setPointerCapture(e.pointerId); });
     kn.addEventListener('pointermove', e => { if (x0 !== null) setX(e.clientX - x0); });
     kn.addEventListener('pointerup', () => { x0 = null; fin(); });
     sl.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === 'ArrowRight') { e.preventDefault(); setX(e.key === 'Enter' ? max() : dx + 50); if (dx >= max() - 4) fin(); } });
   }
-  if (['home', 'send', 'swap'].includes(S.view) || S.sheet) { paintBalances(); if (S.view === 'home') { loadAll(); loadPrices(); } }
+  if (['home', 'send', 'swap', 'bridge'].includes(S.view) || S.sheet) { paintBalances(); if (S.view === 'home') { loadAll(); loadPrices(); } }
   clearInterval(S.pxT); if (S.view === 'home') S.pxT = setInterval(() => { if (S.view !== 'home') return clearInterval(S.pxT); if (document.hidden) return; loadPrices(); loadAll(); }, 60000);
-  if (!PREVIEW && ['send', 'swap'].includes(S.view)) loadBalances();
-  if (['swap', 'swapReview'].includes(S.view)) loadPrices();
+  if (!PREVIEW && ['send', 'swap', 'bridge'].includes(S.view)) loadBalances();
+  if (['swap', 'swapReview', 'bridge', 'bridgeReview'].includes(S.view)) loadPrices();
   if (['sent', 'activity'].includes(S.view)) trackPending();
   if (S.view === 'activity') { loadHist(); loadPrices().then(paintHist); }
 }
