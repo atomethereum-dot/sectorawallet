@@ -913,6 +913,7 @@ html.iosapp .stage,html.iosapp .device,html.iosapp .app{height:var(--app-h)}
 .wcrow .ct small+small{margin-top:3px}
 .wcrow .prm{flex:none;padding:9px 13px;border-radius:11px;background:var(--tile);color:var(--bad);font-size:14px;font-weight:500}
 .wclic{margin:18px 0 0;text-align:center;color:var(--fa);font-size:11.5px}
+.pwhint{margin:8px 2px 0;color:var(--mu);font-size:12.5px;line-height:1.45}
 /* barra inferior en movil: cuatro secciones con su nombre */
 @media (max-width:1023px),(max-height:640px){
   .tabs{left:0;right:0;bottom:0;width:auto;margin:0;height:auto;border-radius:0;border:0;border-top:1px solid var(--ln);background:var(--bg);padding:6px 6px calc(8px + env(safe-area-inset-bottom,0px));justify-content:space-around;box-shadow:none}
@@ -1117,7 +1118,8 @@ const DOTS = (n = 28, rows = 8, p = 11) => { let d = ''; for (let i = 0; i < n; 
 function toast(msg, bad) { const t = document.createElement('div'); t.className = 'toast'; t.setAttribute('role', bad ? 'alert' : 'status'); t.innerHTML = (bad ? ic(P.info, 16, '#f0b54a', 2.2) : ic(P.chk, 16, '#5c9bff', 2.6)) + esc(msg); $app.appendChild(t); setTimeout(() => t.remove(), bad ? 4200 : 1800); }
 async function copy(text, el) { try { await navigator.clipboard.writeText(text); toast('Copied'); }
   catch (e) { if (el) { const r = document.createRange(); r.selectNodeContents(el); const s = getSelection(); s.removeAllRanges(); s.addRange(r); } toast('Selected · copy it manually'); } }
-function strength(p) { let s = 0; if (p.length >= 8) s++; if (p.length >= 12) s++; if (/[A-Z]/.test(p) && /[a-z]/.test(p)) s++; if (/\d/.test(p) && /[^A-Za-z0-9]/.test(p)) s++; return s; }
+const PWOK = p => p.length >= 12 && /[A-Za-z]/.test(p) && /\d/.test(p) && new Set(p).size >= 6;   // minimo: 12 caracteres, con letras y numeros, sin repetir siempre lo mismo
+function strength(p) { if (p.length < 12) return 0; let s = 1; if (PWOK(p)) s++; if (s > 1 && /[A-Z]/.test(p) && /[a-z]/.test(p)) s++; if (s > 2 && (/[^A-Za-z0-9]/.test(p) || p.length >= 16)) s++; return s; }
 let idle = null;
 function armLock() { clearTimeout(idle); S.lastAct = Date.now(); if (S.wallet) idle = setTimeout(lock, S.lockMin * 60000); }
 const lockIfIdle = () => { if (S.wallet && document.visibilityState !== 'hidden' && S.lastAct && Date.now() - S.lastAct > S.lockMin * 60000) lock(); };   // al volver a la app despues del tiempo de bloqueo
@@ -1266,7 +1268,8 @@ V.password = () => SCREEN(`${NAV('', 4, S.mode === 'import' ? 'import' : 'confir
   <div class="fld"><label for="wname">Wallet name</label><div class="in"><input id="wname" maxlength="24" autocomplete="nickname" placeholder="Your name" value="${esc(S.name === 'Account 1' ? '' : S.name)}"><span class="ib">${ic(P.user, 18)}</span></div></div>
   <div class="fld"><label for="pw1">Password</label><div class="in"><input id="pw1" type="password" autocomplete="new-password"><button class="ib" data-eye="pw1" aria-label="Show password">${ic(P.eyeoff, 19)}</button></div>
     <div class="meter" id="meter"><i></i><i></i><i></i><i></i></div><div class="mrow"><span>Strength</span><b id="slabel">—</b></div></div>
-  <div class="reqs" id="reqs">${[['len', '8+ characters'], ['case', 'Uppercase'], ['num', 'Numbers'], ['sym', 'Symbols']].map(([k, t]) => `<span data-r="${k}">${ic(P.chk, 15, '#5c9bff', 2.6)}${t}</span>`).join('')}</div>
+  <div class="reqs" id="reqs">${[['len', '12+ characters'], ['mix', 'Letters and numbers'], ['case', 'Upper and lowercase'], ['sym', 'Symbols']].map(([k, t]) => `<span data-r="${k}">${ic(P.chk, 15, '#5c9bff', 2.6)}${t}</span>`).join('')}</div>
+  <p class="pwhint">Required: 12 characters or more, with letters and numbers. Upper and lowercase and symbols make it stronger.</p>
   <div class="fld"><label for="pw2">Repeat password</label><div class="in"><input id="pw2" type="password" autocomplete="new-password"><span id="match" hidden style="display:flex;align-items:center;gap:6px;color:var(--b2);font-size:13px;font-weight:500;padding-right:10px">${ic(P.chk, 15, '#5c9bff', 2.6)}Match</span></div><div class="err" id="pwerr"></div></div>
   <div class="prog" id="eprog" hidden><i></i></div>`,
   `<button class="btn" id="pwGo" disabled>Create my wallet</button>`);
@@ -2646,12 +2649,12 @@ function bind() {
   if (pw1) { const upd = () => { const p = pw1.value, s = strength(p), cols = ['', '#ff6b5c', '#f0b54a', '#5c9bff', '#1569ff'];
       qa('#meter i').forEach((m, i) => m.style.background = i < s ? cols[s] : '');
       q('#slabel').textContent = p ? ['Too short', 'Weak', 'Fair', 'Strong', 'Very strong'][s] : '—';
-      const R = { len: p.length >= 8, case: /[A-Z]/.test(p) && /[a-z]/.test(p), num: /\d/.test(p), sym: /[^A-Za-z0-9]/.test(p) };
+      const R = { len: p.length >= 12, mix: /[A-Za-z]/.test(p) && /\d/.test(p), case: /[A-Z]/.test(p) && /[a-z]/.test(p), sym: /[^A-Za-z0-9]/.test(p) };
       qa('#reqs span').forEach(e => e.classList.toggle('on', R[e.dataset.r]));
-      const ok = p.length >= 8 && p === pw2.value; q('#pwGo').disabled = !ok; q('#match').hidden = !ok;
-      q('#pwerr').textContent = pw2.value && p !== pw2.value ? 'The passwords do not match.' : ''; };
+      const ok = PWOK(p) && p === pw2.value; q('#pwGo').disabled = !ok; q('#match').hidden = !ok;
+      q('#pwerr').textContent = p.length >= 12 && !R.mix ? 'Add letters and numbers.' : p.length >= 12 && !PWOK(p) ? 'Too simple: avoid repeating the same characters.' : pw2.value && p !== pw2.value ? 'The passwords do not match.' : ''; };
     pw1.addEventListener('input', upd); pw2.addEventListener('input', upd);
-    on('#pwGo', 'click', async () => { const btn = q('#pwGo'), pr = q('#eprog'); btn.disabled = true; pr.hidden = false;
+    on('#pwGo', 'click', async () => { const btn = q('#pwGo'), pr = q('#eprog'); if (!PWOK(pw1.value) || pw1.value !== pw2.value) return; btn.disabled = true; pr.hidden = false;
       try { const json = await S.draft.encrypt(pw1.value, p => { pr.firstChild.style.width = (p * 100).toFixed(0) + '%'; btn.textContent = `Encrypting… ${(p * 100).toFixed(0)}%`; });
         store.set('vault', json); store.del('bio'); store.set('addr', S.draft.address); S.addr = S.draft.address;
         S.name = (q('#wname') && q('#wname').value.trim().slice(0, 24)) || 'Account 1'; store.set('name', S.name); S.since = Date.now(); store.set('since', S.since); S.backed = S.mode === 'import' ? 'imported' : 'confirmed'; store.set('backed', S.backed); store.set('accts', JSON.stringify([{ i: 0, name: S.name, addr: S.draft.address, sol: '' }])); store.set('acct', '0'); S.seed = seedOf(S.draft.mnemonic); useAcct(0); S.draft = null; armLock(); go('ready');
