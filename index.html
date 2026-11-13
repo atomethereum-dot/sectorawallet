@@ -1523,7 +1523,7 @@ const errMsg = (e, fb) => { if (e instanceof UErr) return e.message; const m = S
   if (/abort|failed to fetch|networkerror|no-rpc|http 5/i.test(m)) return "Couldn't reach the network. Try again.";
   return fb; };
 const KYBER_ROUTER = '0x6131B5fae19EA4f9D964eAc0408E4408b66337b5';   // MetaAggregationRouterV2 de KyberSwap
-const NATIVE_EVM = '0xEeeeeEeeeEeEeEeEeEeEEEeeeeEeeeeeeeEEeE';
+const NATIVE_EVM = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';   // direccion estandar de la moneda nativa (con su checksum correcto)
 const NETS = {
   eth: { id: 'eth', name: 'Ethereum', kind: 'evm', chainId: 1, native: 'ETH', dot: '#627eea', rpc: ['https://ethereum-rpc.publicnode.com', 'https://eth.drpc.org'], kyber: 'ethereum', exp: 'https://etherscan.io/tx/',
     tokens: [{ s: 'ETH', n: 'Ethereum', native: true, d: 18 }, { s: 'SECT', n: 'Sectora', a: SECT, d: 18 }, { s: 'USDT', n: 'Tether USD', a: '0xdAC17F958D2ee523a2206206994597C13D831ec7', d: 6 }, { s: 'USDC', n: 'USD Coin', a: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', d: 6 }] },
