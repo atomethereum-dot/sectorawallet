@@ -388,6 +388,130 @@ button.lg:hover{transform:translate(-50%,-50%) scale(1.04)}
 .kp{display:grid;grid-template-columns:repeat(3,1fr);row-gap:2px;margin-top:12px}
 .kp button{height:56px;display:grid;place-items:center;font-size:27px;font-weight:400;border-radius:16px}
 .kp button:active{background:var(--s1)}
+/* enviar: la cantidad grande nunca se sale del ancho; el teclado ocupa el espacio libre pegado al boton */
+.sc:has(> .sendpad) .amt{container-type:inline-size}
+.sc:has(> .sendpad) .amt .v{--amtfs:84px;font-size:min(var(--amtfs),calc(100cqw / (var(--n,1) * .62)))}
+.sc:has(> .sendpad){display:flex;flex-direction:column}
+.sc:has(> .sendpad)>*{flex-shrink:0}
+.sc:has(> .sendpad) #toerr:empty{display:none}
+.sc:has(> .sendpad) .to small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sendpad{flex:1 0 auto;display:flex;flex-direction:column;justify-content:flex-end;padding-top:12px}
+.sendpad .kp{flex:1 1 auto;margin-top:10px;min-height:182px;max-height:300px;grid-template-rows:repeat(4,minmax(44px,1fr))}
+.sendpad .kp button{height:auto;min-height:0;padding:0;line-height:1;font-size:34px}
+.pct{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.pct button{display:flex;align-items:center;justify-content:center;text-align:center;height:40px;padding:0;border-radius:99px;font:500 14px/1 var(--mono);color:var(--tx);background:var(--s1);border:1px solid var(--ln);transition:transform .12s ease,opacity .12s}
+.pct button:active{transform:scale(.96)}
+.pct button.busy{opacity:.45}
+/* pantallas bajas (moviles pequenos y portatiles): Enviar y Swap se compactan por niveles en vez de cortarse */
+@media (max-height:900px){
+  .screen:is(:has(.sendpad),:has(#susdIn)) .ft{padding-bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+  .screen:is(:has(.sendpad),:has(#susdIn)) .sc{padding-bottom:10px}
+  .sc:has(> .sendpad) .amt .v{--amtfs:72px}
+  .screen:has(#susdIn) .sw,.screen:has(#susdIn) .qd{margin-top:8px}
+  .sc:has(> .sendpad) .tokp{margin-top:12px}
+  .sc:has(> .sendpad) .amt .av2{margin-top:8px}
+  .screen:has(#susdIn) .qd div{padding:7px 0}
+  .screen:has(#susdIn) .sc>.slip{padding-top:4px}
+  .screen:has(#susdIn) .flipb{width:38px;height:38px;margin:-12px auto}
+}
+@media (max-height:780px){
+  .screen:is(:has(.sendpad),:has(#susdIn)){padding-top:calc(12px + env(safe-area-inset-top,0px))}
+  .screen:is(:has(.sendpad),:has(#susdIn)) .nav{height:46px}
+  .screen:is(:has(.sendpad),:has(#susdIn)) .nbar{margin-top:6px}
+  .screen:is(:has(.sendpad),:has(#susdIn)) .npill{height:32px}
+  .screen:is(:has(.sendpad),:has(#susdIn)) .ft .btn{height:52px}
+  .sc:has(> .sendpad) .amt .v{--amtfs:58px}
+  .sc:has(> .sendpad) .tokp{margin-top:10px;padding:5px 11px 5px 5px}
+  .sc:has(> .sendpad) .to{min-height:60px}
+  .sc:has(> .sendpad) .recent{margin-top:8px}
+  .sendpad{padding-top:8px}
+  .sendpad .kp{margin-top:8px;min-height:166px;grid-template-rows:repeat(4,minmax(40px,1fr))}
+  .pct button{height:34px}
+  .screen:has(#susdIn) .sw{padding:8px 14px}
+  .screen:has(#susdIn) .swv{font-size:30px}
+  .screen:has(#susdIn) .tokb{padding:4px 9px 4px 4px}
+  .screen:has(#susdIn) .qd div{padding:6px 0}
+}
+@media (max-height:690px){
+  .screen:is(:has(.sendpad),:has(#susdIn)) .ft{padding-top:8px}
+  .screen:is(:has(.sendpad),:has(#susdIn)) .ft .btn{height:48px}
+  .sc:has(> .sendpad) .amt .v{--amtfs:48px}
+  .screen:is(:has(.sendpad),:has(#susdIn)) .nav{height:42px}
+  .screen:has(#susdIn) .sw{padding:7px 14px}
+  .screen:has(#susdIn) .swr{margin-top:2px}
+  .screen:has(#susdIn) .swu{font-size:12.5px;line-height:1.2}
+  .screen:has(#susdIn) .flipb{width:34px;height:34px;margin:-10px auto}
+  .sc:has(> .sendpad) .recent{margin-top:6px}
+  .sendpad .kp{min-height:154px;grid-template-rows:repeat(4,minmax(37px,1fr))}
+  .sendpad .kp button{font-size:30px}
+  .pct button{height:32px}
+  .screen:has(#susdIn) .qd div:first-child{display:none}
+  .screen:has(#susdIn) .qd div:nth-child(2){border-top:0}
+  .screen:has(#susdIn) .swv{font-size:28px}
+  .screen:has(#susdIn) .sc>.kp.sm{min-height:126px;grid-template-rows:repeat(4,minmax(30px,1fr))}
+  .screen:has(#susdIn) .sc>.slip{padding-top:0}
+}
+@media (max-height:650px){
+  .screen:is(:has(.sendpad),:has(#susdIn)){padding-top:calc(8px + env(safe-area-inset-top,0px))}
+  .screen:is(:has(.sendpad),:has(#susdIn)) .nbar{margin-top:4px}
+  .screen:is(:has(.sendpad),:has(#susdIn)) .sc{padding-bottom:6px}
+  .screen:is(:has(.sendpad),:has(#susdIn)) .ft{padding-top:6px}
+  .screen:is(:has(.sendpad),:has(#susdIn)) .ft .btn{height:46px}
+  .screen:has(#susdIn) .sw{padding:6px 14px}
+  .screen:has(#susdIn) .swu{font-size:12px;line-height:1.15}
+  .screen:has(#susdIn) .sc>.kp.sm{min-height:122px;grid-template-rows:repeat(4,minmax(29px,1fr))}
+  .screen:is(:has(.sendpad),:has(#susdIn)) .nav{height:40px}
+  .screen:has(#susdIn) .slip .pill3 button{padding:5px 9px}
+  .screen:has(#susdIn) .flipb{width:32px;height:32px;margin:-9px auto}
+}
+@media (max-height:600px){
+  .screen.okx .ft .legal{display:none}
+}
+@media (max-height:600px){
+  .screen:is(:has(.sendpad),:has(#susdIn)){padding-top:calc(8px + env(safe-area-inset-top,0px))}
+  .screen:is(:has(.sendpad),:has(#susdIn)) .nbar{display:none}
+  .sc:has(> .sendpad) .amt .v{--amtfs:42px}
+  .sc:has(> .sendpad) .to{min-height:54px;margin-top:6px}
+  .sc:has(> .sendpad) .tokp{margin-top:8px}
+  .sc:has(> .sendpad) .amt .av2{margin-top:4px}
+  .sendpad .kp{min-height:142px;grid-template-rows:repeat(4,minmax(34px,1fr))}
+  .sendpad .kp button{font-size:27px}
+  .pct button{height:30px}
+  .screen:has(#susdIn) .swu{display:none}
+  .screen:has(#susdIn) .qd div:nth-child(3),.screen:has(#susdIn) .qd div:nth-child(4){display:none}
+  .screen:has(#susdIn) .sc>.kp.sm{min-height:122px;grid-template-rows:repeat(4,minmax(29px,1fr))}
+}
+/* moviles pequenos: nada se sale ni queda tapado */
+.wcadd{grid-template-columns:minmax(0,1fr)}.wcin input{min-width:0;width:100%}
+.bsheet{max-height:calc(100% - 12px - env(safe-area-inset-top,0px));overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none}
+.row>div{min-width:0}
+@media (max-width:360px){
+  .row .end.pill3{gap:3px}.row .end.pill3 button{padding:7px 8px;font-size:11.5px}
+  .ib3 .ib{width:36px}
+  .acct .acsel b{max-width:130px}
+}
+.wel{grid-template-columns:minmax(0,1fr)}
+@media (max-height:650px){
+  .screen.okx .cs h1{font-size:28px;margin-top:7px}
+  .screen.okx .cs p{font-size:13px;line-height:1.45;margin-top:6px}
+  .screen:has(.car) .ft,.screen:has(.wel) .ft{gap:8px;padding-top:10px}
+  .screen.hasco .co{font-size:10px;line-height:1.35}
+}
+@media (max-height:620px){
+  .screen.okx .cs h1{font-size:26px;margin-top:6px}
+  .screen.okx .cs p{font-size:12.5px;line-height:1.4;margin-top:5px}
+  .screen.okx .pager{margin-top:10px}
+  .screen .wel .globe.code ~ .h1{font-size:28px}
+  .screen .wel .globe.code ~ form .pwin{margin-top:12px;height:52px}
+  .screen .wel .globe.code ~ .kick{margin-top:6px}
+  .screen.hasco .co{font-size:10px;line-height:1.35}
+}
+/* swap: el teclado se adapta a la altura de la pantalla (no se corta la fila del 0) */
+.sc:has(> .kp.sm){display:flex;flex-direction:column}
+.sc:has(> .kp.sm)>*{flex-shrink:0}
+.sc:has(> .kp.sm)>.slip{margin-top:auto;padding-top:8px}
+.sc>.kp.sm{flex:1 1 auto;min-height:142px;max-height:236px;grid-template-rows:repeat(4,minmax(34px,1fr))}
+.screen .sc>.kp.sm button,.screen:has(#susdIn) .sc>.kp.sm button{height:auto;min-height:0;padding:0;line-height:1}
 /* revisar */
 .rvh{margin-top:22px;display:grid;justify-items:center;text-align:center}
 .rvh small{font-size:13px;color:var(--mu)}
@@ -408,6 +532,7 @@ button.lg:hover{transform:translate(-50%,-50%) scale(1.04)}
 .slide .tx{position:absolute;inset:0;display:grid;place-items:center;font-weight:500;font-size:15.5px;padding-left:40px;color:rgba(255,255,255,.9);pointer-events:none}
 .slide .ch{position:absolute;right:22px;top:50%;transform:translateY(-50%);display:flex;pointer-events:none}
 .slide.done .kn{background:var(--ok)}
+.slide.done .tx{padding-left:0}
 /* firmado */
 .sg{position:relative;width:min(100%,290px);aspect-ratio:1;margin:6px auto 0}
 .sg canvas{position:absolute;inset:0;width:100%;height:100%}
@@ -2153,11 +2278,25 @@ V.send = () => { const n = curNet(), t = tokOf(n, S.tok), a = S.amt || '', cs = 
   ${cs.length ? `<div class="recent"><span class="lbl">Contacts</span>${cs.map(c => `<button class="rc notr" data-rec="${esc(c.a)}">${c.k === 'evm' ? IDN(20, c.a) : ''}${esc(c.n)}</button>`).join('')}</div>` : ''}
   ${rec.length ? `<div class="recent"><span class="lbl">Recent</span>${rec.map(r => `<button class="rc" data-rec="${r}">${IDN(20, r)}${short(r)}</button>`).join('')}</div>` : ''}
   <div class="err" id="toerr" style="padding-left:6px"></div>
-  <div class="amt" style="margin-top:0"><div class="v ${a ? '' : 'empty'}" id="amtv">${a || '0'}</div>
+  <div class="amt" style="margin-top:0"><div class="v ${a ? '' : 'empty'}" id="amtv" style="${amtFs(a)}">${a || '0'}</div>
     <button class="tokp" data-sheet="send">${TOKI(t, 24)}${t.s} ${ic(P.down, 14, '#8b93a6', 2.4)}</button>
     <div class="av2">${solSpl ? (PREVIEW ? 'Solana token transfers arrive with the network release' : 'Solana token sends are coming soon') : !PREVIEW && !n.rpc.length ? `${n.name} sends open soon` : `Balance <span data-bal="${t.s}">—</span> ${t.s}${PREVIEW ? ' · signing only' : ''}`}</div></div>
-  <div class="kp">${['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', 'del'].map(k => `<button data-k="${k}" aria-label="${k === 'del' ? 'Delete' : k}">${k === 'del' ? ic(P.del, 26) : k}</button>`).join('')}</div>${SHEET()}`,
+  <div class="sendpad">${!solSpl && (PREVIEW || n.rpc.length) ? `<div class="pct">${[25, 50, 75, 100].map(p => `<button data-pct="${p}" aria-label="Send ${p}%">${p}%</button>`).join('')}</div>` : ''}
+  <div class="kp">${['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', 'del'].map(k => `<button data-k="${k}" aria-label="${k === 'del' ? 'Delete' : k}">${k === 'del' ? ic(P.del, 28) : k}</button>`).join('')}</div></div>${SHEET()}`,
   `<button class="btn" id="revGo" disabled>Review</button>`); };
+// la cantidad grande se reduce si no cabe en una linea
+const amtFs = a => `--n:${Math.max(1, String(a || '0').length)}`;
+// corta (nunca redondea hacia arriba) a los decimales que admite el teclado
+const fmtFloor = (v, d) => { const s = ethers.formatUnits(v, d); if (!s.includes('.')) return s; const [i, f] = s.split('.'), k = Math.max(0, Math.min(8, d, 12 - i.length)), g = f.slice(0, k).replace(/0+$/, ''); return g ? i + '.' + g : i; };
+// 25 / 50 / 75 / 100 % del saldo real; en la moneda nativa se deja lo necesario para la comision
+async function pctAmount(n, t, p) { const me = addrOf(n);
+  if (n.kind === 'evm') {
+    if (!t.native) return fmtFloor(await erc20Bal(n, t.a) * p / 100n, t.d);
+    const bal = BigInt(await rpc(n, 'eth_getBalance', [me, 'latest'])), b = await evmTxBase(n, 'fast'), cap = bal - 30000n * b.maxFeePerGas * 3n / 2n;
+    if (cap <= 0n) return null; const v = bal * p / 100n; return fmtFloor(v > cap ? cap : v, t.d); }
+  const bal = BigInt((await rpc(n, 'getBalance', [me])).value), cap = bal - SOLFEE; if (cap <= 0n) return null;
+  let v = bal * p / 100n; if (v > cap) v = cap; const left = bal - v - SOLFEE; if (left > 0n && left < RENT) { v = bal - SOLFEE - RENT; if (v <= 0n) v = cap; }
+  return fmtFloor(v, 9); }
 
 function checks() { const n = curNet(), hist = txs().map(t => (t.to || '').toLowerCase()), to = (S.to || '').toLowerCase();
   return [{ s: 'ok', t: n.kind === 'sol' ? 'Valid Solana address' : 'Valid address · checksum verified' },
@@ -2236,7 +2375,7 @@ function paintSwapUsd() {
 function paintQuote(state) {
   const { from, to } = swapPair(), q = S.quote, out = $app.querySelector('#qout'), st = $app.querySelector('#qstate'), qd = $app.querySelector('#qd'), go = $app.querySelector('#swapGo'); if (!out) return;
   if (state === 'ok' && q && q.ok) {
-    out.textContent = fmtAmt(q.out); out.classList.remove('empty'); st.textContent = `via ${q.router}`;
+    out.textContent = fmtAmt(q.out); out.classList.remove('empty'); st.textContent = '';
     const rate = Number(q.out) / Number(S.samt || 1);
     qd.innerHTML = `<div>Rate<b>1 ${from.s} = ${fmtAmt(rate)} ${to.s}</b></div><div>Minimum received<b>${fmtAmt(q.min)} ${to.s}</b></div>${q.impact !== null ? `<div>Price impact<b>${q.impact.toFixed(2)}%</b></div>` : ''}${q.gasUsd ? `<div>Network fee<b>≈ $${Number(q.gasUsd).toFixed(2)}</b></div>` : ''}`;
     qd.hidden = false; go.disabled = false;
@@ -2252,7 +2391,7 @@ V.swapReview = () => { const { n, from, to } = swapPair(), q = S.quote; return S
   <div class="swmid">${ic(P.flip, 18, '#5c9bff', 2.2)}</div>
   <div class="swsum card"><div><small>You receive at least</small><b>${fmtAmt(q.min)} ${to.s}</b><small>Expected ${fmtAmt(q.out)} ${to.s}${pxOf(n, to) ? ` · ≈ ${fmtUsd(Number(q.out) * pxOf(n, to).usd)}` : ''}</small></div>${TOKI(to, 40)}</div>
   <div class="checks card"><div class="chh">${ic(P.shield, 18, '#5c9bff', 2)}<b>Security checks</b><span>${n.name}</span></div>
-    <div class="ck ok">${ic(P.chk, 15, '#5c9bff', 2.8)}<span>Price route from ${q.router}</span></div>
+    <div class="ck ok">${ic(P.chk, 15, '#5c9bff', 2.8)}<span>Best price route</span></div>
     <div class="ck ok">${ic(P.chk, 15, '#5c9bff', 2.8)}<span>Slippage protection · ${(S.slip || 50) / 100}% max</span></div>
     ${n.kind === 'evm' && !from.native ? `<div class="ck wn">${ic(P.info, 15, '#f0b54a', 2.2)}<span>Includes approval for ${from.s} · exact amount only</span></div>` : ''}
     <div class="ck ok">${ic(P.chk, 15, '#5c9bff', 2.8)}<span>Signed on this device · your key never leaves it</span></div></div>`,
@@ -2481,7 +2620,13 @@ function bindMulti() {
     to.addEventListener('input', chk); to.addEventListener('paste', () => setTimeout(chk, 0)); chk();
     qa('[data-k]').forEach(b => b.addEventListener('click', () => { const k = b.dataset.k; let a = S.amt || '';
       if (k === 'del') a = a.slice(0, -1); else if (k === '.') { if (!a.includes('.')) a = (a || '0') + '.'; } else if (a.replace('.', '').length < 12) { const d = a.split('.')[1]; if (!(d && d.length >= Math.min(8, t.d))) a = (a === '0' ? '' : a) + k; }
-      S.amt = a; const v = q('#amtv'); v.textContent = a || '0'; v.classList.toggle('empty', !a); chk(); }));
+      S.amt = a; const v = q('#amtv'); v.textContent = a || '0'; v.classList.toggle('empty', !a); v.style.cssText = amtFs(a); chk(); }));
+    qa('[data-pct]').forEach(b => b.addEventListener('click', async () => { if (b.classList.contains('busy')) return; const all = qa('[data-pct]'); all.forEach(x => x.classList.add('busy'));
+      try { const a = await pctAmount(n, t, BigInt(b.dataset.pct)); if (S.view !== 'send') return;
+        if (a === null) return toast(`Not enough ${n.native} for the amount and the network fee.`);
+        S.amt = a === '0' ? '' : a; const v = q('#amtv'); if (v) { v.textContent = S.amt || '0'; v.classList.toggle('empty', !S.amt); v.style.cssText = amtFs(S.amt); } chk(); }
+      catch (e) { if (S.view === 'send') toast(e instanceof UErr ? e.message : "Couldn't reach the network. Try again."); }
+      finally { all.forEach(x => x.classList.remove('busy')); } }));
     const rg = q('#revGo'); rg.addEventListener('click', () => { S.to = n.kind === 'evm' ? ethers.getAddress(to.value.trim()) : to.value.trim(); go('review'); });
   }
   // swap
@@ -2828,7 +2973,7 @@ try { matchMedia('(prefers-color-scheme: light)').addEventListener('change', () 
 /* portada: si no cabe todo (globo, texto, clave y datos de la empresa), el globo se encoge */
 function fitGlobe() { const g = $app.querySelector('.okx .globe, .wel .globe'), sc = $app.querySelector('.sc'); if (!g || !sc || getComputedStyle(sc).display === 'contents') return;
   const wel = g.closest('.wel'); if (wel) wel.style.marginTop = '';
-  g.style.width = ''; const over = sc.scrollHeight - sc.clientHeight; if (over > 0) { g.style.width = Math.max(110, Math.floor(g.getBoundingClientRect().width - over - 2)) + 'px'; return; }
+  g.style.width = ''; g.style.display = ''; const over = sc.scrollHeight - sc.clientHeight; if (over > 0) { const w = Math.floor(g.getBoundingClientRect().width - over - 2); if (w < 72) g.style.display = 'none'; else g.style.width = w + 'px'; return; }   // en pantallas muy bajas el logo decorativo cede su sitio para que no se tape nada
   if (!g.classList.contains('code')) return;   // si sobra espacio, el logo y la animacion crecen en vez de dejar un hueco antes del boton
   let bot = 0; for (const el of sc.children) { if (getComputedStyle(el).position === 'absolute') continue; bot = Math.max(bot, el.getBoundingClientRect().bottom); }
   const free = sc.getBoundingClientRect().bottom - parseFloat(getComputedStyle(sc).paddingBottom) - bot, w0 = g.getBoundingClientRect().width, maxW = Math.min(g.parentElement.clientWidth, 440, matchMedia('(max-width:1023px), (max-height:640px)').matches ? Math.round(innerHeight * (wel ? .34 : .38)) : 9999);
