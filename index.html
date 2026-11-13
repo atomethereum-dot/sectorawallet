@@ -1119,10 +1119,14 @@ async function copy(text, el) { try { await navigator.clipboard.writeText(text);
   catch (e) { if (el) { const r = document.createRange(); r.selectNodeContents(el); const s = getSelection(); s.removeAllRanges(); s.addRange(r); } toast('Selected · copy it manually'); } }
 function strength(p) { let s = 0; if (p.length >= 8) s++; if (p.length >= 12) s++; if (/[A-Z]/.test(p) && /[a-z]/.test(p)) s++; if (/\d/.test(p) && /[^A-Za-z0-9]/.test(p)) s++; return s; }
 let idle = null;
-function armLock() { clearTimeout(idle); if (S.wallet) idle = setTimeout(lock, S.lockMin * 60000); }
+function armLock() { clearTimeout(idle); S.lastAct = Date.now(); if (S.wallet) idle = setTimeout(lock, S.lockMin * 60000); }
+const lockIfIdle = () => { if (S.wallet && document.visibilityState !== 'hidden' && S.lastAct && Date.now() - S.lastAct > S.lockMin * 60000) lock(); };   // al volver a la app despues del tiempo de bloqueo
+document.addEventListener('visibilitychange', lockIfIdle); window.addEventListener('pageshow', lockIfIdle); window.addEventListener('focus', lockIfIdle);
 ['pointerdown', 'keydown'].forEach(e => document.addEventListener(e, armLock, { passive: true }));
-function lock() { S.wallet = null; S.draft = null; S.seed = null; S.solSk = null; go('unlock'); }
-const txs = () => { try { return JSON.parse(store.get('txs') || '[]'); } catch (e) { return []; } };
+function lock() { S.wallet = null; S.draft = null; S.seed = null; S.solSk = null; S.revealWords = null; go('unlock'); }
+const HASHOK = h => /^(0x[0-9a-fA-F]{64}|[1-9A-HJ-NP-Za-km-z]{43,90})$/.test(String(h || ''));
+const ADDROK = a => /^(0x[0-9a-fA-F]{40}|[1-9A-HJ-NP-Za-km-z]{32,44})$/.test(String(a || ''));
+const txs = () => { try { const L = JSON.parse(store.get('txs') || '[]'); return Array.isArray(L) ? L.filter(t => t && HASHOK(t.hash)).map(t => ({ ...t, token: SYM(t.token), outToken: t.outToken != null ? SYM(t.outToken) : t.outToken, to: ADDROK(t.to) ? t.to : '', app: t.app != null ? TNAME(t.app) : t.app, prev: Array.isArray(t.prev) ? t.prev.filter(HASHOK) : t.prev })) : []; } catch (e) { return []; } };
 /* el logo viene hacia la pantalla, la llena y abre la siguiente seccion */
 function zoomTo(view, params = {}) {
   const lg = $app.querySelector('.globe .lg'), reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1368,7 +1372,8 @@ function histItems(n, sym) {
     legs: t.kind === 'cancel' || t.kind === 'revoke' || (t.kind === 'dapp' && !(Number(t.amount) > 0)) ? [] : t.kind === 'swap' ? [{ s: t.token, amt: t.amount, dir: 'out', peer: '' }, { s: t.outToken, amt: '', dir: 'in', peer: '' }] : [{ s: t.token, amt: t.amount, dir: 'out', peer: (t.to || '').toLowerCase() }] }));
   const dust = e => !e.local && e.legs.length > 0 && e.legs.every(l => { if (l.dir !== 'in') return false; const tk = toks(n).find(t => t.s === l.s), p = tk && pxOf(n, tk), a = Number(l.amt);   // recibos de menos de $0.01: polvo y envenenamiento de direcciones
     return p ? a * p.usd < 0.01 : a < 1e-9; });
-  return [...loc, ...on].filter(e => !dust(e) && (!sym || e.legs.some(l => l.s === sym))).sort((a, b) => b.time - a.time);
+  const ok = e => e && HASHOK(e.hash) && Array.isArray(e.legs) && Number.isFinite(+e.time);
+  return [...loc, ...on].filter(ok).map(e => ({ ...e, legs: e.legs.map(l => ({ ...l, s: SYM(l.s), amt: /^[0-9.]*$/.test(String(l.amt ?? '')) ? l.amt : '', peer: ADDROK(l.peer) ? l.peer : '' })) })).filter(e => !dust(e) && (!sym || e.legs.some(l => l.s === sym))).sort((a, b) => b.time - a.time);
 }
 const HICON = k => ({ in: P.recv, out: P.send, swap: P.swap, self: P.swap, fail: P.info, cancel: '<path d="M6 6l12 12M18 6L6 18"/>' })[k];
 function hRow(n, e) {
@@ -1526,7 +1531,13 @@ const NET_ORDER = ['eth', 'bnb', 'rh', 'sol'];
 const curNet = () => NETS[S.net] || NETS.eth;
 const addrOf = n => n.kind === 'sol' ? S.sol : S.addr;
 const tid = t => t.id || t.s;
-const CT = { get(k) { try { return JSON.parse(store.get('ctok.' + k) || '[]'); } catch (e) { return []; } }, set(k, a) { store.set('ctok.' + k, JSON.stringify(a)); } };
+const SYM = v => String(v ?? '').replace(/[^A-Za-z0-9.$_+-]/g, '').slice(0, 12);   // simbolo de token: solo caracteres seguros
+const TNAME = v => String(v ?? '').replace(/[^\x20-\x7e]|[<>"'`&\\]/g, '').trim().slice(0, 40);
+const LOGOOK = u => /^https:\/\/(raw\.githubusercontent\.com\/trustwallet\/assets\/master\/blockchains\/[a-z0-9]+\/assets\/[A-Za-z0-9]+\/logo\.png|(coin-images|assets)\.coingecko\.com\/[A-Za-z0-9\/._-]+(\?[0-9]+)?)$/.test(String(u || ''));
+const CTCLEAN = t => { if (!t || typeof t !== 'object') return null; const a = t.a && /^0x[0-9a-fA-F]{40}$/.test(t.a) ? t.a : null, mint = t.mint && /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(t.mint) ? t.mint : null; if (!a && !mint) return null;
+  const d = Number(t.d); if (!(Number.isInteger(d) && d >= 0 && d <= 36)) return null; const sy = SYM(t.s) || 'TOKEN';
+  return { ...t, id: 'c:' + (a ? a.toLowerCase() : mint), a: a || undefined, mint: mint || undefined, d, s: sy, n: TNAME(t.n) || sy, logo: LOGOOK(t.logo) ? t.logo : '', src: t.src === 'CoinGecko' || t.src === 'Trust Wallet' ? t.src : '', custom: true }; };
+const CT = { get(k) { try { const a = JSON.parse(store.get('ctok.' + k) || '[]'); return Array.isArray(a) ? a.map(CTCLEAN).filter(Boolean) : []; } catch (e) { return []; } }, set(k, a) { store.set('ctok.' + k, JSON.stringify(a.map(CTCLEAN).filter(Boolean))); } };
 const toks = n => [...n.tokens, ...CT.get(n.id)];
 const tokOf = (n, s) => toks(n).find(t => tid(t) === s) || n.tokens[0];
 P.swap = '<path d="M7 4v14M3 14l4 4 4-4M17 20V6M13 10l4-4 4 4"/>';
@@ -1888,7 +1899,7 @@ async function revokePerm(n, p) { if (!S.wallet) throw new UErr('Unlock the wall
 
 /* ---------- escanear un codigo QR con la camara (o desde una imagen) ---------- */
 let SCAN = null;
-const loadJsQR = () => window.jsQR ? Promise.resolve() : new Promise((res, rej) => { const sc = document.createElement('script'); sc.src = 'jsqr.js'; sc.onload = () => res(); sc.onerror = () => rej(new Error('jsqr')); document.head.appendChild(sc); });
+const loadJsQR = () => window.jsQR ? Promise.resolve() : new Promise((res, rej) => { const sc = document.createElement('script'); sc.src = 'jsqr.js'; sc.integrity = 'sha384-b5Ya4Bq3qCyz39m2ISh+4DxjAIljdeFwK/BsXLuj9gugaNwAcj/ia15fxNZL9Nlx'; sc.onload = () => res(); sc.onerror = () => rej(new Error('jsqr')); document.head.appendChild(sc); });
 function closeScan() { if (!SCAN) return; const x = SCAN; SCAN = null; clearTimeout(x.tm); try { x.stream && x.stream.getTracks().forEach(t => t.stop()); } catch (e) {} x.o.remove(); document.removeEventListener('keydown', x.key); }
 async function openScan(onText) {
   closeScan(); const o = document.createElement('div'); o.className = 'scanov'; o.setAttribute('role', 'dialog'); o.setAttribute('aria-label', 'Scan QR code');
@@ -1944,7 +1955,7 @@ function scanText(txt) { if (/^wc:/i.test(String(txt || '').trim())) return wcPa
 const WC_PID = '8f269c3d2a230632090ddbb53684b221', WC_NETS = { 'eip155:1': 'eth', 'eip155:56': 'bnb' };
 const WC_METHODS = ['eth_sendTransaction', 'personal_sign', 'eth_signTypedData', 'eth_signTypedData_v4', 'wallet_switchEthereumChain', 'wallet_addEthereumChain', 'eth_accounts', 'eth_requestAccounts', 'eth_chainId'];
 let WK = null, WKP = null; const WCQ = [];
-const loadWCLib = () => window.SWWC ? Promise.resolve() : new Promise((res, rej) => { const sc = document.createElement('script'); sc.src = 'wc.js'; sc.onload = () => res(); sc.onerror = () => rej(new Error('wc-lib')); document.head.appendChild(sc); });
+const loadWCLib = () => window.SWWC ? Promise.resolve() : new Promise((res, rej) => { const sc = document.createElement('script'); sc.src = 'wc.js'; sc.integrity = 'sha384-HoxwGjlq9Wv48q+DQ98dA7wLD100xRIO6SxyLItlp09OFCsnKe089ye+Ni8/e3sW'; sc.onload = () => res(); sc.onerror = () => rej(new Error('wc-lib')); document.head.appendChild(sc); });
 const wcFlag = () => { try { store.set('wc', WK && Object.keys(WK.getActiveSessions()).length ? '1' : ''); } catch (e) {} };
 const wcHost = u => { try { return new URL(u).host; } catch (e) { return String(u || '').replace(/^https?:\/\//, '').split('/')[0]; } };
 const wcAv = (m, s = 44) => `<span class="wcav" style="width:${s}px;height:${s}px;font-size:${Math.round(s * .42)}px" aria-hidden="true">${esc(String((m && m.name) || '?').trim().slice(0, 1).toUpperCase() || '?')}</span>`;
@@ -2316,6 +2327,25 @@ async function kyberRoute(n, from, to, amt) {
   const ti = from.native ? NATIVE_EVM : from.a, to2 = to.native ? NATIVE_EVM : to.a;
   const j = await (await fetchT(`https://aggregator-api.kyberswap.com/${n.kyber}/api/v1/routes?tokenIn=${ti}&tokenOut=${to2}&amountIn=${amt}`, { headers: { 'x-client-id': 'sectora-wallet' } })).json();
   if (!j || !j.data || !j.data.routeSummary) throw new UErr('No swap route right now. Try again.'); return j.data; }
+const KYI = () => KYI.v || (KYI.v = new ethers.Interface(['function swap((address callTarget,address approveTarget,bytes targetData,(address srcToken,address dstToken,address[] srcReceivers,uint256[] srcAmounts,address[] feeReceivers,uint256[] feeAmounts,address dstReceiver,uint256 amount,uint256 minReturnAmount,uint256 flags,bytes permit) desc,bytes clientData) execution)']));
+function kyberCheck(data, from, to, amt, minOut) {   // si la API devolviera otra cosa (otro destinatario, otro token, menos minimo o comisiones), no se firma
+  const bad = () => { throw new UErr('Unexpected swap route. Stopped for your safety.'); }, EE = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', tk = t => t.native ? EE : t.a.toLowerCase(); let d;
+  try { d = KYI().decodeFunctionData('swap', data)[0].desc; } catch (e) { bad(); }
+  if (d.dstReceiver.toLowerCase() !== S.addr.toLowerCase() || d.srcToken.toLowerCase() !== tk(from) || d.dstToken.toLowerCase() !== tk(to) || d.amount !== amt || d.minReturnAmount * 1000n < minOut * 999n || d.feeAmounts.some(f => f > 0n)) bad(); }
+/* canjes en Solana: antes de firmar se simula la transaccion y solo puede salir lo que pediste (mas la comision) */
+async function solGuard(n, txb, from, amt) { const bad = () => { throw new UErr('Unexpected swap transaction. Stopped for your safety.'); }, me = ethers.hexlify(b32(S.sol));
+  const TP = ['TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA', 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb'];
+  let bal, tl, sim; try { [bal, ...tl] = await Promise.all([rpc(n, 'getBalance', [S.sol]), ...TP.map(p => rpc(n, 'getTokenAccountsByOwner', [S.sol, { programId: p }, { encoding: 'jsonParsed' }]))]); } catch (e) { throw new UErr("Couldn't check the swap right now. Try again in a minute."); }
+  const pre = tl.flatMap(r => (r && r.value) || []).slice(0, 90).map(x => { const i = x.account.data.parsed.info; return { a: x.pubkey, mint: i.mint, v: BigInt(i.tokenAmount.amount) }; });
+  try { sim = await rpc(n, 'simulateTransaction', [ethers.encodeBase64(txb), { encoding: 'base64', sigVerify: false, replaceRecentBlockhash: true, commitment: 'confirmed', accounts: { encoding: 'base64', addresses: [S.sol, ...pre.map(p => p.a)] } }]); } catch (e) { throw new UErr("Couldn't check the swap right now. Try again in a minute."); }
+  const v = sim && sim.value; if (!v) bad(); if (v.err) throw new UErr('This swap would fail on the network right now. Get a new price and try again.');
+  const acc = v.accounts || []; if (acc.length !== pre.length + 1) bad();
+  const lamPre = BigInt(bal.value), lamPost = acc[0] ? BigInt(acc[0].lamports) : 0n; if (lamPre - lamPost > (from.native ? amt : 0n) + 50000000n) bad();   // margen: 0.05 SOL para comisiones y cuentas nuevas
+  pre.forEach((p, i) => { const a = acc[i + 1]; if (!a) { if (p.v > 0n) bad(); return; }
+    const d = ethers.getBytes(ethers.decodeBase64(Array.isArray(a.data) ? a.data[0] : a.data)); if (d.length < 72) bad();
+    if (ethers.hexlify(d.slice(32, 64)) !== me) bad();   // nadie puede cambiar el dueño de tus cuentas de tokens
+    let post = 0n; for (let k = 7; k >= 0; k--) post = (post << 8n) | BigInt(d[64 + k]);
+    const dec = p.v - post; if (dec > 0n && !(p.mint === (from.mint || '') && dec <= amt)) bad(); }); }
 async function signSwap(step = () => {}) {
   const { n, from, to } = swapPair(), q = S.quote, amt = toUnits(S.samt, from.d); let hash, steps = 1;
   if (n.kind === 'sol') {
@@ -2328,6 +2358,7 @@ async function signSwap(step = () => {}) {
     if (!PREVIEW) {   // seguridad: una sola firma y la cuenta que paga es la tuya
       let m = msg[0] & 0x80 ? 1 : 0; const nreq = msg[m]; m += 3; let kc = 0; sh = 0; for (;;) { const b = msg[m++]; kc |= (b & 0x7f) << sh; if (!(b & 0x80)) break; sh += 7; }
       if (cnt !== 1 || nreq !== 1 || kc < 1 || ethers.hexlify(msg.slice(m, m + 32)) !== ethers.hexlify(b32(S.sol))) throw new UErr('Unexpected swap transaction. Stopped for your safety.'); }
+    if (!PREVIEW) await solGuard(n, tx, from, amt);
     const sig = SWSOL.sign(msg, S.solSk); tx.set(sig, off); hash = ethers.encodeBase58(sig);
     if (!PREVIEW) { step('Sending…'); await solSend(n, tx); }
   } else {
@@ -2358,6 +2389,7 @@ async function signSwap(step = () => {}) {
       body: JSON.stringify({ routeSummary: route.routeSummary, sender: S.addr, recipient: S.addr, slippageTolerance: S.slip || 50 }) })).json();
     const d = b && b.data; if (!d || !d.data || !d.routerAddress) throw new UErr('No swap route right now. Try again.');
     if (!PREVIEW && (d.routerAddress.toLowerCase() !== KYBER_ROUTER.toLowerCase() || (d.amountIn && BigInt(d.amountIn) !== amt))) throw new UErr('Unexpected swap route. Stopped for your safety.');
+    if (!PREVIEW) kyberCheck(d.data, from, to, amt, toUnits(q.min, to.d));
     const tx = { to: d.routerAddress, data: d.data, value: from.native ? amt : 0n };
     const gasLimit = PREVIEW ? BigInt(Math.ceil(Number(d.gas || 400000) * 1.3)) : await estGas(n, tx, 0n);
     if (!PREVIEW) await needNative(n, tx.value, gasLimit, base);
@@ -2728,17 +2760,17 @@ async function readToken(n, raw) {
     const r = await rpc(n, 'getAccountInfo', [mint, { encoding: 'jsonParsed' }]); const p = r && r.value && r.value.data && r.value.data.parsed;
     if (!p || p.type !== 'mint') throw new UErr('No token found at this address on Solana.');
     const d = p.info.decimals, v = await verifyTok(n, mint, '', d);
-    return { id: 'c:' + mint, mint, d, s: v.listed ? String(v.symbol).slice(0, 12) : mint.slice(0, 4).toUpperCase(), n: v.listed ? String(v.name || v.symbol).slice(0, 40) : 'Unlisted token', custom: true, listed: v.listed, src: v.src || '', busy: !!v.busy, logo: v.listed ? v.logo : '' }; }
+    return CTCLEAN({ id: 'c:' + mint, mint, d, s: v.listed ? String(v.symbol).slice(0, 12) : mint.slice(0, 4).toUpperCase(), n: v.listed ? String(v.name || v.symbol).slice(0, 40) : 'Unlisted token', custom: true, listed: v.listed, src: v.src || '', busy: !!v.busy, logo: v.listed ? v.logo : '' }); }
   if (!ethers.isAddress(raw.trim())) throw new UErr('This is not a valid contract address.');
   const a = ethers.getAddress(raw.trim()), call = async sel => rpc(n, 'eth_call', [{ to: a, data: sel }, 'latest']);
   const code = await rpc(n, 'eth_getCode', [a, 'latest']); if (!code || code === '0x') throw new UErr(`No contract at this address on ${n.name}.`);
   const str = h => { if (!h || h === '0x') return ''; try { return ethers.AbiCoder.defaultAbiCoder().decode(['string'], h)[0]; } catch (e) { try { return ethers.decodeBytes32String(h.slice(0, 66)); } catch (e2) { return ''; } } };
   let d; try { d = Number(BigInt(await call('0x313ce567'))); } catch (e) { throw new UErr('This contract is not a standard token.'); }
   if (!(d >= 0 && d <= 36)) throw new UErr('This contract is not a standard token.');
-  const sym = (str(await call('0x95d89b41').catch(() => '')) || '').replace(/[^\x20-\x7e]/g, '').trim().slice(0, 12), nm = (str(await call('0x06fdde03').catch(() => '')) || '').replace(/[^\x20-\x7e]/g, '').trim().slice(0, 40);
+  const sym = SYM(str(await call('0x95d89b41').catch(() => '')) || ''), nm = (str(await call('0x06fdde03').catch(() => '')) || '').replace(/[^\x20-\x7e]/g, '').trim().slice(0, 40);
   if (!sym) throw new UErr('This contract is not a standard token.');
   const v = await verifyTok(n, a, sym, d);
-  return { id: 'c:' + a.toLowerCase(), a, d, s: sym, n: nm || sym, custom: true, listed: v.listed, src: v.src || '', busy: !!v.busy, logo: v.listed ? v.logo : '' }; }
+  return CTCLEAN({ id: 'c:' + a.toLowerCase(), a, d, s: sym, n: nm || sym, custom: true, listed: v.listed, src: v.src || '', busy: !!v.busy, logo: v.listed ? v.logo : '' }); }
 const CTCHK = {};
 async function recheckCT() { const n = curNet(); if (CTCHK[n.id] || !TWCHAIN[n.id]) return; CTCHK[n.id] = 1;
   const l = CT.get(n.id); let ch = false;
