@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://raw.githubusercontent.com https://coin-images.coingecko.com https://assets.coingecko.com; font-src 'self' data:; connect-src 'self' https://raw.githubusercontent.com https://api.coingecko.com https://api.dexscreener.com https://api.geckoterminal.com https://eth.blockscout.com https://ethereum-rpc.publicnode.com https://eth.drpc.org https://bsc-rpc.publicnode.com https://bsc-dataseed.bnbchain.org https://solana-rpc.publicnode.com https://api.mainnet-beta.solana.com https://aggregator-api.kyberswap.com https://lite-api.jup.ag; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://raw.githubusercontent.com https://coin-images.coingecko.com https://assets.coingecko.com; font-src 'self' data:; connect-src 'self' https://raw.githubusercontent.com https://api.coingecko.com https://api.dexscreener.com https://api.geckoterminal.com https://eth.blockscout.com https://ethereum-rpc.publicnode.com https://eth.drpc.org https://bsc-rpc.publicnode.com https://bsc-dataseed.bnbchain.org https://solana-rpc.publicnode.com https://api.mainnet-beta.solana.com https://aggregator-api.kyberswap.com https://lite-api.jup.ag wss://relay.walletconnect.org wss://relay.walletconnect.com https://verify.walletconnect.org https://verify.walletconnect.com https://rpc.walletconnect.org; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="no-referrer">
 <meta name="google" content="notranslate">
 <meta name="format-detection" content="telephone=no,date=no,address=no,email=no">
@@ -890,6 +890,29 @@ html.iosapp .stage,html.iosapp .device,html.iosapp .app{height:var(--app-h)}
 .prow .prm.arm{background:rgba(255,92,92,.14)}
 .prow .ppend{flex:none;color:var(--warn);font-size:13px;font-weight:500}
 .pnone{text-align:center;margin-top:46px;color:var(--mu)}.pnone b{display:block;margin-top:12px;color:var(--tx);font-weight:500;font-size:16px}.pnone p{margin:6px 0 0;font-size:14px}
+/* WalletConnect */
+.wcav{display:grid;place-items:center;flex:none;border-radius:30%;background:linear-gradient(140deg,#1d2a44,#15325f);color:#cfe0ff;font-weight:600}
+.wch{text-align:center;margin-top:18px}.wch .wcav{margin:0 auto}.wch .h1{margin-top:14px;font-size:26px}
+.wch .wcurl{margin:6px 0 0;color:var(--mu);font-size:13.5px}.wch .lead{margin-top:10px}
+.wch.sm{display:flex;align-items:center;gap:12px;text-align:left;margin-top:14px}.wch.sm .wcav{margin:0}.wch.sm b{display:block;font-weight:500;font-size:16px}.wch.sm small{display:block;color:var(--mu);font-size:12.5px;margin-top:2px}
+.wct{margin-top:18px;font-size:24px}
+.wcv{display:flex;gap:9px;align-items:flex-start;margin-top:12px;padding:11px 13px;border-radius:13px;font-size:13.5px;line-height:1.45}
+.wcv svg{flex:none;margin-top:1px}.wcv.ok{background:rgba(21,105,255,.1);color:var(--b2)}.wcv.warn{background:rgba(240,181,74,.1);color:var(--warn)}.wcv.bad{background:rgba(255,92,92,.1);color:var(--bad)}
+.wcv b{font-weight:600}.wcv .mono{font-size:12.5px}
+.wcperm{margin-top:12px;padding:6px 16px}.wcperm div{display:flex;gap:10px;align-items:center;padding:9px 0;font-size:14px}.wcperm .no{color:var(--mu)}.wcperm .no svg{color:var(--bad)}
+.wcbtns{display:flex;gap:10px}.wcbtns .btn{flex:1;min-width:0}
+.wcsw{margin-top:10px}
+.wcmsg{margin-top:14px;padding:12px 14px;max-height:260px;overflow:auto}
+.wcmsg pre{margin:0;white-space:pre-wrap;word-break:break-word;font:400 13.5px/1.5 var(--sans)}.wcmsg pre.mono{font-family:var(--mono);font-size:12.5px}
+.wcflds{margin-top:10px;padding:4px 14px;max-height:280px;overflow:auto}
+.wcflds div{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--ln);font-size:13px}.wcflds div:last-child{border-bottom:0}
+.wcflds span{color:var(--mu);flex:none;max-width:45%;overflow-wrap:anywhere}.wcflds b{font-weight:500;text-align:right;overflow-wrap:anywhere;min-width:0}
+.wcact{margin-top:14px;padding:13px 15px;font-size:15px;line-height:1.5}.wcact .mono{font-size:13px}
+.wcadd{display:grid;gap:10px;margin-top:16px}.wcin{padding-right:6px}.wcin input{font:500 14px/1.3 var(--mono)}
+.wcpaste{flex:none;padding:9px 13px;border-radius:11px;background:var(--tile);color:var(--b2);font-weight:500;font-size:14px}
+.wcrow .ct small+small{margin-top:3px}
+.wcrow .prm{flex:none;padding:9px 13px;border-radius:11px;background:var(--tile);color:var(--bad);font-size:14px;font-weight:500}
+.wclic{margin:18px 0 0;text-align:center;color:var(--fa);font-size:11.5px}
 /* barra inferior en movil: cuatro secciones con su nombre */
 @media (max-width:1023px),(max-height:640px){
   .tabs{left:0;right:0;bottom:0;width:auto;margin:0;height:auto;border-radius:0;border:0;border-top:1px solid var(--ln);background:var(--bg);padding:6px 6px calc(8px + env(safe-area-inset-bottom,0px));justify-content:space-around;box-shadow:none}
@@ -975,7 +998,8 @@ const P = {
   home: '<path d="M3 11l9-7 9 7v9h-6v-6H9v6H3z"/>', act: '<path d="M4 6h16M4 12h10M4 18h7"/>', lock: '<rect x="5" y="11" width="14" height="10" rx="2.5"/><path d="M8 11V7a4 4 0 018 0v4"/>',
   gear: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/>',
   eye: '<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
-  qr: '<path d="M4 8V5.5A1.5 1.5 0 015.5 4H8M16 4h2.5A1.5 1.5 0 0120 5.5V8M20 16v2.5a1.5 1.5 0 01-1.5 1.5H16M8 20H5.5A1.5 1.5 0 014 18.5V16M7 12h10"/>',
+  link: '<path d="M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1"/>',
+qr: '<path d="M4 8V5.5A1.5 1.5 0 015.5 4H8M16 4h2.5A1.5 1.5 0 0120 5.5V8M20 16v2.5a1.5 1.5 0 01-1.5 1.5H16M8 20H5.5A1.5 1.5 0 014 18.5V16M7 12h10"/>',
 user: '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/>',
 eyeoff: '<path d="M3 3l18 18M10.6 5.1A10.4 10.4 0 0112 5c6.4 0 10 7 10 7a17 17 0 01-3.2 4.1M6.6 6.6A17.5 17.5 0 002 12s3.6 7 10 7a9.7 9.7 0 005.4-1.6"/><path d="M9.9 9.9a3 3 0 004.2 4.2"/>',
   copy: '<rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15V5a1 1 0 011-1h10"/>', warn: '<path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18v.01"/>',
@@ -1340,8 +1364,8 @@ async function loadHist(force) {
 function histItems(n, sym) {
   const h = HIST[hKey(n)], me0 = (addrOf(n) || '').toLowerCase(), own = n.id === 'bnb' ? new Set(txs().filter(t => (t.netId || 'eth') === n.id && t.hash && (t.from ? t.from.toLowerCase() === me0 : ACCI() === 0)).map(t => t.hash.toLowerCase())) : null;
   const on = ((h && h.items) || []).filter(e => !own || !own.has(e.hash.toLowerCase())), seen = new Set(on.map(e => e.hash.toLowerCase()));
-  const me = (addrOf(n) || '').toLowerCase(), loc = txs().filter(t => (t.netId || 'eth') === n.id && t.hash && !seen.has(t.hash.toLowerCase()) && (t.from ? t.from.toLowerCase() === me : ACCI() === 0)).map(t => ({ hash: t.hash, time: t.time, ok: t.st !== 'fail', local: t, cancel: t.kind === 'cancel', rev: t.kind === 'revoke',
-    legs: t.kind === 'cancel' || t.kind === 'revoke' ? [] : t.kind === 'swap' ? [{ s: t.token, amt: t.amount, dir: 'out', peer: '' }, { s: t.outToken, amt: '', dir: 'in', peer: '' }] : [{ s: t.token, amt: t.amount, dir: 'out', peer: (t.to || '').toLowerCase() }] }));
+  const me = (addrOf(n) || '').toLowerCase(), loc = txs().filter(t => (t.netId || 'eth') === n.id && t.hash && !seen.has(t.hash.toLowerCase()) && (t.from ? t.from.toLowerCase() === me : ACCI() === 0)).map(t => ({ hash: t.hash, time: t.time, ok: t.st !== 'fail', local: t, cancel: t.kind === 'cancel', rev: t.kind === 'revoke', app: t.kind === 'dapp' ? (t.app || 'App') : null,
+    legs: t.kind === 'cancel' || t.kind === 'revoke' || (t.kind === 'dapp' && !(Number(t.amount) > 0)) ? [] : t.kind === 'swap' ? [{ s: t.token, amt: t.amount, dir: 'out', peer: '' }, { s: t.outToken, amt: '', dir: 'in', peer: '' }] : [{ s: t.token, amt: t.amount, dir: 'out', peer: (t.to || '').toLowerCase() }] }));
   const dust = e => !e.local && e.legs.length > 0 && e.legs.every(l => { if (l.dir !== 'in') return false; const tk = toks(n).find(t => t.s === l.s), p = tk && pxOf(n, tk), a = Number(l.amt);   // recibos de menos de $0.01: polvo y envenenamiento de direcciones
     return p ? a * p.usd < 0.01 : a < 1e-9; });
   return [...loc, ...on].filter(e => !dust(e) && (!sym || e.legs.some(l => l.s === sym))).sort((a, b) => b.time - a.time);
@@ -1350,14 +1374,14 @@ const HICON = k => ({ in: P.recv, out: P.send, swap: P.swap, self: P.swap, fail:
 function hRow(n, e) {
   const o = e.legs.filter(l => l.dir === 'out'), i = e.legs.filter(l => l.dir === 'in'), kind = !e.ok && !e.legs.length ? 'fail' : o.length && i.length ? 'swap' : i.length ? 'in' : o.length ? 'out' : 'self';
   const main = kind === 'swap' ? i[0] : (i[0] || o[0] || e.legs[0]), peer = main && main.peer, tm = new Date(e.time).toLocaleTimeString(LOC(), { hour: 'numeric', minute: '2-digit' });
-  const title = e.rev ? `Permission removed${e.local && e.local.token ? ' · ' + esc(e.local.token) : ''}` : e.cancel ? 'Transfer cancelled' : kind === 'fail' ? 'Failed transaction' : kind === 'swap' ? `${esc(o[0].s)} → ${esc(i[0].s)}` : `${kind === 'in' ? 'Received' : kind === 'out' ? 'Sent' : 'Moved'} ${esc(main.s)}`;
+  const title = e.rev ? `Permission removed${e.local && e.local.token ? ' · ' + esc(e.local.token) : ''}` : e.app ? `<span class="notr">${esc(e.app)}</span>` : e.cancel ? 'Transfer cancelled' : kind === 'fail' ? 'Failed transaction' : kind === 'swap' ? `${esc(o[0].s)} → ${esc(i[0].s)}` : `${kind === 'in' ? 'Received' : kind === 'out' ? 'Sent' : 'Moved'} ${esc(main.s)}`;
   const st = e.local ? stOf(e.local) : !e.ok ? TXST.fail : null;
-  const sub = `${st ? `<em style="color:${st[1]}">${st[0]}</em> · ` : ''}${kind === 'swap' ? 'Swap · ' + tm : !peer ? tm : `${kind === 'in' ? 'From' : 'To'} ${short(peer)} · ${tm}`}`;
+  const sub = `${st ? `<em style="color:${st[1]}">${st[0]}</em> · ` : ''}${kind === 'swap' ? 'Swap · ' + tm : e.app ? 'App transaction · ' + tm : !peer ? tm : `${kind === 'in' ? 'From' : 'To'} ${short(peer)} · ${tm}`}`;
   const tk = main && toks(n).find(t => t.s === main.s), p = tk && pxOf(n, tk), amt = main && main.amt ? Number(main.amt) : null;
-  const right = kind === 'fail' || e.cancel || e.rev ? '' : `<b class="${kind === 'in' || kind === 'swap' ? 'up' : ''}">${amt === null ? '' : (kind === 'in' || kind === 'swap' ? '+' : '−') + fmtAmt(main.amt)} ${esc(main.s)}</b><small>${kind === 'swap' && o[0].amt ? '−' + fmtAmt(o[0].amt) + ' ' + esc(o[0].s) : p && amt !== null ? fmtUsd(amt * p.usd) : ''}</small>`;
+  const right = kind === 'fail' || e.cancel || e.rev || !main ? '' : `<b class="${kind === 'in' || kind === 'swap' ? 'up' : ''}">${amt === null ? '' : (kind === 'in' || kind === 'swap' ? '+' : '−') + fmtAmt(main.amt)} ${esc(main.s)}</b><small>${kind === 'swap' && o[0].amt ? '−' + fmtAmt(o[0].amt) + ' ' + esc(o[0].s) : p && amt !== null ? fmtUsd(amt * p.usd) : ''}</small>`;
   const href = n.exp ? n.exp + e.hash : '';
   const bump = e.local && e.local.st === 'pend' && n.kind === 'evm' && e.local.nonce != null && e.local.maxFee && Date.now() - e.local.time < 6 * 3600e3 ? `<div class="hact"><button data-bump="speed" data-h="${e.hash}">Speed up</button>${e.cancel ? '' : `<button data-bump="cancel" data-h="${e.hash}">Cancel</button>`}</div>` : '';
-  return `<${href ? `a href="${href}" target="_blank" rel="noopener noreferrer"` : 'div'} class="hrow"><span class="hic k-${e.cancel ? 'fail' : kind}">${ic(e.rev ? P.shield : HICON(e.cancel ? 'cancel' : kind), 18, 'currentColor', 1.9)}</span><div class="ht"><b>${title}</b><small>${sub}</small></div><div class="hr">${right}</div></${href ? 'a' : 'div'}>` + bump;
+  return `<${href ? `a href="${href}" target="_blank" rel="noopener noreferrer"` : 'div'} class="hrow"><span class="hic k-${e.cancel ? 'fail' : kind}">${ic(e.rev ? P.shield : e.app && !e.legs.length ? P.link : HICON(e.cancel ? 'cancel' : kind), 18, 'currentColor', 1.9)}</span><div class="ht"><b>${title}</b><small>${sub}</small></div><div class="hr">${right}</div></${href ? 'a' : 'div'}>` + bump;
 }
 function HLIST(sym) {
   const n = curNet(), h = HIST[hKey(n)], L = histItems(n, sym), eb = expBase(n), me = addrOf(n);
@@ -1409,6 +1433,7 @@ V.sent = () => { const t = txs()[0] || {}; return SCREEN(`<div class="sg" style=
 V.settings = () => SCREEN(`<h1 class="h1" style="margin-top:14px">Settings</h1>
   <div class="prof card">${AVBOX(56, 1)}<div style="min-width:0;flex:1"><label class="lbl" for="rename">Account name</label><input id="rename" class="rename" maxlength="24" value="${esc(/^Account \d+$/.test(S.name) && trStr(S.name) ? trStr(S.name).trim() : S.name)}"><small>${S.since ? 'Member since ' + new Date(S.since).toLocaleDateString(LOC(), { month: 'short', year: 'numeric' }) : short(S.addr)}</small></div></div>
   <div class="lbl gl2">Account</div><div class="grp card">
+    <button class="row" data-go="wcapps"><span class="si">${ic(P.link, 18, '#5c9bff')}</span><div><b>Connected apps</b><small>${store.get('wc') === '1' ? 'WalletConnect · active' : 'Connect to websites with WalletConnect'}</small></div><span class="end">${ic(P.chev, 15)}</span></button>
     <button class="row" data-go="contacts"><span class="si">${ic(P.user, 18, '#5c9bff')}</span><div><b>Contacts</b><small>${CONTACTS.get().length ? `${CONTACTS.get().length} saved` : 'Save addresses you send to'}</small></div><span class="end">${ic(P.chev, 15)}</span></button>
     <button class="row" data-go="security"><span class="si">${ic(P.shield, 18, '#5c9bff')}</span><div><b>Security center</b><small>${sec().score} of ${sec().total} checks passed</small></div><span class="end">${ic(P.chev, 15)}</span></button>
     <button class="row" data-copy="${S.addr}"><span class="si">${ic(P.copy, 18, '#5c9bff')}</span><div><b>Copy address</b><small class="mono">${short(S.addr)}</small></div></button></div>
@@ -1674,7 +1699,7 @@ const MCARD2 = () => { const n = curNet(), a = addrOf(n); return `<div class="mc
 
 const NBADGE = n => n.id !== 'rh' && TLOGO[n.native] ? `<img class="nbdg" src="${TLOGO[n.native]}" width="18" height="18" alt="" decoding="async">` : '';
 V.home = () => { const sc = sec(), n = curNet(); return SCREEN(`<div class="top hmt"><div class="acct">${AVBOX(32)}<button class="acsel" data-sheet="acct" aria-label="Switch account"><b>${esc(S.name)}</b>${ic(P.down, 16, 'currentColor', 2.2)}</button></div>
-    <div class="ib3"><button class="ib" data-copy="${addrOf(n)}" aria-label="Copy address" title="Copy address">${ic(P.copy, 22, 'currentColor', 1.7)}</button><button class="ib" data-go="activity" aria-label="Activity" title="Activity">${ic(P.clock, 22, 'currentColor', 1.7)}</button><button class="ib" id="lockNow" aria-label="Lock" title="Lock">${ic(P.lock, 22, 'currentColor', 1.7)}</button></div></div>
+    <div class="ib3"><button class="ib" data-hscan="1" aria-label="Scan QR code" title="Scan QR code">${ic(P.qr, 22, 'currentColor', 1.7)}</button><button class="ib" data-copy="${addrOf(n)}" aria-label="Copy address" title="Copy address">${ic(P.copy, 22, 'currentColor', 1.7)}</button><button class="ib" data-go="activity" aria-label="Activity" title="Activity">${ic(P.clock, 22, 'currentColor', 1.7)}</button><button class="ib" id="lockNow" aria-label="Lock" title="Lock">${ic(P.lock, 22, 'currentColor', 1.7)}</button></div></div>
   <div class="hero"><div class="hcap">Total · all networks</div><div class="hbal na" id="netBal">—</div><div class="hchg" id="netChg"></div>
     <div class="hsub">${NETPILL()}<span class="sync" id="syncChip"><span class="dot off"></span>Offline</span></div></div>
   <div class="acts4 mm"><button data-go="send">${ic(P.send, 24, 'currentColor', 1.7)}<span>Send</span></button><button data-go="receive">${ic(P.recv, 24, 'currentColor', 1.7)}<span>Receive</span></button><button data-go="swap">${ic(P.swap, 24, 'currentColor', 1.7)}<span>Swap</span></button><button data-go="security">${ic(P.shield, 24, 'currentColor', 1.7)}<span>Security</span></button></div>
@@ -1902,7 +1927,8 @@ function qrParse(txt) {   // direccion sola, EIP-681 (ethereum:0x…@56/transfer
   const [head, fn] = path.replace(/^pay-/i, '').split('/'), [a, ch] = head.split('@'); r.chain = ch && /^\d+$/.test(ch) ? Number(ch) : null;
   if (fn === 'transfer') { r.token = a; r.a = Q.get('address') || ''; r.raw = Q.get('uint256'); } else { r.a = a; r.raw = Q.get('value'); }
   return r; }
-function scanTo() { openScan(txt => { const n = curNet(), r = qrParse(txt), isE = a => { try { return ethers.isAddress(a); } catch (e) { return false; } };
+function scanTo() { openScan(scanText); }
+function scanText(txt) { if (/^wc:/i.test(String(txt || '').trim())) return wcPair(txt); const n = curNet(), r = qrParse(txt), isE = a => { try { return ethers.isAddress(a); } catch (e) { return false; } };
   if (!r.a || !(isE(r.a) || isSolAddr(r.a))) return toast("This QR code doesn't contain a wallet address.", 1);
   if (n.kind === 'evm' && !isE(r.a)) return toast('This is a Solana address. Switch to Solana to send there.', 1);
   if (n.kind === 'sol' && !isSolAddr(r.a)) return toast('This is a 0x address. Switch to Ethereum or BNB Chain to send there.', 1);
@@ -1913,7 +1939,185 @@ function scanTo() { openScan(txt => { const n = curNet(), r = qrParse(txt), isE 
   else if (n.kind === 'evm' && r.raw != null) { const nat = toks(n).find(z => z.native); if (nat) { S.tok = tid(nat); t = nat; } }
   let a = null; try { if (n.kind === 'sol' && r.amt && /^\d*\.?\d+$/.test(r.amt)) a = r.amt; else if (r.raw != null) { const v = bigAmt(r.raw); if (v && v > 0n) a = ethers.formatUnits(v, t.d); } } catch (e) {}
   if (a) { a = a.includes('.') ? a.replace(/\.?0+$/, '') : a; if (+a > 0 && a.replace('.', '').length <= 12) S.amt = a; }
-  render(); toast(note); }); }
+  if (S.view === 'send') render(); else { S.dir = 'fwd'; go('send'); } toast(note); }
+/* ---------- WalletConnect (WalletKit de Reown): conectar la wallet con webs y apps ---------- */
+const WC_PID = '8f269c3d2a230632090ddbb53684b221', WC_NETS = { 'eip155:1': 'eth', 'eip155:56': 'bnb' };
+const WC_METHODS = ['eth_sendTransaction', 'personal_sign', 'eth_signTypedData', 'eth_signTypedData_v4', 'wallet_switchEthereumChain', 'wallet_addEthereumChain', 'eth_accounts', 'eth_requestAccounts', 'eth_chainId'];
+let WK = null, WKP = null; const WCQ = [];
+const loadWCLib = () => window.SWWC ? Promise.resolve() : new Promise((res, rej) => { const sc = document.createElement('script'); sc.src = 'wc.js'; sc.onload = () => res(); sc.onerror = () => rej(new Error('wc-lib')); document.head.appendChild(sc); });
+const wcFlag = () => { try { store.set('wc', WK && Object.keys(WK.getActiveSessions()).length ? '1' : ''); } catch (e) {} };
+const wcHost = u => { try { return new URL(u).host; } catch (e) { return String(u || '').replace(/^https?:\/\//, '').split('/')[0]; } };
+const wcAv = (m, s = 44) => `<span class="wcav" style="width:${s}px;height:${s}px;font-size:${Math.round(s * .42)}px" aria-hidden="true">${esc(String((m && m.name) || '?').trim().slice(0, 1).toUpperCase() || '?')}</span>`;
+const wcSup = () => ({ eip155: { chains: Object.keys(WC_NETS), methods: WC_METHODS, events: ['chainChanged', 'accountsChanged'], accounts: Object.keys(WC_NETS).map(c => c + ':' + S.addr) } });
+const wcSess = t => (WK && WK.getActiveSessions()[t]) || null;
+const wcAccts = t => { const s = wcSess(t); return [...new Set((((s && s.namespaces.eip155) || {}).accounts || []).map(a => a.split(':')[2]).filter(Boolean))]; };
+const wcSessChains = t => { const s = wcSess(t); return [...new Set((((s && s.namespaces.eip155) || {}).accounts || []).map(a => a.split(':').slice(0, 2).join(':')))]; };
+const wcOk = (r, result) => WK.respondSessionRequest({ topic: r.topic, response: { id: r.id, jsonrpc: '2.0', result } });
+const wcErr = (r, code, message) => WK.respondSessionRequest({ topic: r.topic, response: { id: r.id, jsonrpc: '2.0', error: { code, message } } });
+function wcVer(vc, url) { const v = (vc && vc.verified) || {}, host = wcHost(url), org = v.origin ? wcHost(v.origin) : '';
+  if (v.isScam) return { k: 'bad', t: 'Known scam site. Do not connect or sign anything.' };
+  if (v.validation === 'VALID') return { k: 'ok', t: `Domain verified · ${host}` };
+  if (v.validation === 'INVALID') return { k: 'bad', t: org && org !== host ? `This request does not come from ${host} (it comes from ${org}). It may be a fake site.` : `This request does not come from ${host}. It may be a fake site.` };
+  return { k: 'warn', t: 'Domain not verified. Make sure you opened the real site.' }; }
+function wcInit() { if (WK) return Promise.resolve(WK); if (WKP) return WKP;
+  WKP = (async () => { await loadWCLib();
+    const core = new SWWC.Core({ projectId: WC_PID, telemetryEnabled: false });
+    const k = await SWWC.WalletKit.init({ core, metadata: { name: 'Sectora Wallet', description: 'Self-custody wallet of the Sectora network', url: 'https://getsectora.app', icons: ['https://getsectora.app/icons/icon-512.png'] } });
+    k.on('session_proposal', p => { clearTimeout(S.wcWait); S.wcProp = p; wcShow('wcprop'); });
+    k.on('session_request', r => { if (!WCQ.some(x => x.id === r.id) && !(S.wcReq && S.wcReq.id === r.id)) WCQ.push(r); wcNext(); });
+    k.on('session_delete', () => { wcFlag(); if (S.view === 'wcapps') render(); });
+    k.on('proposal_expire', e => { if (S.wcProp && S.wcProp.id === e.id) { S.wcProp = null; if (S.view === 'wcprop') { toast('The connection request expired. Scan the code again.', 1); wcBack(); } } });
+    k.on('session_request_expire', e => { const i = WCQ.findIndex(x => x.id === e.id); if (i >= 0) WCQ.splice(i, 1); if (S.wcReq && S.wcReq.id === e.id) { S.wcReq = null; if (S.view === 'wcreq') { toast('The request expired.', 1); wcBack(); } } });
+    WK = k; wcFlag();
+    try { for (const r of k.getPendingSessionRequests() || []) if (!WCQ.some(x => x.id === r.id)) WCQ.push(r); } catch (e) {}
+    return k; })().catch(e => { WKP = null; throw e; });
+  return WKP; }
+function wcShow(view) { if (!S.wallet) return; if (!['wcprop', 'wcreq'].includes(S.view)) S.wcBackTo = S.view; S.dir = 'fwd'; go(view); }
+function wcBack() { const b = S.wcBackTo && !['wcprop', 'wcreq', 'unlock', 'welcome', 'boot'].includes(S.wcBackTo) ? S.wcBackTo : 'home'; S.wcBackTo = null; S.dir = 'back'; go(b); setTimeout(wcNext, 350); }
+function wcResume() { if (!S.wallet) return;
+  if (S.wcProp && S.view !== 'wcprop') return wcShow('wcprop');
+  if (WK) return wcNext();
+  if (store.get('wc') === '1') wcInit().then(() => wcNext()).catch(e => console.warn('[wallet] wc init', e)); }
+async function wcNext() { if (!WK || !S.wallet || S.view === 'wcprop') return; if (S.wcReq) { if (S.view !== 'wcreq') wcShow('wcreq'); return; }
+  while (WCQ.length) { const r = WCQ.shift(), m = r.params.request.method, P0 = r.params.request.params || [], ch = r.params.chainId;
+    try {
+      if (!wcSess(r.topic)) continue;
+      if (m === 'eth_accounts' || m === 'eth_requestAccounts') { await wcOk(r, wcAccts(r.topic)); continue; }
+      if (m === 'eth_chainId') { await wcOk(r, ethers.toQuantity(Number(String(ch).split(':')[1] || 1))); continue; }
+      if (m === 'wallet_switchEthereumChain' || m === 'wallet_addEthereumChain') { let id = ''; try { id = 'eip155:' + Number(BigInt((P0[0] && P0[0].chainId) || '0x0')); } catch (e) {}
+        if (WC_NETS[id] && wcSessChains(r.topic).includes(id)) { await wcOk(r, null); try { await WK.emitSessionEvent({ topic: r.topic, event: { name: 'chainChanged', data: Number(id.split(':')[1]) }, chainId: id }); } catch (e) {} }
+        else await wcErr(r, 4902, 'Sectora Wallet supports Ethereum and BNB Chain'); continue; }
+      if (!['personal_sign', 'eth_signTypedData', 'eth_signTypedData_v4', 'eth_sendTransaction'].includes(m) || !WC_NETS[ch]) { await wcErr(r, 4200, 'Method not supported by Sectora Wallet'); continue; }
+    } catch (e) { console.warn('[wallet] wc auto', e); continue; }
+    S.wcReq = r; S.wcSimFail = false; wcShow('wcreq'); return; } }
+async function wcPair(uri) { uri = String(uri || '').trim();
+  if (/^wc:[^@]+@1\b/i.test(uri)) return toast('This app uses an old WalletConnect version that is no longer supported.', 1);
+  if (!/^wc:[0-9a-f]{64}@2\?/i.test(uri)) return toast('This is not a WalletConnect code.', 1);
+  if (!S.wallet) return toast('Unlock the wallet first.', 1);
+  toast('Connecting…');
+  try { const k = await wcInit(); clearTimeout(S.wcWait); S.wcWait = setTimeout(() => { if (!S.wcProp) toast("The app didn't answer. Refresh its QR code and try again.", 1); }, 25000); await k.pair({ uri }); }
+  catch (e) { console.warn('[wallet] wc pair', e); clearTimeout(S.wcWait); toast(/expired|already|exists|pairing/i.test(String(e && e.message)) ? 'This code was already used or expired. Get a new one from the app.' : "Couldn't connect. Check your internet and try again.", 1); } }
+const wcMsgText = raw => { try { const b = ethers.isHexString(raw) ? ethers.getBytes(raw) : ethers.toUtf8Bytes(String(raw)), t = ethers.toUtf8String(b); return /^[^\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]*$/.test(t) ? t : null; } catch (e) { return null; } };
+const UNL = v => { try { return BigInt(v) >= 2n ** 128n || BigInt(v) === 2n ** 160n - 1n; } catch (e) { return false; } };
+const wcName = (n, a) => { if (!a) return ''; const lo = String(a).toLowerCase(), c = contactOf(a), tk = toks(n).find(t => t.a && t.a.toLowerCase() === lo); return (SPN[n.id] || {})[lo] || (c && c.n) || (tk && tk.s) || (lo === S.addr.toLowerCase() ? 'This account' : ''); };
+const wcAddr = (n, a) => { const nm = wcName(n, a); return `${nm ? `<span${nm === 'This account' ? '' : ' class="notr"'}>${esc(nm)}</span> · ` : ''}<span class="mono">${short(ethers.getAddress(String(a).toLowerCase()))}</span>`; };
+function wcAct(n, to, data, meta) {   // explica en claro que hace la llamada al contrato
+  const sel = data.slice(0, 10).toLowerCase(), ab = ethers.AbiCoder.defaultAbiCoder(), args = '0x' + data.slice(10), sym = meta ? meta.s : 'tokens', amt = v => meta && meta.d != null ? fmtAmt(ethers.formatUnits(v, meta.d)) : String(v);
+  try {
+    if (sel === '0x095ea7b3' || sel === '0x39509351') { const [sp, v] = ab.decode(['address', 'uint256'], args), unl = UNL(v);
+      if (v === 0n) return { t: `Remove the permission of ${wcAddr(n, sp)} to spend your ${esc(sym)}` };
+      return { t: `Allow ${wcAddr(n, sp)} to spend ${unl ? 'an unlimited amount of' : amt(v)} ${esc(sym)}`, d: unl ? `Unlimited permission: this contract could move all your ${esc(sym)}, now or later. Prefer apps that ask only for the amount you need.` : '' }; }
+    if (sel === '0xa9059cbb') { const [d, v] = ab.decode(['address', 'uint256'], args); return { t: `Send ${amt(v)} ${esc(sym)} to ${wcAddr(n, d)}` }; }
+    if (sel === '0x23b872dd') { const [f, d, v] = ab.decode(['address', 'address', 'uint256'], args); return { t: `Move ${amt(v)} ${esc(sym)} from ${wcAddr(n, f)} to ${wcAddr(n, d)}` }; }
+    if (sel === '0xa22cb465') { const [op, on] = ab.decode(['address', 'bool'], args); return on ? { t: `Give ${wcAddr(n, op)} control of all your items in this collection`, d: 'This lets the contract move ALL your items of this collection. Only accept it on a marketplace you trust.' } : { t: `Remove the control of ${wcAddr(n, op)} over this collection` }; }
+  } catch (e) {}
+  return { t: data && data !== '0x' ? `Contract interaction · function <span class="mono">${esc(sel)}</span>` : '' }; }
+function wcInfo(r) { const s = wcSess(r.topic), m = (s && s.peer && s.peer.metadata) || {}, method = r.params.request.method, P0 = r.params.request.params || [], n = NETS[WC_NETS[r.params.chainId]] || NETS.eth, me = S.addr.toLowerCase();
+  const I = { m, v: wcVer(r.verifyContext, m.url), n, method, warn: [], body: '', title: 'Request', btn: 'Sign', fee: false, mis: null, misI: null, block: false };
+  I.danger = I.v.k === 'bad';
+  const misFor = a => { if (!a || String(a).toLowerCase() === me || I.mis) return; const x = ACCTS().find(y => y.addr.toLowerCase() === String(a).toLowerCase()); I.mis = x ? x.name : short(String(a)); I.misI = x ? x.i : null; };
+  const acc = wcAccts(r.topic); if (acc.length && !acc.some(a => a.toLowerCase() === me)) misFor(acc[0]);
+  if (method === 'personal_sign') { let [raw, ad] = P0; if (typeof raw === 'string' && typeof ad === 'string' && ethers.isAddress(raw) && !ethers.isAddress(ad)) [raw, ad] = [ad, raw]; misFor(ad);
+    const txt = wcMsgText(raw), siwe = /wants you to sign in with your Ethereum account/.test(txt || '');
+    I.title = siwe ? 'Sign in' : 'Sign message'; I.btn = siwe ? 'Sign in' : 'Sign';
+    if (siwe) { const dom = (txt.split(' wants you')[0] || '').trim().replace(/^https?:\/\//, ''), host = wcHost(m.url); if (dom && host && dom !== host) { I.warn.push(`This sign-in is for ${esc(dom)}, but the app says it is ${esc(host)}.`); I.danger = true; } }
+    I.body = `<div class="wcmsg card"><pre class="notr${txt == null ? ' mono' : ''}">${esc(txt != null ? txt : String(raw).slice(0, 3000))}</pre></div><p class="fnote">Signing a message is free. It does not send any transaction.</p>`; }
+  else if (method === 'eth_signTypedData' || method === 'eth_signTypedData_v4') { let [ad, d] = P0; if (typeof d === 'string' && ethers.isAddress(d) && !ethers.isAddress(ad)) [ad, d] = [d, ad]; misFor(ad);
+    let td = {}; try { td = typeof d === 'string' ? JSON.parse(d) : (d || {}); } catch (e) { I.block = true; I.warn.push('This signature request is malformed.'); }
+    const dm = td.domain || {}, msg = td.message || {}, PT = String(td.primaryType || ''), cid = dm.chainId != null ? Number(dm.chainId) : null;
+    I.title = 'Sign data'; I.btn = 'Sign';
+    if (cid && cid !== n.chainId) { I.warn.push(`This signature is for another network (chain ${cid}).`); I.danger = true; }
+    const pm = /^Permit/.test(PT) || ('spender' in msg && ('value' in msg || 'amount' in msg || 'details' in msg));
+    if (pm) { const det = msg.details || (Array.isArray(msg.details) ? msg.details[0] : null) || {}, tka = det.token || (msg.permitted && msg.permitted.token) || dm.verifyingContract || '', sp = msg.spender || '', v = det.amount != null ? det.amount : msg.value != null ? msg.value : msg.amount != null ? msg.amount : (msg.permitted || {}).amount;
+      const tk = toks(n).find(t => t.a && t.a.toLowerCase() === String(tka).toLowerCase()), sym = tk ? tk.s : 'tokens';
+      I.title = 'Token permission'; I.danger = true;
+      I.warn.push(`This signature lets ${sp ? wcAddr(n, sp) : 'an app'} move your ${esc(sym)}${v != null ? ` (${UNL(v) ? 'unlimited' : tk ? fmtAmt(ethers.formatUnits(BigInt(v), tk.d)) : esc(String(v))})` : ''} without another approval. Only sign it if you trust this app.`); }
+    const flat = (o, p, out) => { for (const [k, v] of Object.entries(o || {})) { if (out.length >= 30) break; const key = p ? p + '.' + k : k; if (v && typeof v === 'object' && !Array.isArray(v)) flat(v, key, out); else out.push([key, v]); } return out; };
+    const fv = v => { const x = Array.isArray(v) ? `[${v.length}]` : String(v); if (typeof v === 'string' && ethers.isAddress(v)) return wcAddr(n, v); if (/^\d{20,}$/.test(x) && UNL(x)) return 'Unlimited'; return `<span class="notr">${esc(x.length > 90 ? x.slice(0, 88) + '…' : x)}</span>`; };
+    I.body = `<div class="kv card"><div>Signing for<b class="notr">${esc(String(dm.name || '—'))}</b></div>${dm.verifyingContract ? `<div>Contract<b>${wcAddr(n, dm.verifyingContract)}</b></div>` : ''}<div>Type<b class="notr">${esc(PT || '—')}</b></div></div>
+      <div class="wcflds card">${flat(msg, '', []).map(([k, v]) => `<div><span class="notr">${esc(k)}</span><b>${fv(v)}</b></div>`).join('') || '<div><span>—</span></div>'}</div>`; }
+  else if (method === 'eth_sendTransaction') { const tx = P0[0] || {}, to = tx.to ? String(tx.to) : '', data = String(tx.data || tx.input || '0x'); let value = 0n; try { value = BigInt(tx.value || 0); } catch (e) {}
+    misFor(tx.from); I.title = 'Review transaction'; I.btn = 'Send'; I.fee = true;
+    if (!to || !ethers.isAddress(to)) { I.block = true; I.warn.push('Creating contracts is not supported.'); }
+    const tk = to ? toks(n).find(t => t.a && t.a.toLowerCase() === to.toLowerCase()) : null, a = to && ethers.isAddress(to) ? wcAct(n, to, data, tk ? { s: tk.s, d: tk.d } : null) : { t: '' }; if (a.d) { I.warn.push(a.d); I.danger = true; }
+    const nat = toks(n).find(t => t.native), p = nat && pxOf(n, nat);
+    I.body = `${a.t ? `<div class="wcact card" id="wcact">${a.t}</div>` : ''}
+      <div class="kv card">${to && ethers.isAddress(to) ? `<div>To<b>${wcAddr(n, to)}</b></div>` : ''}<div>Amount<b>${value > 0n ? `${fmtAmt(ethers.formatEther(value))} ${n.native}${p ? ` · ${fmtUsd(Number(ethers.formatEther(value)) * p.usd)}` : ''}` : `0 ${n.native}`}</b></div></div>`;
+    I.tx = { to, value, data, gas: tx.gas || tx.gasLimit || null, tk }; }
+  return I; }
+async function wcExec(r) { const method = r.params.request.method, P0 = r.params.request.params || [];
+  if (!S.wallet) throw new UErr('Unlock the wallet first.');
+  if (method === 'personal_sign') { let [raw, ad] = P0; if (typeof raw === 'string' && typeof ad === 'string' && ethers.isAddress(raw) && !ethers.isAddress(ad)) raw = ad; return S.wallet.signMessage(ethers.isHexString(raw) ? ethers.getBytes(raw) : String(raw)); }
+  if (method === 'eth_signTypedData' || method === 'eth_signTypedData_v4') { let [ad, d] = P0; if (typeof d === 'string' && ethers.isAddress(d) && !ethers.isAddress(ad)) d = ad; const td = typeof d === 'string' ? JSON.parse(d) : d, types = { ...(td.types || {}) }; delete types.EIP712Domain; return S.wallet.signTypedData(td.domain || {}, types, td.message || {}); }
+  if (method === 'eth_sendTransaction') { const n = NETS[WC_NETS[r.params.chainId]], I = wcInfo(r), t = I.tx; if (!n || I.block || !t) throw new UErr("This transaction can't be sent.");
+    const base = await evmTxBase(n, 'normal'), gasLimit = t.gas ? BigInt(t.gas) : await estGas(n, { to: t.to, value: t.value, data: t.data }, 300000n);
+    await needNative(n, t.value, gasLimit, base);
+    const { baseFee, ...fee } = base, to = ethers.getAddress(t.to.toLowerCase()), raw = await S.wallet.signTransaction({ to, value: t.value, data: t.data, gasLimit, ...fee }), hash = ethers.keccak256(raw);
+    await sendRaw(n, raw);
+    keepTx({ hash, to, amount: t.value > 0n ? ethers.formatEther(t.value) : '0', token: n.native, net: n.name, netId: n.id, kind: 'dapp', app: String(I.m.name || 'App').slice(0, 40), time: Date.now(), st: 'pend', nonce: fee.nonce, maxFee: String(fee.maxFeePerGas), tip: String(fee.maxPriorityFeePerGas), gas: String(gasLimit), txTo: to, txVal: String(t.value), txData: t.data });
+    return hash; }
+  throw new UErr('Method not supported.'); }
+V.wcprop = () => { const p = S.wcProp; if (!p || !window.SWWC) return SCREEN(`${NAV('Connect an app', 0, 'home')}<p class="hnone">No pending request.</p>`);
+  const m = p.params.proposer.metadata || {}, v = wcVer(p.verifyContext, m.url); let ns = null; try { ns = SWWC.buildApprovedNamespaces({ proposal: p.params, supportedNamespaces: wcSup() }); } catch (e) {}
+  const chs = ns && ns.eip155 ? [...new Set(ns.eip155.chains || ns.eip155.accounts.map(a => a.split(':').slice(0, 2).join(':')))].filter(c => WC_NETS[c]).map(c => NETS[WC_NETS[c]].name) : [];
+  return SCREEN(`<div class="wch">${wcAv(m, 64)}<h1 class="h1 notr">${esc(m.name || 'App')}</h1><p class="wcurl mono">${esc(wcHost(m.url) || '')}</p><p class="lead">wants to connect to your wallet</p></div>
+  <div class="wcv ${v.k}">${ic(v.k === 'ok' ? P.chk : P.info, 16, 'currentColor', 2.2)}<span>${esc(v.t)}</span></div>
+  <div class="kv card"><div>Account<b><span class="notr">${esc(S.name)}</span> · <span class="mono">${short(S.addr)}</span></b></div><div>Networks<b>${chs.length ? chs.join(' · ') : '—'}</b></div></div>
+  ${ns ? `<div class="wcperm card"><div>${ic(P.chk, 15, '#5c9bff', 2.6)}<span>See your address and balances</span></div><div>${ic(P.chk, 15, '#5c9bff', 2.6)}<span>Ask you to approve transactions and signatures</span></div><div class="no">${ic('<path d="M6 6l12 12M18 6L6 18"/>', 15, 'currentColor', 2.4)}<span>Move funds without your approval</span></div></div>`
+    : `<div class="wcv bad">${ic(P.info, 16, 'currentColor', 2.2)}<span>This app needs a network Sectora doesn't support yet. Sectora connects on Ethereum and BNB Chain.</span></div>`}`,
+  `<div class="wcbtns"><button class="btn sec" id="wcRej">Reject</button><button class="btn" id="wcOk" ${ns ? '' : 'disabled'}>Connect</button></div>`); };
+V.wcreq = () => { const r = S.wcReq; if (!r || !WK) return SCREEN(`${NAV('Request', 0, 'home')}<p class="hnone">No pending request.</p>`);
+  const I = wcInfo(r);
+  return SCREEN(`<div class="wch sm">${wcAv(I.m, 46)}<div><b class="notr">${esc(I.m.name || 'App')}</b><small class="mono">${esc(wcHost(I.m.url))}</small></div></div>
+  <h1 class="h1 wct">${I.title}</h1>
+  <div class="wcv ${I.v.k}">${ic(I.v.k === 'ok' ? P.chk : P.info, 16, 'currentColor', 2.2)}<span>${esc(I.v.t)}</span></div>
+  ${I.mis ? `<div class="wcv bad">${ic(P.info, 16, 'currentColor', 2.2)}<span>This app is connected to <b class="notr">${esc(I.mis)}</b>. Switch to that account to continue.</span></div>${I.misI != null ? `<button class="btn sec wcsw" id="wcSwitch">Switch account</button>` : ''}` : ''}
+  ${I.warn.map(w => `<div class="wcv bad">${ic(P.info, 16, 'currentColor', 2.2)}<span>${w}</span></div>`).join('')}
+  ${I.body}
+  <div class="kv card"><div>Network<b>${NDOT(I.n)} ${I.n.name}</b></div><div>Account<b><span class="notr">${esc(S.name)}</span> · <span class="mono">${short(S.addr)}</span></b></div>${I.fee ? '<div>Network fee<b id="wcfee">Estimating…</b></div>' : ''}</div>
+  <div id="wcsim"></div>`,
+  `<div class="wcbtns"><button class="btn sec" id="wcRej">Reject</button><button class="btn" id="wcOk" ${I.mis || I.block ? 'disabled' : ''}>${I.btn}</button></div>`); };
+V.wcapps = () => { const L = WK ? Object.values(WK.getActiveSessions()) : null;
+  return SCREEN(`${NAV('Connected apps', 0, 'settings')}
+  <p class="plead">Connect Sectora to websites and apps with WalletConnect. On the site, choose WalletConnect and scan its QR code.</p>
+  <div class="wcadd"><button class="btn" data-wcscan="1">${ic(P.qr, 19, '#fff', 2)}Scan QR code</button>
+    <div class="in wcin"><input id="wcuri" placeholder="Or paste the wc: link" autocomplete="off" autocapitalize="none" spellcheck="false" aria-label="WalletConnect link"><button class="wcpaste" id="wcpaste">Paste</button></div>
+    <button class="btn sec" id="wcgo">Connect</button></div>
+  <div class="lbl gl2">Your connections</div>
+  ${S.wcInitErr && !WK ? "<p class=\"hnone\">Couldn't reach WalletConnect right now. Check your internet and try again.</p>" : !L ? '<p class="hnone">Loading…</p>' : L.length ? `<div class="clist">${L.map(s => { const m = (s.peer && s.peer.metadata) || {}, ac = wcAccts(s.topic), x = ACCTS().find(y => ac.some(a => a.toLowerCase() === y.addr.toLowerCase())), ch = wcSessChains(s.topic).filter(c => WC_NETS[c]).map(c => NETS[WC_NETS[c]].name);
+      return `<div class="crow wcrow"><span class="cav">${wcAv(m, 40)}</span><span class="ct"><b class="notr">${esc(m.name || 'App')}</b><small class="mono">${esc(wcHost(m.url))}</small><small><span class="notr">${esc(x ? x.name : short(ac[0] || ''))}</span> · ${ch.join(' · ')}</small></span><button class="prm" data-wcdis="${esc(s.topic)}">Disconnect</button></div>`; }).join('')}</div>`
+    : `<div class="cempty" style="margin-top:28px">${ic(P.link, 32, '#545c6e', 1.6)}<p>No connected apps yet.</p></div>`}
+  <div class="note" style="margin-top:18px">${ic(P.info, 17, '#5c9bff')}<span>Only connect to sites you trust. Sectora always asks you before signing anything, and an app can never move your funds on its own.</span></div>
+  <p class="wclic notr">WalletConnect · Portions © 2025 Reown, Inc. All Rights Reserved</p>`); };
+function wcBind() { const q = s => $app.querySelector(s), qa = s => $app.querySelectorAll(s);
+  qa('[data-wcscan]').forEach(b => b.addEventListener('click', () => openScan(t => /^wc:/i.test(String(t).trim()) ? wcPair(t) : toast('This is not a WalletConnect code.', 1))));
+  { const g = q('#wcgo'), u = q('#wcuri'), pa = q('#wcpaste'); if (g && u) g.addEventListener('click', () => wcPair(u.value));
+    if (pa && u) pa.addEventListener('click', async () => { try { u.value = (await navigator.clipboard.readText()).trim(); } catch (e) { toast('Paste the link into the box.', 1); u.focus(); } }); }
+  qa('[data-wcdis]').forEach(b => b.addEventListener('click', async () => { if (b.dataset.arm !== '1') { b.dataset.arm = '1'; b.textContent = 'Tap again'; return; } b.disabled = true;
+    try { await WK.disconnectSession({ topic: b.dataset.wcdis, reason: SWWC.getSdkError('USER_DISCONNECTED') }); } catch (e) {} wcFlag(); toast('Disconnected'); render(); }));
+  if (S.view === 'wcapps' && !WK) wcInit().then(() => { S.wcInitErr = false; if (S.view === 'wcapps') render(); }).catch(e => { console.warn('[wallet] wc init', e); S.wcInitErr = true; if (S.view === 'wcapps') render(); });
+  if (S.view === 'wcprop' && S.wcProp && WK) { const p = S.wcProp, ok = q('#wcOk'), rj = q('#wcRej'), v = wcVer(p.verifyContext, (p.params.proposer.metadata || {}).url);
+    if (rj) rj.addEventListener('click', async () => { rj.disabled = true; try { await WK.rejectSession({ id: p.id, reason: SWWC.getSdkError('USER_REJECTED') }); } catch (e) {} S.wcProp = null; wcBack(); });
+    if (ok) ok.addEventListener('click', async () => { if (ok.disabled) return; if (v.k === 'bad' && ok.dataset.arm !== '1') { ok.dataset.arm = '1'; ok.textContent = 'Tap again to connect'; return; }
+      ok.disabled = true; ok.textContent = 'Connecting…';
+      try { const ns = SWWC.buildApprovedNamespaces({ proposal: p.params, supportedNamespaces: wcSup() }); await WK.approveSession({ id: p.id, namespaces: ns }); S.wcProp = null; wcFlag(); toast(`Connected to ${(p.params.proposer.metadata || {}).name || 'the app'}`); wcBack(); }
+      catch (e) { console.warn('[wallet] wc approve', e); ok.disabled = false; ok.textContent = 'Connect'; toast("Couldn't connect. The request may have expired. Scan the code again.", 1); } }); }
+  if (S.view === 'wcreq' && S.wcReq && WK) { const r = S.wcReq, I = wcInfo(r), ok = q('#wcOk'), rj = q('#wcRej'), sw = q('#wcSwitch');
+    if (sw) sw.addEventListener('click', () => { if (!S.seed) return lock(); useAcct(I.misI); toast(`Switched to ${S.name}`); render(); });
+    if (rj) rj.addEventListener('click', async () => { rj.disabled = true; try { await wcErr(r, 4001, 'User rejected the request'); } catch (e) {} S.wcReq = null; toast('Rejected'); wcBack(); });
+    if (ok) ok.addEventListener('click', async () => { if (ok.disabled) return; if ((I.danger || S.wcSimFail) && ok.dataset.arm !== '1') { ok.dataset.arm = '1'; ok.textContent = 'Tap again to confirm'; return; }
+      if (!S.wallet) return lock(); ok.disabled = true; if (rj) rj.disabled = true; ok.textContent = I.method === 'eth_sendTransaction' ? 'Sending…' : 'Signing…'; let res;
+      try { res = await wcExec(r); } catch (e) { console.warn('[wallet] wc exec', e); ok.disabled = false; if (rj) rj.disabled = false; ok.dataset.arm = ''; ok.textContent = I.btn; return toast(errMsg(e, "Couldn't complete the request. Try again."), 1); }
+      try { await wcOk(r, res); toast(I.method === 'eth_sendTransaction' ? 'Sent. Follow it in Activity.' : 'Signed'); } catch (e) { toast(I.method === 'eth_sendTransaction' ? 'Sent, but the app may not have been notified.' : "Signed, but the app didn't receive it. Try again from the app.", 1); }
+      S.wcReq = null; wcBack(); });
+    if (I.fee && I.tx && !I.block) { const n = I.n, t = I.tx, nat = toks(n).find(x => x.native);
+      (async () => { let gas = null; try { gas = t.gas ? BigInt(t.gas) : await estGas(n, { to: t.to, value: t.value, data: t.data }, null); } catch (e) { gas = null; }
+        if (S.wcReq !== r) return; const sim = q('#wcsim');
+        if (!gas) { S.wcSimFail = true; if (sim) sim.innerHTML = `<div class="wcv bad">${ic(P.info, 16, 'currentColor', 2.2)}<span>The network says this transaction would fail. If you send it, you could lose the fee.</span></div>`; gas = 300000n; }
+        try { const b = await evmTxBase(n, 'normal'), eff = b.baseFee > 0n && b.baseFee + b.maxPriorityFeePerGas < b.maxFeePerGas ? b.baseFee + b.maxPriorityFeePerGas : b.maxFeePerGas, f = Number(ethers.formatEther(gas * eff)), p = nat && pxOf(n, nat), e = q('#wcfee');
+          if (e && S.wcReq === r) e.textContent = `≈ ${fmtAmt(f)} ${n.native}${p ? ' · ' + fmtUsd(f * p.usd) : ''}`; } catch (e) { const el = q('#wcfee'); if (el) el.textContent = '—'; } })();
+      if (!t.tk && t.data.length > 10) mcall(n, [[t.to, IFC().encodeFunctionData('symbol')], [t.to, IFC().encodeFunctionData('decimals')]]).then(rs => { let s = '', d = null; try { s = IFC().decodeFunctionResult('symbol', rs[0])[0]; } catch (e) {} try { d = Number(IFC().decodeFunctionResult('decimals', rs[1])[0]); } catch (e) {}
+        if (!s || d == null || S.wcReq !== r) return; const a = wcAct(n, t.to, t.data, { s: String(s).replace(/[^\w.$-]/g, '').slice(0, 10), d }), el = q('#wcact'); if (el && a.t) el.innerHTML = a.t; }).catch(() => {}); } } }
 V.receive = () => { const n = curNet(), a = addrOf(n); return SCREEN(`${NAV('Receive', 0, 'home')}
   <div class="nbar" style="justify-content:center">${NETPILL()}</div>
   <div class="qcard"><div class="r1"><span class="wm">${LOGOW()}SECTORA</span><span class="net">${NDOT(n)}${n.name}</span></div>
@@ -2201,6 +2405,8 @@ function bindMulti() {
     feeQuote(n, t, S.amt, S.to).then(r => { S.feeQ = r; if (S.view === 'review') paint(r); }).catch(() => paint(null)); if (!p) loadPrices();
     qa('[data-speed]').forEach(b => b.addEventListener('click', () => { S.speed = b.dataset.speed; qa('[data-speed]').forEach(x => x.classList.toggle('on', x === b)); const a = $app.querySelector('#feeAll'); if (a && S.feeQ) a.textContent = `≈ ${fmtAmt(S.feeQ[S.speed])} ${n.native}`; })); }
   qa('[data-bump]').forEach(b => b.addEventListener('click', () => onBump(b)));
+  wcBind(); if (S.wallet && !['wcprop', 'wcreq'].includes(S.view)) wcResume();
+  qa('[data-hscan]').forEach(b => b.addEventListener('click', () => openScan(scanText)));
   qa('[data-scan]').forEach(b => b.addEventListener('click', e => { e.preventDefault(); if (b.dataset.scan === 'to') return scanTo();
     openScan(txt => { const r = qrParse(txt), i = $app.querySelector('#caddr'), er = $app.querySelector('#cerr'); if (!i) return; if (!r.a || !kindOf(r.a)) { if (er) er.textContent = "This QR code doesn't contain a wallet address."; return; } i.value = r.a; if (er) er.textContent = ''; toast('Address scanned'); }); }));
   if (S.view === 'perms') { paintPerms(); loadPerms(); }
@@ -2473,7 +2679,7 @@ function bind() {
   }
   // ajustes y frase
   qa('[data-lockmin]').forEach(b => b.addEventListener('click', () => { S.lockMin = +b.dataset.lockmin; store.set('lock', S.lockMin); armLock(); render(); }));
-  on('#wipe', 'click', () => { if (!S.wipeArm) { S.wipeArm = true; return render(); } ['vault', 'addr', 'txs', 'name', 'since', 'backed', 'sol', 'net', 'bio', 'accts', 'acct'].forEach(store.del); S.wallet = null; S.addr = ''; S.wipeArm = false; go('welcome'); toast('Wallet deleted from this device'); });
+  on('#wipe', 'click', () => { if (!S.wipeArm) { S.wipeArm = true; return render(); } ['vault', 'addr', 'txs', 'name', 'since', 'backed', 'sol', 'net', 'bio', 'accts', 'acct', 'wc'].forEach(store.del); try { indexedDB.deleteDatabase('WALLET_CONNECT_V2_INDEXED_DB'); } catch (e) {} WK = null; WKP = null; S.wcProp = null; S.wcReq = null; WCQ.length = 0; S.wallet = null; S.addr = ''; S.wipeArm = false; go('welcome'); toast('Wallet deleted from this device'); });
   const doReveal = async e => { if (e) e.preventDefault(); const pw = q('#rpw').value, pr = q('#rprog'), er = q('#rerr'); pr.hidden = false; er.textContent = '';
     try { const w = await ethers.Wallet.fromEncryptedJson(store.get('vault'), pw, p => pr.firstChild.style.width = (p * 100).toFixed(0) + '%'); S.revealWords = w.mnemonic ? w.mnemonic.phrase.split(' ') : []; render(); }
     catch (err) { pr.hidden = true; er.textContent = 'Wrong password. Try again.'; } };
